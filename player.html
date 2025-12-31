@@ -171,6 +171,20 @@
             display: flex;
             gap: 24px;
             align-items: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeInHeader 0.6s ease-out 0.2s forwards;
+        }
+        
+        @keyframes fadeInHeader {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .player-avatar {
             width: 120px;
@@ -340,6 +354,20 @@
             border: none;
             margin-bottom: 24px;
             gap: 8px;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeInTabs 0.6s ease-out 0.4s forwards;
+        }
+        
+        @keyframes fadeInTabs {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .nav-tabs .nav-link {
             border: none;
@@ -348,6 +376,24 @@
             border-radius: 12px;
             font-family: 'VimeArtBold', sans-serif;
             transition: all 0.3s ease;
+        }
+        
+        /* Плавное появление контента вкладок */
+        .tab-content {
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeInContent 0.6s ease-out 0.6s forwards;
+        }
+        
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Стили для тултипа истории ников */
@@ -641,10 +687,40 @@
             border-radius: 10px;
             padding: 12px;
             box-shadow: 0 3px 12px rgba(52, 152, 219, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInFriend 0.4s ease-out forwards;
         }
+        
+        @keyframes fadeInFriend {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Задержки для каждой карточки друга */
+        .friend-card:nth-child(1) { animation-delay: 0.05s; }
+        .friend-card:nth-child(2) { animation-delay: 0.1s; }
+        .friend-card:nth-child(3) { animation-delay: 0.15s; }
+        .friend-card:nth-child(4) { animation-delay: 0.2s; }
+        .friend-card:nth-child(5) { animation-delay: 0.25s; }
+        .friend-card:nth-child(6) { animation-delay: 0.3s; }
+        .friend-card:nth-child(7) { animation-delay: 0.35s; }
+        .friend-card:nth-child(8) { animation-delay: 0.4s; }
+        .friend-card:nth-child(9) { animation-delay: 0.45s; }
+        .friend-card:nth-child(10) { animation-delay: 0.5s; }
+        .friend-card:nth-child(11) { animation-delay: 0.55s; }
+        .friend-card:nth-child(12) { animation-delay: 0.6s; }
+        .friend-card:nth-child(n+13) { animation-delay: 0.65s; }
+        
         .friend-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 18px rgba(52, 152, 219, 0.15);
@@ -862,12 +938,61 @@
             box-shadow: 0 8px 32px rgba(52, 152, 219, 0.10);
             display: flex;
             gap: 24px;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: fadeInSkin 0.5s ease-out forwards;
         }
+        
+        @keyframes fadeInSkin {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
         #skin3d-controls {
             display: flex;
             flex-direction: column;
             gap: 8px;
             min-width: 240px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInControls 0.5s ease-out 0.2s forwards;
+        }
+        
+        @keyframes fadeInControls {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        #skin3d-container {
+            width: 480px;
+            height: 700px;
+            margin: 0 auto 60px auto;
+            opacity: 0;
+            transform: translateX(20px);
+            animation: fadeInContainer 0.5s ease-out 0.2s forwards;
+        }
+        
+        @keyframes fadeInContainer {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         .control-group {
             background: #f8fbff;
@@ -907,11 +1032,6 @@
         .skin3d-ctrl-btn {
             width: 100%;
             margin: 0 0 8px 0;
-        }
-        #skin3d-container {
-            width: 480px;
-            height: 700px;
-            margin: 0 auto 60px auto;
         }
         /* Добавляем стили для выпадающего списка недавних ников в навигации */
         .recent-nicks {
@@ -1202,6 +1322,20 @@
             position: relative;
             cursor: pointer;
             transition: height 0.4s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInBanner 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeInBanner {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .profile-banner:hover {
@@ -1219,7 +1353,12 @@
             object-fit: cover;
             object-position: center center;
             display: block;
-            transition: height 0.4s ease;
+            transition: height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        
+        .profile-banner img.loaded {
+            opacity: 1;
         }
         
         .profile-banner.expanded img {
@@ -1313,7 +1452,7 @@
         </div>
         <div id="player-content" style="display: none;">
             <div class="profile-banner">
-                <img src="photo_2025-12-31_20-28-53.jpg" alt="Баннер профиля" id="profile-banner-img">
+                <img src="vimefurrybanner.jpg" alt="Баннер профиля" id="profile-banner-img">
             </div>
             <div class="player-header">
                 <div class="player-avatar" id="player-avatar"></div>
@@ -1523,6 +1662,26 @@
                 profileBanner.addEventListener('click', function() {
                     this.classList.toggle('expanded');
                 });
+            }
+            
+            // Плавная загрузка изображения баннера
+            const bannerImg = document.getElementById('profile-banner-img');
+            if (bannerImg) {
+                // Если изображение уже загружено
+                if (bannerImg.complete) {
+                    bannerImg.classList.add('loaded');
+                } else {
+                    // Добавляем обработчик загрузки
+                    bannerImg.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                    
+                    // Обработчик ошибки загрузки
+                    bannerImg.addEventListener('error', function() {
+                        // Если изображение не загрузилось, все равно показываем фон
+                        this.classList.add('loaded');
+                    });
+                }
             }
         });
 
@@ -4385,7 +4544,7 @@ async function loadFriendsList(username) {
         
         // Проверяем, есть ли друзья
         if (friends.length === 0) {
-            friendsList.innerHTML = '<div class="text-center w-100 py-5">У игрока нет друзей</div>';
+            friendsList.innerHTML = '<div class="text-center w-100 py-5" style="color: #7f8c8d; font-family: \'VimeArtBold\', sans-serif; font-size: 1.1rem;">Кажется, никто не хочет с ним дружить</div>';
             friendsLoading.style.display = 'none';
             friendsSortContainer.style.display = 'none';
             friendsList.style.display = 'flex'; // Используем flex для центрирования сообщения
