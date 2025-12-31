@@ -3433,27 +3433,7 @@ document.getElementById('quick-search-btn').onclick = function() {
                         
                         if (historyResponse.ok) {
                             const proxyData = await historyResponse.json();
-                            
-                            // Разные прокси возвращают данные в разных форматах
-                            if (proxyData.contents) {
-                                // allorigins.win формат - contents может быть строкой JSON
-                                try {
-                                    if (typeof proxyData.contents === 'string') {
-                                        historyData = JSON.parse(proxyData.contents);
-                                    } else {
-                                        historyData = proxyData.contents;
-                                    }
-                                } catch (e) {
-                                    // Если не JSON, используем как есть
-                                    historyData = proxyData.contents;
-                                }
-                            } else if (proxyData.data) {
-                                historyData = proxyData.data;
-                            } else if (Array.isArray(proxyData)) {
-                                historyData = proxyData;
-                            } else {
-                                historyData = proxyData;
-                            }
+                            historyData = proxyData['response']['data']['history']
                             
                             console.log('Успешно получены данные через прокси', i + 1);
                             break;
