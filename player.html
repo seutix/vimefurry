@@ -3629,7 +3629,7 @@ document.getElementById('quick-search-btn').onclick = function() {
                     `;
                     
                     // Поддерживаем разные форматы полей даты
-                    const changeDate = item.changedToAt || item.changed_at || item.date || item.timestamp || item.changedAt || item.time || item.changed_at_timestamp;
+                    const changeDate = item.created_at;
                     if (changeDate) {
                         const date = new Date(changeDate);
                         if (!isNaN(date.getTime())) {
