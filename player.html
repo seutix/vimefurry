@@ -1386,9 +1386,229 @@
                 height: 150px;
             }
         }
+
+        /* Стили для модального окна истории скинов */
+        .history-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .history-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .history-modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 1400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: #3498db #e6f3ff;
+        }
+
+        .history-modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .history-modal-content::-webkit-scrollbar-track {
+            background: #e6f3ff;
+            border-radius: 10px;
+        }
+
+        .history-modal-content::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 10px;
+        }
+
+        .history-modal-content::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e6f3ff;
+        }
+
+        .history-modal-title {
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 1.5rem;
+            color: #3498db;
+        }
+
+        .history-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #e6f3ff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, color 0.2s ease;
+            color: #3498db;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .history-modal-close:hover {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .history-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .history-tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            background: #e6f3ff;
+            color: #3498db;
+            font-family: 'VimeArtBold', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-tab-btn:hover {
+            background: #d1e7ff;
+        }
+
+        .history-tab-btn.active {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .history-item {
+            background: #f8fbff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInHistoryItem 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeInHistoryItem {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(52, 152, 219, 0.15);
+        }
+
+        .history-item-preview {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .history-item-date {
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-align: center;
+        }
+
+        .history-loading {
+            text-align: center;
+            padding: 60px 20px;
+            font-family: 'VimeArtBold', sans-serif;
+            color: #3498db;
+            font-size: 1.1rem;
+        }
+
+        .history-error {
+            text-align: center;
+            padding: 60px 20px;
+            font-family: 'VimeArtBold', sans-serif;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 60px 20px;
+            font-family: 'VimeArtBold', sans-serif;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .history-modal-content {
+                padding: 20px;
+                max-height: 95vh;
+            }
+
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-tabs {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
-<body>
+<body></body>
     </style>
 </head>
 <body>
@@ -1592,6 +1812,10 @@
                             <div class="control-group">
                                 <div class="control-group-title">Отображение</div>
                                 <button id="toggleCapeBtn" class="skin3d-ctrl-btn active">Скрыть плащ</button>
+                            </div>
+                            <div class="control-group">
+                                <div class="control-group-title">История</div>
+                                <button id="showHistoryBtn" class="skin3d-ctrl-btn">История скинов</button>
                             </div>
                             <div class="download-buttons">
                                 <a id="downloadSkinBtn" class="button download-btn">Скачать скин</a>
@@ -2405,6 +2629,9 @@ document.getElementById('quick-search-btn').onclick = function() {
                     }
 
                     document.getElementById('player-id').textContent = `id: ${player.id}`;
+                    
+                    // Сохраняем ID игрока для использования в истории скинов
+                    window.currentPlayerId = player.id;
                     
                     // Обновляем информацию об уровне (без процента)
                     document.getElementById('player-level-meta').textContent = `Уровень: ${player.level}`;
@@ -5198,7 +5425,283 @@ function downloadFile(url, fileName) {
             alert('Не удалось скачать файл. Попробуйте позже.');
         });
 }
+
+// История скинов и плащей
+let historyViewers = [];
+
+function openHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    modal.classList.add('active');
+    
+    // Загружаем историю скинов по умолчанию
+    loadSkinsHistory();
+}
+
+function closeHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    modal.classList.remove('active');
+    
+    // Очищаем все viewers
+    historyViewers.forEach(viewer => {
+        if (viewer && viewer.dispose) {
+            viewer.dispose();
+        }
+    });
+    historyViewers = [];
+}
+
+// Закрытие модального окна при клике вне его
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('historyModal');
+    if (modal && e.target === modal) {
+        closeHistoryModal();
+    }
+});
+
+function switchHistoryTab(type) {
+    const skinsBtn = document.getElementById('historySkinsBtn');
+    const capesBtn = document.getElementById('historyCapesBtn');
+    
+    if (type === 'skins') {
+        skinsBtn.classList.add('active');
+        capesBtn.classList.remove('active');
+        loadSkinsHistory();
+    } else {
+        capesBtn.classList.add('active');
+        skinsBtn.classList.remove('active');
+        loadCapesHistory();
+    }
+}
+
+async function loadSkinsHistory() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    const playerId = window.currentPlayerId;
+    
+    const container = document.getElementById('historyContent');
+    container.innerHTML = '<div class="history-loading">Загрузка истории скинов...</div>';
+    
+    // Очищаем предыдущие viewers
+    historyViewers.forEach(viewer => {
+        if (viewer && viewer.dispose) {
+            viewer.dispose();
+        }
+    });
+    historyViewers = [];
+    
+    try {
+        const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(`https://vimetop.ru/api/v1/player/${playerId}/history/skins`)}`);
+        const text = await response.text();
+        const data = JSON.parse(text);
+        
+        if (!data || !data.response || !data.response.data || data.response.data.length === 0) {
+            container.innerHTML = '<div class="history-empty">История скинов пуста</div>';
+            return;
+        }
+        
+        const grid = document.createElement('div');
+        grid.className = 'history-grid';
+        
+        data.response.data.forEach((item, index) => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.style.animationDelay = `${index * 0.05}s`;
+            
+            const preview = document.createElement('div');
+            preview.className = 'history-item-preview';
+            preview.id = `history-skin-${index}`;
+            
+            const date = document.createElement('div');
+            date.className = 'history-item-date';
+            date.textContent = new Date(item.created_at).toLocaleString('ru-RU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            historyItem.appendChild(preview);
+            historyItem.appendChild(date);
+            grid.appendChild(historyItem);
+            
+            // Создаем 3D viewer для каждого скина
+            setTimeout(async () => {
+                try {
+                    // Загружаем скин через прокси и создаем blob URL
+                    const skinResponse = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(item.url)}`);
+                    const skinBlob = await skinResponse.blob();
+                    const skinBlobUrl = URL.createObjectURL(skinBlob);
+                    
+                    const viewer = new skinview3d.SkinViewer({
+                        canvas: Object.assign(document.createElement("canvas"), { 
+                            width: preview.offsetWidth, 
+                            height: 300 
+                        }),
+                        width: preview.offsetWidth,
+                        height: 300,
+                        skin: skinBlobUrl,
+                        background: '#ffffff',
+                        lighting: true,
+                        ambientLight: 0.5,
+                        directionalLight: 0.8
+                    });
+                    
+                    preview.appendChild(viewer.canvas);
+                    viewer.controls.enableRotate = true;
+                    viewer.controls.enableZoom = true;
+                    viewer.controls.enablePan = false;
+                    viewer.controls.autoRotate = true;
+                    viewer.controls.autoRotateSpeed = 1.0;
+                    viewer.animation = new skinview3d.WalkingAnimation();
+                    viewer.animation.speed = 0.8;
+                    
+                    historyViewers.push(viewer);
+                } catch (error) {
+                    console.error('Ошибка создания viewer:', error);
+                    preview.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #e74c3c;">Ошибка загрузки</div>';
+                }
+            }, index * 100);
+        });
+        
+        container.innerHTML = '';
+        container.appendChild(grid);
+        
+    } catch (error) {
+        console.error('Ошибка загрузки истории скинов:', error);
+        container.innerHTML = '<div class="history-error">Ошибка загрузки истории скинов</div>';
+    }
+}
+
+async function loadCapesHistory() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    const playerId = window.currentPlayerId;
+    
+    const container = document.getElementById('historyContent');
+    container.innerHTML = '<div class="history-loading">Загрузка истории плащей...</div>';
+    
+    // Очищаем предыдущие viewers
+    historyViewers.forEach(viewer => {
+        if (viewer && viewer.dispose) {
+            viewer.dispose();
+        }
+    });
+    historyViewers = [];
+    
+    try {
+        const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(`https://vimetop.ru/api/v1/player/${playerId}/history/capes`)}`);
+        const text = await response.text();
+        const data = JSON.parse(text);
+        
+        if (!data || !data.response || !data.response.data || data.response.data.length === 0) {
+            container.innerHTML = '<div class="history-empty">История плащей пуста</div>';
+            return;
+        }
+        
+        const grid = document.createElement('div');
+        grid.className = 'history-grid';
+        
+        // Получаем текущий скин для отображения с плащом
+        const currentSkinUrl = `https://skin.vimeworld.com/raw/skin/${username}.png`;
+        
+        data.response.data.forEach((item, index) => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.style.animationDelay = `${index * 0.05}s`;
+            
+            const preview = document.createElement('div');
+            preview.className = 'history-item-preview';
+            preview.id = `history-cape-${index}`;
+            
+            const date = document.createElement('div');
+            date.className = 'history-item-date';
+            date.textContent = new Date(item.created_at).toLocaleString('ru-RU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            historyItem.appendChild(preview);
+            historyItem.appendChild(date);
+            grid.appendChild(historyItem);
+            
+            // Создаем 3D viewer для каждого плаща
+            setTimeout(async () => {
+                try {
+                    // Загружаем плащ через прокси и создаем blob URL
+                    const capeResponse = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(item.url)}`);
+                    const capeBlob = await capeResponse.blob();
+                    const capeBlobUrl = URL.createObjectURL(capeBlob);
+                    
+                    const viewer = new skinview3d.SkinViewer({
+                        canvas: Object.assign(document.createElement("canvas"), { 
+                            width: preview.offsetWidth, 
+                            height: 300 
+                        }),
+                        width: preview.offsetWidth,
+                        height: 300,
+                        skin: currentSkinUrl,
+                        cape: capeBlobUrl,
+                        background: '#ffffff',
+                        lighting: true,
+                        ambientLight: 0.5,
+                        directionalLight: 0.8
+                    });
+                    
+                    preview.appendChild(viewer.canvas);
+                    viewer.controls.enableRotate = true;
+                    viewer.controls.enableZoom = true;
+                    viewer.controls.enablePan = false;
+                    viewer.controls.autoRotate = true;
+                    viewer.controls.autoRotateSpeed = 1.0;
+                    viewer.animation = new skinview3d.WalkingAnimation();
+                    viewer.animation.speed = 0.8;
+                    
+                    historyViewers.push(viewer);
+                } catch (error) {
+                    console.error('Ошибка создания viewer:', error);
+                    preview.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #e74c3c;">Ошибка загрузки</div>';
+                }
+            }, index * 100);
+        });
+        
+        container.innerHTML = '';
+        container.appendChild(grid);
+        
+    } catch (error) {
+        console.error('Ошибка загрузки истории плащей:', error);
+        container.innerHTML = '<div class="history-error">Ошибка загрузки истории плащей</div>';
+    }
+}
+
+// Добавляем обработчик для кнопки истории
+document.addEventListener('DOMContentLoaded', function() {
+    const showHistoryBtn = document.getElementById('showHistoryBtn');
+    if (showHistoryBtn) {
+        showHistoryBtn.addEventListener('click', openHistoryModal);
+    }
+});
     </script>
     <script src="auth.js"></script>
+
+    <!-- Модальное окно истории скинов и плащей -->
+    <div id="historyModal" class="history-modal">
+        <div class="history-modal-content">
+            <div class="history-modal-header">
+                <h2 class="history-modal-title">История скинов и плащей</h2>
+                <button class="history-modal-close" onclick="closeHistoryModal()">×</button>
+            </div>
+            <div class="history-tabs">
+                <button id="historySkinsBtn" class="history-tab-btn active" onclick="switchHistoryTab('skins')">Скины</button>
+                <button id="historyCapesBtn" class="history-tab-btn" onclick="switchHistoryTab('capes')">Плащи</button>
+            </div>
+            <div id="historyContent">
+                <div class="history-loading">Загрузка...</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 
