@@ -252,6 +252,30 @@
             border-radius: 4px; /* Скругление как у рангов */
             font-size: 0.7rem; /* Увеличенный размер шрифта */
             color: #3498db; /* Голубой текст */
+            position: relative; /* Для позиционирования tooltip */
+        }
+        
+        .prime-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            color: #2c3e50;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            margin-bottom: 8px;
+            z-index: 1000;
+        }
+        
+        .prime-badge:hover .prime-tooltip {
+            opacity: 1;
         }
         .player-status {
             display: flex;
@@ -1944,6 +1968,31 @@ document.getElementById('quick-search-btn').onclick = function() {
                     // Отображаем Prime статус
                     if (player.prime) {
                         primeBadgeElement.style.display = 'inline-block';
+                        
+                        // Добавляем tooltip с датой приобретения Prime
+                        if (player.primeStart) {
+                            // Удаляем старый tooltip если есть
+                            const oldTooltip = primeBadgeElement.querySelector('.prime-tooltip');
+                            if (oldTooltip) {
+                                oldTooltip.remove();
+                            }
+                            
+                            // Создаем новый tooltip
+                            const tooltip = document.createElement('span');
+                            tooltip.classList.add('prime-tooltip');
+                            
+                            // Конвертируем Unix timestamp в дату
+                            const primeDate = new Date(player.primeStart * 1000);
+                            const day = String(primeDate.getDate()).padStart(2, '0');
+                            const month = String(primeDate.getMonth() + 1).padStart(2, '0');
+                            const year = primeDate.getFullYear();
+                            const hours = String(primeDate.getHours()).padStart(2, '0');
+                            const minutes = String(primeDate.getMinutes()).padStart(2, '0');
+                            const seconds = String(primeDate.getSeconds()).padStart(2, '0');
+                            
+                            tooltip.textContent = `Подписка действует с ${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+                            primeBadgeElement.appendChild(tooltip);
+                        }
                     } else {
                         primeBadgeElement.style.display = 'none';
                     }
