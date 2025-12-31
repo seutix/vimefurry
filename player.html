@@ -2093,7 +2093,7 @@ document.getElementById('quick-search-btn').onclick = function() {
 
                     // Обновляем статус игрока на основе полученных данных сессии
                     updatePlayerStatusFromData(sessionData);
-
+                    loadFriendsBasicInfo(username);
                     // Запускаем периодическое обновление статуса
                     setInterval(updatePlayerStatus, 10000); // Обновляем каждые 10 секунд
 
