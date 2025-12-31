@@ -423,10 +423,82 @@
             border-radius: 12px;
             padding: 16px;
             box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
             position: relative;
             max-height: 300px;
             overflow: hidden;
+            cursor: default;
+        }
+        .stat-card.dragging {
+            opacity: 0.6;
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 12px 32px rgba(52, 152, 219, 0.25);
+            z-index: 1000;
+        }
+        .stat-card.drag-over {
+            transform: scale(0.95);
+            border: 2px dashed #3498db;
+            background: #f0f8ff;
+        }
+        
+        .drag-handle {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+        
+        .drag-handle:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .drag-handle-dot {
+            width: 3px;
+            height: 3px;
+            background: #3498db;
+            border-radius: 50%;
+            transition: background 0.2s ease;
+        }
+        
+        .drag-handle-row {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .drag-handle:hover .drag-handle-dot {
+            background: #2980b9;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stat-card {
+            animation: slideIn 0.3s ease-out;
         }
         .stat-card.expanded {
             max-height: none;
@@ -495,17 +567,18 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%);
+            background: transparent;
             padding: 20px 0 0 0;
             text-align: center;
             cursor: pointer;
             color: transparent;
             font-family: 'VimeArtBold', sans-serif;
             font-size: 0.9rem;
-            display: none;
-        }
-        .stat-card:not(.expanded) .expand-button {
             display: block;
+        }
+        .stat-card.expanded .expand-button {
+            background: transparent;
+            padding: 10px 0;
         }
         .stat-title {
             font-family: 'VimeArtBold', sans-serif;
@@ -2554,40 +2627,256 @@ document.getElementById('quick-search-btn').onclick = function() {
             const statsGrid = document.querySelector('.stats-grid');
             statsGrid.innerHTML = ''; // Очищаем текущую статистику
 
+            // Получаем сохраненный порядок из localStorage
+            const savedOrder = JSON.parse(localStorage.getItem('statsBlocksOrder') || '[]');
+            
+            // Собираем все игры с данными
+            const gamesWithStats = [];
+            for (const [gameCode, gameConfig] of Object.entries(GAMES_CONFIG)) {
+                const gameStats = isSeasonal ? 
+                    (data.stats[gameCode]?.season?.monthly || {}) : 
+                    (data.stats[gameCode]?.global || {});
+
+                if (Object.keys(gameStats).length > 0) {
+                    gamesWithStats.push({
+                        gameCode,
+                        gameConfig,
+                        gameStats
+                    });
+                }
+            }
+            
+            // Сортируем игры согласно сохраненному порядку
+            if (savedOrder.length > 0) {
+                gamesWithStats.sort((a, b) => {
+                    const indexA = savedOrder.indexOf(a.gameCode);
+                    const indexB = savedOrder.indexOf(b.gameCode);
+                    if (indexA === -1 && indexB === -1) return 0;
+                    if (indexA === -1) return 1;
+                    if (indexB === -1) return -1;
+                    return indexA - indexB;
+                });
+            }
+
             // Счетчик для отслеживания количества блоков в ряду
             let blocksInRow = 0;
             let currentRow = document.createElement('div');
             currentRow.className = 'stats-row';
             statsGrid.appendChild(currentRow);
 
-            // Проходим по всем играм из конфига
-            for (const [gameCode, gameConfig] of Object.entries(GAMES_CONFIG)) {
-                // Выбираем данные в зависимости от режима
-                const gameStats = isSeasonal ? 
-                    (data.stats[gameCode]?.season?.monthly || {}) : 
-                    (data.stats[gameCode]?.global || {});
-
-                if (Object.keys(gameStats).length > 0) {
-                    const gameData = {
-                        ...gameConfig,
-                        global: gameStats
-                    };
-                    
-                    const statsBlock = createStatsBlock(gameCode, gameData);
-                    
-                    // Если в текущем ряду уже 4 блока, создаем новый ряд
-                    if (blocksInRow === 4) {
-                        currentRow = document.createElement('div');
-                        currentRow.className = 'stats-row';
-                        statsGrid.appendChild(currentRow);
-                        blocksInRow = 0;
-                    }
-
-                    currentRow.appendChild(statsBlock);
-                    blocksInRow++;
+            // Создаем блоки в отсортированном порядке
+            gamesWithStats.forEach(({ gameCode, gameConfig, gameStats }) => {
+                const gameData = {
+                    ...gameConfig,
+                    global: gameStats
+                };
+                
+                const statsBlock = createStatsBlock(gameCode, gameData);
+                
+                // Если в текущем ряду уже 4 блока, создаем новый ряд
+                if (blocksInRow === 4) {
+                    currentRow = document.createElement('div');
+                    currentRow.className = 'stats-row';
+                    statsGrid.appendChild(currentRow);
+                    blocksInRow = 0;
                 }
+
+                currentRow.appendChild(statsBlock);
+                blocksInRow++;
+            });
+        }
+
+        // Переменная для хранения перетаскиваемого элемента
+        let draggedElement = null;
+        let autoScrollInterval = null;
+        let currentMouseY = 0;
+        let isDragging = false;
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            isDragging = true;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+            
+            // Добавляем небольшую задержку для плавности
+            setTimeout(() => {
+                if (draggedElement) {
+                    draggedElement.style.opacity = '0.6';
+                }
+            }, 0);
+            
+            // Запускаем автоскролл
+            startAutoScroll();
+            
+            // Разрешаем ручной скролл во время перетаскивания
+            enableManualScroll();
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '';
+            this.classList.remove('dragging');
+            isDragging = false;
+            
+            // Убираем класс drag-over со всех элементов с анимацией
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.classList.remove('drag-over');
+            });
+            
+            // Останавливаем автоскролл
+            stopAutoScroll();
+            
+            // Отключаем ручной скролл
+            disableManualScroll();
+            
+            // Сохраняем новый порядок
+            saveStatsOrder();
+            
+            draggedElement = null;
+            currentMouseY = 0;
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            
+            // Сохраняем текущую позицию мыши
+            currentMouseY = e.clientY;
+            
+            return false;
+        }
+
+        // Обработчик ручного скролла колесиком мыши
+        function handleManualScroll(e) {
+            if (isDragging) {
+                // Предотвращаем стандартное поведение и скроллим вручную
+                e.preventDefault();
+                
+                // Скроллим страницу на величину deltaY
+                window.scrollBy(0, e.deltaY);
+                
+                return false;
             }
         }
+
+        function enableManualScroll() {
+            // Добавляем обработчик для колесика мыши с passive: false чтобы можно было preventDefault
+            document.addEventListener('wheel', handleManualScroll, { passive: false });
+        }
+
+        function disableManualScroll() {
+            // Удаляем обработчик
+            document.removeEventListener('wheel', handleManualScroll);
+        }
+
+        function startAutoScroll() {
+            if (autoScrollInterval) return;
+            
+            autoScrollInterval = setInterval(() => {
+                if (!draggedElement) {
+                    stopAutoScroll();
+                    return;
+                }
+                
+                // Выполняем автоскролл на основе текущей позиции мыши
+                performAutoScroll();
+            }, 16); // ~60fps
+        }
+
+        function stopAutoScroll() {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+        }
+
+        function performAutoScroll() {
+            if (!currentMouseY) return;
+            
+            const scrollThreshold = 150; // Зона в пикселях от края экрана
+            const scrollSpeed = 25; // Скорость скролла
+            const viewportHeight = window.innerHeight;
+            
+            // Скролл вверх
+            if (currentMouseY < scrollThreshold) {
+                const intensity = 1 - (currentMouseY / scrollThreshold);
+                window.scrollBy(0, -scrollSpeed * intensity);
+            }
+            // Скролл вниз
+            else if (currentMouseY > viewportHeight - scrollThreshold) {
+                const intensity = (currentMouseY - (viewportHeight - scrollThreshold)) / scrollThreshold;
+                window.scrollBy(0, scrollSpeed * intensity);
+            }
+        }
+
+        function handleDragEnter(e) {
+            if (this !== draggedElement) {
+                this.classList.add('drag-over');
+            }
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            
+            if (draggedElement !== this) {
+                // Получаем родительские ряды
+                const draggedRow = draggedElement.parentNode;
+                const targetRow = this.parentNode;
+                
+                // Добавляем анимацию перед перемещением
+                const draggedRect = draggedElement.getBoundingClientRect();
+                const targetRect = this.getBoundingClientRect();
+                
+                // Если элементы в одном ряду
+                if (draggedRow === targetRow) {
+                    // Определяем позицию для вставки
+                    const allCards = Array.from(targetRow.children);
+                    const draggedIndex = allCards.indexOf(draggedElement);
+                    const targetIndex = allCards.indexOf(this);
+                    
+                    if (draggedIndex < targetIndex) {
+                        targetRow.insertBefore(draggedElement, this.nextSibling);
+                    } else {
+                        targetRow.insertBefore(draggedElement, this);
+                    }
+                } else {
+                    // Элементы в разных рядах - меняем местами
+                    const draggedNext = draggedElement.nextSibling;
+                    const targetNext = this.nextSibling;
+                    
+                    targetRow.insertBefore(draggedElement, this);
+                    draggedRow.insertBefore(this, draggedNext);
+                }
+                
+                // Добавляем анимацию появления
+                draggedElement.style.animation = 'none';
+                setTimeout(() => {
+                    draggedElement.style.animation = '';
+                }, 10);
+            }
+            
+            this.classList.remove('drag-over');
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            // Проверяем, действительно ли мы покинули элемент
+            if (e.target === this) {
+                this.classList.remove('drag-over');
+            }
+        }
+
+        function saveStatsOrder() {
+            const statsGrid = document.querySelector('.stats-grid');
+            const allCards = statsGrid.querySelectorAll('.stat-card');
+            const order = Array.from(allCards).map(card => card.getAttribute('data-game-code'));
+            localStorage.setItem('statsBlocksOrder', JSON.stringify(order));
+        }
+
 
         function formatLargeNumber(num) {
             // Если число меньше 1000, возвращаем его как есть
@@ -2619,6 +2908,36 @@ document.getElementById('quick-search-btn').onclick = function() {
         function createStatsBlock(gameCode, gameData) {
             const block = document.createElement('div');
             block.className = 'stat-card';
+            block.setAttribute('data-game-code', gameCode);
+            
+            // Создаем drag handle (ручку для перетаскивания)
+            const dragHandle = document.createElement('div');
+            dragHandle.className = 'drag-handle';
+            dragHandle.setAttribute('draggable', 'true');
+            
+            // Создаем 3 ряда по 2 точки (6 точек всего)
+            for (let i = 0; i < 3; i++) {
+                const row = document.createElement('div');
+                row.className = 'drag-handle-row';
+                for (let j = 0; j < 2; j++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'drag-handle-dot';
+                    row.appendChild(dot);
+                }
+                dragHandle.appendChild(row);
+            }
+            
+            // Добавляем обработчики drag-and-drop только к handle
+            dragHandle.addEventListener('dragstart', function(e) {
+                handleDragStart.call(block, e);
+            });
+            block.addEventListener('dragend', handleDragEnd);
+            block.addEventListener('dragover', handleDragOver);
+            block.addEventListener('dragenter', handleDragEnter);
+            block.addEventListener('drop', handleDrop);
+            block.addEventListener('dragleave', handleDragLeave);
+            
+            block.appendChild(dragHandle);
             
             // Заголовок блока
             const title = document.createElement('div');
@@ -3855,9 +4174,6 @@ async function loadFriendsList(username) {
             friendsList.style.justifyContent = 'center';
             friendsList.style.alignItems = 'center';
             return;
-        } else {
-            // Показываем селектор сортировки, если есть друзья
-            friendsSortContainer.style.display = 'block';
         }
         
         // Загружаем статусы и отображаем список
@@ -3929,9 +4245,10 @@ async function loadFriendsStatuses(friends) {
         // Отрисовываем список с сортировкой по умолчанию
         renderFriendsList(window.friendsData, onlineStatuses, sortSelect.value);
         
-        // Показываем список и скрываем индикатор загрузки
+        // Показываем список, контейнер сортировки и скрываем индикатор загрузки
         friendsLoading.style.display = 'none';
         friendsList.style.display = 'grid';
+        document.getElementById('friends-sort-container').style.display = 'block';
     } catch (error) {
         console.error('Ошибка при загрузке статусов друзей:', error);
         friendsLoading.style.display = 'none';
@@ -4139,22 +4456,52 @@ function createFriendElement(friend, onlineStatuses) {
             '&f': '#FFFFFF'  // Белый
         };
         
-        // Извлекаем цветовой код и символ
-        const colorMatch = primeIcon.match(/^&([0-9a-f])(.+)$/);
-        if (colorMatch) {
-            const colorCode = '&' + colorMatch[1];
-            const symbol = colorMatch[2];
-            const color = colorMap[colorCode] || '#FFFFFF';
+        // Извлекаем код форматирования и символ
+        const formatMatch = primeIcon.match(/^&([0-9a-fklmnor])(.+)$/);
+        if (formatMatch) {
+            const formatCode = '&' + formatMatch[1];
+            const symbol = formatMatch[2];
             
-            primeIconSpan.style.color = color;
-            // Добавляем тень для белого цвета (&f)
-            if (colorCode === '&f') {
-                primeIconSpan.style.textShadow = '0px 0px 2px rgba(0,0,0,0.3)';
+            // Проверяем, это цветовой код или форматирующий
+            if (colorMap[formatCode]) {
+                // Цветовой код
+                const color = colorMap[formatCode];
+                primeIconSpan.style.color = color;
+                // Добавляем тень для белого цвета (&f)
+                if (formatCode === '&f') {
+                    primeIconSpan.style.textShadow = '0px 0px 2px rgba(0,0,0,0.3)';
+                }
+                primeIconSpan.textContent = symbol;
+            } else {
+                // Форматирующий код (&k, &l, &m, &n, &o, &r)
+                primeIconSpan.textContent = symbol;
+                
+                // Применяем соответствующее форматирование
+                switch (formatCode) {
+                    case '&k': // Случайные символы (обфускация)
+                        // Для &k просто отображаем символ как есть
+                        // В браузере сложно реализовать анимацию случайных символов
+                        break;
+                    case '&l': // Жирный
+                        primeIconSpan.style.fontWeight = 'bold';
+                        break;
+                    case '&m': // Зачеркнутый
+                        primeIconSpan.style.textDecoration = 'line-through';
+                        break;
+                    case '&n': // Подчеркнутый
+                        primeIconSpan.style.textDecoration = 'underline';
+                        break;
+                    case '&o': // Курсив
+                        primeIconSpan.style.fontStyle = 'italic';
+                        break;
+                    case '&r': // Сброс форматирования
+                        // Просто отображаем символ без дополнительного форматирования
+                        break;
+                }
             }
-            primeIconSpan.textContent = symbol;
         } else {
             // Если формат не соответствует ожидаемому
-            primeIconSpan.textContent = 'PRIME';
+            primeIconSpan.textContent = 'Prime';
             primeIconSpan.className = 'friend-prime';
         }
         
