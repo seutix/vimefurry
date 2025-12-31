@@ -441,6 +441,18 @@
             background: #f0f8ff;
         }
         
+        .drag-ghost {
+            opacity: 0.95 !important;
+            box-shadow: 0 20px 60px rgba(52, 152, 219, 0.3) !important;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: none !important;
+        }
+        
+        .drag-ghost .drag-handle {
+            display: none !important;
+        }
+        
         .drag-handle {
             position: absolute;
             top: 8px;
@@ -2690,7 +2702,15 @@ document.getElementById('quick-search-btn').onclick = function() {
         let draggedElement = null;
         let autoScrollInterval = null;
         let currentMouseY = 0;
+        let currentMouseX = 0;
         let isDragging = false;
+        let dragGhost = null;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let velocityX = 0;
+        let velocityY = 0;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
 
         function handleDragStart(e) {
             draggedElement = this;
@@ -2699,12 +2719,30 @@ document.getElementById('quick-search-btn').onclick = function() {
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/html', this.innerHTML);
             
-            // Добавляем небольшую задержку для плавности
-            setTimeout(() => {
-                if (draggedElement) {
-                    draggedElement.style.opacity = '0.6';
-                }
-            }, 0);
+            // Вычисляем смещение от точки клика до верхнего левого угла элемента
+            const rect = this.getBoundingClientRect();
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
+            
+            // Создаем визуальную копию элемента
+            dragGhost = this.cloneNode(true);
+            dragGhost.style.position = 'fixed';
+            dragGhost.style.pointerEvents = 'none';
+            dragGhost.style.zIndex = '10000';
+            dragGhost.style.width = this.offsetWidth + 'px';
+            dragGhost.style.height = this.offsetHeight + 'px';
+            dragGhost.style.transition = 'transform 0.1s ease-out';
+            dragGhost.classList.remove('dragging');
+            dragGhost.classList.add('drag-ghost');
+            document.body.appendChild(dragGhost);
+            
+            // Скрываем оригинальный элемент
+            this.style.opacity = '0.3';
+            
+            // Инициализируем позицию
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            updateGhostPosition(e.clientX, e.clientY);
             
             // Запускаем автоскролл
             startAutoScroll();
@@ -2717,6 +2755,12 @@ document.getElementById('quick-search-btn').onclick = function() {
             this.style.opacity = '';
             this.classList.remove('dragging');
             isDragging = false;
+            
+            // Удаляем ghost элемент
+            if (dragGhost) {
+                dragGhost.remove();
+                dragGhost = null;
+            }
             
             // Убираем класс drag-over со всех элементов с анимацией
             document.querySelectorAll('.stat-card').forEach(card => {
@@ -2734,6 +2778,11 @@ document.getElementById('quick-search-btn').onclick = function() {
             
             draggedElement = null;
             currentMouseY = 0;
+            currentMouseX = 0;
+            velocityX = 0;
+            velocityY = 0;
+            dragOffsetX = 0;
+            dragOffsetY = 0;
         }
 
         function handleDragOver(e) {
@@ -2744,8 +2793,43 @@ document.getElementById('quick-search-btn').onclick = function() {
             
             // Сохраняем текущую позицию мыши
             currentMouseY = e.clientY;
+            currentMouseX = e.clientX;
+            
+            // Обновляем позицию ghost элемента
+            if (dragGhost) {
+                updateGhostPosition(e.clientX, e.clientY);
+            }
             
             return false;
+        }
+        
+        function updateGhostPosition(mouseX, mouseY) {
+            if (!dragGhost) return;
+            
+            // Вычисляем скорость движения
+            velocityX = mouseX - lastMouseX;
+            velocityY = mouseY - lastMouseY;
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            
+            // Ограничиваем угол наклона
+            const maxRotation = 8;
+            const rotationX = Math.max(-maxRotation, Math.min(maxRotation, velocityY * 0.5));
+            const rotationZ = Math.max(-maxRotation, Math.min(maxRotation, velocityX * 0.3));
+            
+            // Позиционируем ghost элемент относительно точки клика (где находятся точки)
+            const x = mouseX - dragOffsetX;
+            const y = mouseY - dragOffsetY;
+            
+            // Применяем трансформации
+            dragGhost.style.left = x + 'px';
+            dragGhost.style.top = y + 'px';
+            dragGhost.style.transform = `
+                rotateX(${-rotationX}deg) 
+                rotateZ(${rotationZ}deg) 
+                scale(1.05)
+            `;
+            dragGhost.style.boxShadow = '0 20px 60px rgba(52, 152, 219, 0.3)';
         }
 
         // Обработчик ручного скролла колесиком мыши
