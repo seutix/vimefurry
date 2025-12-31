@@ -1996,8 +1996,11 @@ function saveQuickNick(nick) {
                 // Добавляем оверлей головы
                 const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png`;
                 const skinFullImg = new Image();
-                skinFullImg.crossOrigin = "Anonymous";
-                skinFullImg.src = skinFullUrl;
+                
+                skinFullImg.onerror = function() {
+                    // Игнорируем ошибку загрузки скина (например, если у игрока нет кастомного скина)
+                    // Не логируем, чтобы не засорять консоль
+                };
                 
                 skinFullImg.onload = function() {
                     const canvas = document.createElement('canvas');
@@ -2030,6 +2033,10 @@ function saveQuickNick(nick) {
                     overlayImg.className = 'mini-head-overlay';
                     headContainer.appendChild(overlayImg);
                 };
+                
+                // Устанавливаем crossOrigin и src после обработчиков
+                skinFullImg.crossOrigin = "Anonymous";
+                skinFullImg.src = skinFullUrl;
                 
                 // Создаем контейнер для ника и статуса
                 const nickContainer = document.createElement('div');
@@ -2911,8 +2918,11 @@ document.getElementById('quick-search-btn').onclick = function() {
                     // Добавляем оверлей головы из полного скина
                     const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;
                     const skinFullImg = new Image();
-                    skinFullImg.crossOrigin = "Anonymous"; // Важно для работы с canvas
-                    skinFullImg.src = skinFullUrl;
+                    
+                    skinFullImg.onerror = function() {
+                        // Игнорируем ошибку загрузки скина (например, если у игрока нет кастомного скина)
+                        // Не логируем, чтобы не засорять консоль
+                    };
 
                     skinFullImg.onload = function() {
                         const canvas = document.createElement('canvas');
@@ -2946,6 +2956,10 @@ document.getElementById('quick-search-btn').onclick = function() {
                         overlayImg.classList.add('player-avatar-overlay');
                          playerAvatarDiv.appendChild(overlayImg);
                     };
+
+                    // Устанавливаем crossOrigin и src после обработчиков
+                    skinFullImg.crossOrigin = "Anonymous";
+                    skinFullImg.src = skinFullUrl;
 
                     // Инициализация SkinViewer
                     const skinUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;

@@ -505,8 +505,11 @@
                 // Добавляем оверлей головы
                 const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png`;
                 const skinFullImg = new Image();
-                skinFullImg.crossOrigin = "Anonymous";
-                skinFullImg.src = skinFullUrl;
+                
+                skinFullImg.onerror = function() {
+                    // Игнорируем ошибку загрузки скина
+                    // Не логируем, чтобы не засорять консоль
+                };
                 
                 skinFullImg.onload = function() {
                     const canvas = document.createElement('canvas');
@@ -539,6 +542,10 @@
                     overlayImg.className = 'mini-head-overlay';
                     headContainer.appendChild(overlayImg);
                 };
+                
+                // Устанавливаем crossOrigin и src после обработчиков
+                skinFullImg.crossOrigin = "Anonymous";
+                skinFullImg.src = skinFullUrl;
                 
                 // Создаем контейнер для ника и статуса
                 const nickContainer = document.createElement('div');
@@ -891,8 +898,11 @@
                 // Добавляем оверлей головы
                 const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png`;
                 const skinFullImg = new Image();
-                skinFullImg.crossOrigin = "Anonymous";
-                skinFullImg.src = skinFullUrl;
+                
+                skinFullImg.onerror = function() {
+                    // Игнорируем ошибку загрузки скина
+                    // Не логируем, чтобы не засорять консоль
+                };
                 
                 skinFullImg.onload = function() {
                     const canvas = document.createElement('canvas');
@@ -932,6 +942,10 @@
                     overlayImg.style.transformOrigin = 'center center';
                     headContainer.appendChild(overlayImg);
                 };
+                
+                // Устанавливаем crossOrigin и src после обработчиков
+                skinFullImg.crossOrigin = "Anonymous";
+                skinFullImg.src = skinFullUrl;
                 
                 authKeyBtn.appendChild(headContainer);
                 
