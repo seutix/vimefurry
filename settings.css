@@ -1,0 +1,178 @@
+/* Стили для кнопки настроек */
+#settings-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e6f3ff;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    transition: background 0.2s, transform 0.2s;
+    z-index: 1000;
+}
+
+#settings-btn:hover {
+    background: #d4e9ff;
+    transform: scale(1.05);
+}
+
+/* Стили для анимированной шестерни */
+.gear {
+    width: 24px;
+    height: 24px;
+    background-color: #3498db;
+    border-radius: 50%;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.gear-inner {
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.gear .bar {
+    width: 36px;
+    height: 9px;
+    background-color: #3498db;
+    border-radius: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.gear .bar:nth-child(2) {
+    transform: translate(-50%, -50%) rotate(60deg);
+}
+
+.gear .bar:nth-child(3) {
+    transform: translate(-50%, -50%) rotate(-60deg);
+}
+
+/* Анимация при наведении */
+#settings-btn:hover .gear,
+#settings-btn.active .gear {
+    animation: animate-gear 2s linear infinite;
+}
+
+@keyframes animate-gear {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Стили для меню настроек */
+#settings-menu {
+    position: fixed;
+    bottom: 90px;
+    left: 24px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(52, 152, 219, 0.15);
+    padding: 16px;
+    min-width: 280px;
+    z-index: 1001;
+    display: none;
+    animation: fadeIn 0.2s ease-out;
+}
+
+#settings-menu.show {
+    display: block;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #e6f3ff;
+}
+
+.settings-item:last-child {
+    border-bottom: none;
+}
+
+.settings-label {
+    font-size: 0.95rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.settings-toggle {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.settings-toggle.active {
+    background: #3498db;
+}
+
+.settings-toggle::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.settings-toggle.active::after {
+    transform: translateX(24px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Класс для отключения кастомного шрифта */
+body.no-custom-font * {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    #settings-btn {
+        bottom: 20px !important;
+        left: 20px !important;
+        width: 45px !important;
+        height: 45px !important;
+    }
+    #settings-menu {
+        bottom: 75px !important;
+        left: 20px !important;
+        min-width: 260px;
+    }
+}
+

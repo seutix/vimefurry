@@ -1,0 +1,727 @@
+/* Адаптивные стили для всех страниц сайта */
+
+/* Базовые стили для всех устройств */
+@media (max-width: 1200px) {
+    .container, .player-container {
+        width: 100%;
+        max-width: 960px;
+        padding: 0 15px;
+    }
+}
+
+/* Планшеты */
+@media (max-width: 992px) {
+    .container, .player-container {
+        max-width: 720px;
+        margin-top: 60px;
+    }
+    
+    /* Уменьшаем размер шрифтов */
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Навигация */
+    .navbar {
+        padding: 10px 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+        padding-left: 15px;
+    }
+    
+    /* Карточки */
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .friends-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Профиль игрока */
+    .player-header {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    /* Скин превью */
+    #skin-preview-section {
+        flex-direction: column;
+    }
+    
+    #skin3d-container {
+        width: 100%;
+        max-width: 480px;
+        height: 500px;
+    }
+    
+    #skin3d-controls {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    .container, .player-container {
+        max-width: 100%;
+        width: 100%;
+        margin: 50px auto 0;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+    
+    /* Центрируем и ограничиваем ширину контента */
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .container > *,
+    .player-container > * {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    /* Навигация */
+    .navbar {
+        min-height: 50px;
+    }
+    
+    /* Меню-гамбургер */
+    .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1100;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 10px;
+    }
+    
+    .mobile-menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: #3498db;
+        margin: 4px 0;
+        transition: all 0.3s;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+    
+    /* Мобильное меню */
+    .mobile-menu {
+        position: fixed;
+        top: 50px;
+        left: 0;
+        width: 100%;
+        background: white;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+        z-index: 1050;
+    }
+    
+    .mobile-menu.show {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .mobile-menu-items {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+    
+    .mobile-menu-items a {
+        padding: 12px 20px;
+        color: #3498db;
+        text-decoration: none;
+        font-family: 'VimeArtBold', sans-serif;
+        font-size: 1.1rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .mobile-menu-items a:last-child {
+        border-bottom: none;
+    }
+    
+    /* Центральное меню в навигации - скрываем на мобильных */
+    .navbar .container-fluid > div:nth-child(2) {
+        display: none;
+    }
+    
+    /* Шапка профиля */
+    .player-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+        margin: 0 auto;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .player-avatar {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 10px;
+    }
+    
+    .player-name {
+        font-size: 1.4rem;
+        justify-content: center;
+    }
+    
+    .player-status {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    /* Статистика - одна колонка на мобильных (1 блок в ряд) */
+    .stats-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .stats-row {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: none !important;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .stat-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        flex: 0 0 auto;
+    }
+    
+    /* Друзья - одна колонка на мобильных */
+    .friends-list {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Достижения - одна колонка на мобильных */
+    .achievements-grid,
+    [class*="achievements-grid"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Матчи - одна колонка на мобильных */
+    .matches-list,
+    [class*="matches-list"] {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Все элементы достижений и матчей */
+    .achievement-item,
+    .match-item {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .stat-card,
+    .friend-card,
+    .moder-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Вкладки */
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+    }
+    
+    .nav-tabs .nav-link {
+        white-space: nowrap;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    /* Поиск */
+    .navbar .container-fluid > div:nth-child(3) {
+        position: relative;
+        left: auto;
+        right: auto;
+        width: calc(100% - 100px);
+        transform: none;
+        margin: 0 auto;
+    }
+    
+    #quick-search {
+        width: 100%;
+    }
+    
+    /* Скрываем некоторые элементы на малых экранах */
+    .player-meta, .player-level-meta {
+        display: none;
+    }
+    
+    /* Форма поиска на главной */
+    .search-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    .search-box {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .search-input, .search-button {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Топы и модераторы */
+    .tops-container, .moders-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    .tops-grid,
+    .moders-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .top-card,
+    .moder-card {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Карточки и контейнеры */
+    .card,
+    .auth-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    /* Таблицы */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        width: 100%;
+        max-width: 100%;
+        font-size: 0.85rem;
+    }
+    
+    /* Вкладки */
+    .tab-content {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Элементы профиля */
+    .player-info {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .experience-bar {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Секции */
+    #skin-preview-section {
+        width: 100%;
+        max-width: 100%;
+        flex-direction: column;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+    
+    #skin3d-container {
+        width: 100%;
+        max-width: 100%;
+        height: 400px;
+    }
+    
+    #skin3d-controls {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* Очень маленькие устройства */
+@media (max-width: 480px) {
+    .container, .player-container {
+        padding: 0 12px;
+    }
+    
+    .player-status {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .friends-list {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .stat-card,
+    .friend-card,
+    .moder-card,
+    .top-card {
+        padding: 12px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .recent-nicks {
+        width: 100%;
+        left: 0;
+        max-width: 100%;
+    }
+    
+    .navbar-brand {
+        font-size: 0.9rem;
+        padding-left: 10px;
+    }
+    
+    /* Настраиваем меню поиска */
+    .navbar .container-fluid > div:nth-child(3) {
+        width: calc(100% - 80px);
+        max-width: calc(100% - 80px);
+    }
+    
+    /* Уменьшаем размеры элементов */
+    .player-header {
+        padding: 12px;
+    }
+    
+    .player-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .player-name {
+        font-size: 1.2rem;
+    }
+    
+    .search-container {
+        padding: 12px;
+    }
+    
+    .tops-container,
+    .moders-container {
+        padding: 12px;
+    }
+    
+    /* Улучшаем читаемость */
+    .stat-value,
+    .stat-label {
+        font-size: 0.9rem;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Исправления для iPhone 5/SE */
+@media (max-width: 320px) {
+    .container, .player-container {
+        padding: 0 8px;
+    }
+    
+    .status-item {
+        font-size: 0.75rem;
+    }
+    
+    .player-name {
+        font-size: 1.1rem;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .navbar-brand {
+        font-size: 0.85rem;
+        padding-left: 5px;
+    }
+    
+    .stat-card,
+    .friend-card,
+    .moder-card,
+    .top-card {
+        padding: 10px;
+    }
+    
+    .player-header {
+        padding: 10px;
+    }
+    
+    .player-avatar {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* Исправление положения кнопки авторизации */
+@media (max-width: 768px) {
+    #auth-key-btn {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        z-index: 1000;
+        background: #3498db;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #auth-key-btn svg {
+        fill: white;
+    }
+}
+
+/* Анимация для меню-гамбургер */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Дополнительные улучшения для мобильных устройств */
+@media (max-width: 768px) {
+    /* Предотвращаем горизонтальную прокрутку */
+    * {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    /* Центрируем все контейнеры */
+    .container,
+    .player-container,
+    .search-container,
+    .auth-container,
+    .tops-container,
+    .moders-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Улучшаем отступы */
+    .player-header,
+    .card,
+    .stat-card,
+    .friend-card,
+    .moder-card,
+    .top-card {
+        margin-bottom: 12px;
+    }
+    
+    /* Улучшаем навигацию */
+    .navbar {
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+    
+    .navbar .container-fluid {
+        width: 100%;
+        padding: 0 12px;
+    }
+    
+    /* Улучшаем поиск */
+    #quick-search {
+        max-width: 100%;
+        font-size: 0.85rem;
+    }
+    
+    /* Улучшаем кнопки */
+    .btn,
+    .search-button,
+    .button {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    /* Улучшаем формы */
+    .form-control,
+    .search-input,
+    input[type="text"],
+    input[type="password"],
+    textarea,
+    select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        font-size: 16px; /* Предотвращает зум на iOS */
+    }
+    
+    /* Улучшаем таблицы */
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .table td,
+    .table th {
+        padding: 8px 4px;
+    }
+    
+    /* Улучшаем списки */
+    .list-group-item {
+        padding: 12px;
+    }
+    
+    /* Улучшаем модальные окна */
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-content {
+        width: 100%;
+    }
+    
+    /* Улучшаем выпадающие меню */
+    .dropdown-menu {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* Улучшаем пагинацию */
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .page-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Дополнительные улучшения для очень маленьких экранов */
+@media (max-width: 480px) {
+    /* Еще больше уменьшаем отступы */
+    .container,
+    .player-container {
+        padding: 0 10px;
+    }
+    
+    .player-header,
+    .card,
+    .stat-card,
+    .friend-card,
+    .moder-card,
+    .top-card {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    /* Улучшаем размеры текста */
+    body {
+        font-size: 14px;
+    }
+    
+    p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Улучшаем кнопки */
+    .btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    /* Улучшаем иконки */
+    svg {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Улучшаем изображения */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+} 
