@@ -1193,32 +1193,58 @@
         /* Стили для баннера профиля */
         .profile-banner {
             width: 100%;
-            height: 200px;
-            background: #fff;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 16px;
             margin-bottom: 24px;
             box-shadow: 0 8px 32px rgba(52, 152, 219, 0.10);
             overflow: hidden;
             position: relative;
+            cursor: pointer;
+            transition: height 0.4s ease, box-shadow 0.3s ease;
+        }
+        
+        .profile-banner:hover {
+            box-shadow: 0 12px 40px rgba(52, 152, 219, 0.15);
+        }
+        
+        .profile-banner.expanded {
+            height: auto;
+            cursor: pointer;
         }
         
         .profile-banner img {
             width: 100%;
-            height: 100%;
+            height: 300px;
             object-fit: cover;
+            object-position: center top;
             display: block;
+            transition: height 0.4s ease;
+        }
+        
+        .profile-banner.expanded img {
+            height: auto;
+            object-fit: contain;
         }
 
         @media (max-width: 768px) {
             .profile-banner {
-                height: 150px;
+                height: 200px;
                 margin-bottom: 16px;
+            }
+            
+            .profile-banner img {
+                height: 200px;
             }
         }
 
         @media (max-width: 480px) {
             .profile-banner {
-                height: 120px;
+                height: 150px;
+            }
+            
+            .profile-banner img {
+                height: 150px;
             }
         }
     </style>
@@ -1286,10 +1312,12 @@
             Игрок не найден
         </div>
         <div id="player-content" style="display: none;">
+            <div class="profile-banner">
+                <img src="photo_2025-12-31_20-28-53.jpg" alt="Баннер профиля" id="profile-banner-img">
+            </div>
             <div class="player-header">
                 <div class="player-avatar" id="player-avatar"></div>
                 <div class="player-info">
-                    <img class="profile-banner" id="profile-banner" src="photo_2025-12-31_20-28-53.jpg" alt="Не удалось загрузить">
                     <h1 class="player-name">
                         <span id="player-name" style="display: inline-block; vertical-align: middle;"></span>
                         <div class="player-privileges"> <!-- Новый контейнер для привилегий -->
@@ -1488,6 +1516,15 @@
             window.location.href = 'auth.html';
         };
 
+        // Обработчик клика для баннера профиля
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileBanner = document.querySelector('.profile-banner');
+            if (profileBanner) {
+                profileBanner.addEventListener('click', function() {
+                    this.classList.toggle('expanded');
+                });
+            }
+        });
 
         /* Добавляем функционал недавних ников в навигации */
         const MAX_RECENT_NICKS_NAV = 5;
