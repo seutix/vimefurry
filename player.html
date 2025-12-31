@@ -3421,15 +3421,25 @@ document.getElementById('quick-search-btn').onclick = function() {
                 console.log('Запрос истории ников для ID:', playerId);
                 console.log('Целевой URL:', targetUrl);
                 
+                // Функция для fetch с таймаутом
+                const fetchWithTimeout = (url, timeout = 3000) => {
+                    return Promise.race([
+                        fetch(url),
+                        new Promise((_, reject) => 
+                            setTimeout(() => reject(new Error('Таймаут запроса')), timeout)
+                        )
+                    ]);
+                };
+                
                 let historyResponse;
                 let historyData;
                 let lastError;
                 
-                // Пробуем каждый прокси по очереди
+                // Пробуем каждый прокси по очереди с таймаутом 3 секунды
                 for (let i = 0; i < corsProxies.length; i++) {
                     try {
                         console.log(`Пробуем прокси ${i + 1}:`, corsProxies[i]);
-                        historyResponse = await fetch(corsProxies[i]);
+                        historyResponse = await fetchWithTimeout(corsProxies[i], 3000);
                         
                         if (historyResponse.ok) {
                             const proxyData = await historyResponse.json();
@@ -3439,7 +3449,7 @@ document.getElementById('quick-search-btn').onclick = function() {
                             break;
                         }
                     } catch (error) {
-                        console.log(`Прокси ${i + 1} не сработал:`, error);
+                        console.log(`Прокси ${i + 1} не сработал:`, error.message);
                         lastError = error;
                         continue;
                     }
