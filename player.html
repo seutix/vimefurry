@@ -2781,17 +2781,22 @@ document.getElementById('quick-search-btn').onclick = function() {
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
-        function handleDragStart(e) {
+        function handleMouseDown(e) {
+            // Начинаем перетаскивание
             draggedElement = this;
             isDragging = true;
             this.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.innerHTML);
             
             // Вычисляем смещение от точки клика до верхнего левого угла элемента
             const rect = this.getBoundingClientRect();
             dragOffsetX = e.clientX - rect.left;
             dragOffsetY = e.clientY - rect.top;
+            
+            // Инициализируем позицию мыши
+            currentMouseX = e.clientX;
+            currentMouseY = e.clientY;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
             
             // Создаем визуальную копию элемента
             dragGhost = this.cloneNode(true);
@@ -2808,9 +2813,7 @@ document.getElementById('quick-search-btn').onclick = function() {
             // Скрываем оригинальный элемент
             this.style.opacity = '0.3';
             
-            // Инициализируем позицию
-            lastMouseX = e.clientX;
-            lastMouseY = e.clientY;
+            // Обновляем позицию ghost
             updateGhostPosition(e.clientX, e.clientY);
             
             // Запускаем автоскролл
@@ -2819,13 +2822,85 @@ document.getElementById('quick-search-btn').onclick = function() {
             // Разрешаем ручной скролл во время перетаскивания
             enableManualScroll();
             
-            // Добавляем глобальный обработчик dragover для всего документа
-            document.addEventListener('dragover', globalDragOver);
+            // Добавляем глобальные обработчики
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+            // Предотвращаем выделение текста
+            e.preventDefault();
         }
 
-        function handleDragEnd(e) {
-            this.style.opacity = '';
-            this.classList.remove('dragging');
+        function handleMouseMove(e) {
+            if (!isDragging) return;
+            
+            // Сохраняем текущую позицию мыши
+            currentMouseY = e.clientY;
+            currentMouseX = e.clientX;
+            
+            // Обновляем позицию ghost элемента
+            if (dragGhost) {
+                updateGhostPosition(e.clientX, e.clientY);
+            }
+            
+            // Проверяем, над каким элементом находится курсор
+            const elementBelow = document.elementFromPoint(e.clientX, e.clientY);
+            const droppableBelow = elementBelow?.closest('.stat-card');
+            
+            // Убираем класс drag-over со всех элементов
+            document.querySelectorAll('.stat-card').forEach(card => {
+                if (card !== draggedElement) {
+                    card.classList.remove('drag-over');
+                }
+            });
+            
+            // Добавляем класс drag-over к элементу под курсором
+            if (droppableBelow && droppableBelow !== draggedElement) {
+                droppableBelow.classList.add('drag-over');
+            }
+        }
+
+        function handleMouseUp(e) {
+            if (!isDragging) return;
+            
+            // Находим элемент под курсором
+            const elementBelow = document.elementFromPoint(e.clientX, e.clientY);
+            const droppableBelow = elementBelow?.closest('.stat-card');
+            
+            // Если есть целевой элемент, выполняем перемещение
+            if (droppableBelow && droppableBelow !== draggedElement) {
+                // Получаем родительские ряды
+                const draggedRow = draggedElement.parentNode;
+                const targetRow = droppableBelow.parentNode;
+                
+                // Если элементы в одном ряду
+                if (draggedRow === targetRow) {
+                    const allCards = Array.from(draggedRow.children);
+                    const draggedIndex = allCards.indexOf(draggedElement);
+                    const targetIndex = allCards.indexOf(droppableBelow);
+                    
+                    if (draggedIndex < targetIndex) {
+                        draggedRow.insertBefore(draggedElement, droppableBelow.nextSibling);
+                    } else {
+                        draggedRow.insertBefore(draggedElement, droppableBelow);
+                    }
+                } else {
+                    // Элементы в разных рядах - меняем их местами
+                    const draggedNext = draggedElement.nextSibling;
+                    const targetNext = droppableBelow.nextSibling;
+                    
+                    if (draggedNext) {
+                        targetRow.insertBefore(draggedElement, targetNext);
+                        draggedRow.insertBefore(droppableBelow, draggedNext);
+                    } else {
+                        targetRow.insertBefore(draggedElement, targetNext);
+                        draggedRow.appendChild(droppableBelow);
+                    }
+                }
+            }
+            
+            // Очищаем состояние
+            draggedElement.style.opacity = '';
+            draggedElement.classList.remove('dragging');
             isDragging = false;
             
             // Удаляем ghost элемент
@@ -2834,7 +2909,7 @@ document.getElementById('quick-search-btn').onclick = function() {
                 dragGhost = null;
             }
             
-            // Убираем класс drag-over со всех элементов с анимацией
+            // Убираем класс drag-over со всех элементов
             document.querySelectorAll('.stat-card').forEach(card => {
                 card.classList.remove('drag-over');
             });
@@ -2845,8 +2920,9 @@ document.getElementById('quick-search-btn').onclick = function() {
             // Отключаем ручной скролл
             disableManualScroll();
             
-            // Удаляем глобальный обработчик dragover
-            document.removeEventListener('dragover', globalDragOver);
+            // Удаляем глобальные обработчики
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
             
             // Сохраняем новый порядок
             saveStatsOrder();
@@ -2860,30 +2936,26 @@ document.getElementById('quick-search-btn').onclick = function() {
             dragOffsetY = 0;
         }
 
+        // Старые функции для совместимости (больше не используются)
+        function handleDragStart(e) {
+            // Эта функция больше не используется, но оставлена для совместимости
+        }
+
+        function handleDragEnd(e) {
+            // Эта функция больше не используется, но оставлена для совместимости
+        }
+
         function handleDragOver(e) {
             if (e.preventDefault) {
                 e.preventDefault();
             }
-            e.dataTransfer.dropEffect = 'move';
-            
             return false;
         }
         
-        // Глобальный обработчик для перемещения по всему экрану
         function globalDragOver(e) {
             if (e.preventDefault) {
                 e.preventDefault();
             }
-            
-            // Сохраняем текущую позицию мыши
-            currentMouseY = e.clientY;
-            currentMouseX = e.clientX;
-            
-            // Обновляем позицию ghost элемента
-            if (dragGhost) {
-                updateGhostPosition(e.clientX, e.clientY);
-            }
-            
             return false;
         }
         
@@ -2921,22 +2993,62 @@ document.getElementById('quick-search-btn').onclick = function() {
             if (isDragging) {
                 // Предотвращаем стандартное поведение и скроллим вручную
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
                 
-                // Скроллим страницу на величину deltaY
-                window.scrollBy(0, e.deltaY);
+                // Получаем величину прокрутки (разные события используют разные свойства)
+                const scrollAmount = e.deltaY || e.wheelDelta || e.detail || 0;
+                
+                // Скроллим страницу
+                window.scrollBy({
+                    top: scrollAmount,
+                    behavior: 'instant'
+                });
+                
+                // Обновляем позицию ghost элемента после скролла
+                if (dragGhost && currentMouseX && currentMouseY) {
+                    updateGhostPosition(currentMouseX, currentMouseY);
+                }
                 
                 return false;
             }
         }
 
         function enableManualScroll() {
-            // Добавляем обработчик для колесика мыши с passive: false чтобы можно было preventDefault
-            document.addEventListener('wheel', handleManualScroll, { passive: false });
+            // Добавляем обработчики для всех типов событий прокрутки
+            const scrollHandler = handleManualScroll;
+            const options = { passive: false, capture: true };
+            
+            // Современные браузеры
+            window.addEventListener('wheel', scrollHandler, options);
+            document.addEventListener('wheel', scrollHandler, options);
+            document.body.addEventListener('wheel', scrollHandler, options);
+            
+            // Старые браузеры и альтернативные события
+            window.addEventListener('mousewheel', scrollHandler, options);
+            document.addEventListener('mousewheel', scrollHandler, options);
+            document.body.addEventListener('mousewheel', scrollHandler, options);
+            
+            // Firefox
+            window.addEventListener('DOMMouseScroll', scrollHandler, options);
+            document.addEventListener('DOMMouseScroll', scrollHandler, options);
         }
 
         function disableManualScroll() {
-            // Удаляем обработчик
-            document.removeEventListener('wheel', handleManualScroll);
+            // Удаляем все обработчики
+            const scrollHandler = handleManualScroll;
+            const options = { passive: false, capture: true };
+            
+            window.removeEventListener('wheel', scrollHandler, options);
+            document.removeEventListener('wheel', scrollHandler, options);
+            document.body.removeEventListener('wheel', scrollHandler, options);
+            
+            window.removeEventListener('mousewheel', scrollHandler, options);
+            document.removeEventListener('mousewheel', scrollHandler, options);
+            document.body.removeEventListener('mousewheel', scrollHandler, options);
+            
+            window.removeEventListener('DOMMouseScroll', scrollHandler, options);
+            document.removeEventListener('DOMMouseScroll', scrollHandler, options);
         }
 
         function startAutoScroll() {
@@ -2979,64 +3091,7 @@ document.getElementById('quick-search-btn').onclick = function() {
             }
         }
 
-        function handleDragEnter(e) {
-            if (this !== draggedElement) {
-                this.classList.add('drag-over');
-            }
-        }
-
-        function handleDrop(e) {
-            if (e.stopPropagation) {
-                e.stopPropagation();
-            }
-            
-            if (draggedElement !== this) {
-                // Получаем родительские ряды
-                const draggedRow = draggedElement.parentNode;
-                const targetRow = this.parentNode;
-                
-                // Добавляем анимацию перед перемещением
-                const draggedRect = draggedElement.getBoundingClientRect();
-                const targetRect = this.getBoundingClientRect();
-                
-                // Если элементы в одном ряду
-                if (draggedRow === targetRow) {
-                    // Определяем позицию для вставки
-                    const allCards = Array.from(targetRow.children);
-                    const draggedIndex = allCards.indexOf(draggedElement);
-                    const targetIndex = allCards.indexOf(this);
-                    
-                    if (draggedIndex < targetIndex) {
-                        targetRow.insertBefore(draggedElement, this.nextSibling);
-                    } else {
-                        targetRow.insertBefore(draggedElement, this);
-                    }
-                } else {
-                    // Элементы в разных рядах - меняем местами
-                    const draggedNext = draggedElement.nextSibling;
-                    const targetNext = this.nextSibling;
-                    
-                    targetRow.insertBefore(draggedElement, this);
-                    draggedRow.insertBefore(this, draggedNext);
-                }
-                
-                // Добавляем анимацию появления
-                draggedElement.style.animation = 'none';
-                setTimeout(() => {
-                    draggedElement.style.animation = '';
-                }, 10);
-            }
-            
-            this.classList.remove('drag-over');
-            return false;
-        }
-
-        function handleDragLeave(e) {
-            // Проверяем, действительно ли мы покинули элемент
-            if (e.target === this) {
-                this.classList.remove('drag-over');
-            }
-        }
+        // Старые функции удалены, логика перемещения теперь в handleMouseUp
 
         function saveStatsOrder() {
             const statsGrid = document.querySelector('.stats-grid');
@@ -3081,7 +3136,7 @@ document.getElementById('quick-search-btn').onclick = function() {
             // Создаем drag handle (ручку для перетаскивания)
             const dragHandle = document.createElement('div');
             dragHandle.className = 'drag-handle';
-            dragHandle.setAttribute('draggable', 'true');
+            // Убираем draggable, используем mouse events вместо HTML5 Drag API
             
             // Создаем 3 ряда по 2 точки (6 точек всего)
             for (let i = 0; i < 3; i++) {
@@ -3095,15 +3150,10 @@ document.getElementById('quick-search-btn').onclick = function() {
                 dragHandle.appendChild(row);
             }
             
-            // Добавляем обработчики drag-and-drop только к handle
-            dragHandle.addEventListener('dragstart', function(e) {
-                handleDragStart.call(block, e);
+            // Добавляем обработчик mousedown к handle для начала перетаскивания
+            dragHandle.addEventListener('mousedown', function(e) {
+                handleMouseDown.call(block, e);
             });
-            block.addEventListener('dragend', handleDragEnd);
-            block.addEventListener('dragover', handleDragOver);
-            block.addEventListener('dragenter', handleDragEnter);
-            block.addEventListener('drop', handleDrop);
-            block.addEventListener('dragleave', handleDragLeave);
             
             block.appendChild(dragHandle);
             
