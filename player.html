@@ -1189,6 +1189,38 @@
         body.no-custom-font * {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
         }
+
+        /* Стили для баннера профиля */
+        .profile-banner {
+            width: 100%;
+            height: 200px;
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(52, 152, 219, 0.10);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .profile-banner {
+                height: 150px;
+                margin-bottom: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-banner {
+                height: 120px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -4367,8 +4399,9 @@ function renderFriendsList(friends, onlineStatuses, sortType = 'online') {
             const rankOrder = {
                 "ADMIN": 1, "CHIEF": 2, "WARDEN": 3, "MODER": 4, "HELPER": 5, "ORGANIZER": 6, 
                 "DEV": 7, "YOUTUBE": 8, "MAPLEAD": 9, "SRBUILDER": 10, "BUILDER": 11, "JRBUILDER": 12, 
-                "VIME": 13, "ETERNAL": 14, "ELITE": 15, "THANE": 16, "DIVINE": 17, "IMMORTAL": 18, 
-                "HOLY": 19, "PREMIUM": 20, "VIP": 21, "PLAYER": 22
+                "VIME": 13, "ULTIMATE": 14, "IMPERIUM": 15, "IMPERIAL": 15, "ABSOLUTE": 16, "CELESTIAL": 17, 
+                "ETERNAL": 18, "ELITE": 19, "THANE": 20, "DIVINE": 21, "IMMORTAL": 22, 
+                "HOLY": 23, "PREMIUM": 24, "VIP": 25, "PLAYER": 26
             };
             
             sortedFriends.sort((a, b) => {
