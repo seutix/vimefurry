@@ -454,7 +454,7 @@
         
         .drag-handle {
             position: absolute;
-            top: 8px;
+            top: 14px;
             right: 8px;
             width: 24px;
             height: 24px;
@@ -2818,6 +2818,9 @@ document.getElementById('quick-search-btn').onclick = function() {
             
             // Разрешаем ручной скролл во время перетаскивания
             enableManualScroll();
+            
+            // Добавляем глобальный обработчик dragover для всего документа
+            document.addEventListener('dragover', globalDragOver);
         }
 
         function handleDragEnd(e) {
@@ -2842,6 +2845,9 @@ document.getElementById('quick-search-btn').onclick = function() {
             // Отключаем ручной скролл
             disableManualScroll();
             
+            // Удаляем глобальный обработчик dragover
+            document.removeEventListener('dragover', globalDragOver);
+            
             // Сохраняем новый порядок
             saveStatsOrder();
             
@@ -2859,6 +2865,15 @@ document.getElementById('quick-search-btn').onclick = function() {
                 e.preventDefault();
             }
             e.dataTransfer.dropEffect = 'move';
+            
+            return false;
+        }
+        
+        // Глобальный обработчик для перемещения по всему экрану
+        function globalDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
             
             // Сохраняем текущую позицию мыши
             currentMouseY = e.clientY;
@@ -2881,24 +2896,24 @@ document.getElementById('quick-search-btn').onclick = function() {
             lastMouseX = mouseX;
             lastMouseY = mouseY;
             
-            // Ограничиваем угол наклона
-            const maxRotation = 8;
-            const rotationX = Math.max(-maxRotation, Math.min(maxRotation, velocityY * 0.5));
-            const rotationZ = Math.max(-maxRotation, Math.min(maxRotation, velocityX * 0.3));
+            // Увеличиваем максимальный угол наклона и коэффициенты для более сильного эффекта
+            const maxRotation = 25;
+            const rotationX = Math.max(-maxRotation, Math.min(maxRotation, velocityY * 1.5));
+            const rotationZ = Math.max(-maxRotation, Math.min(maxRotation, velocityX * 1.2));
             
             // Позиционируем ghost элемент относительно точки клика (где находятся точки)
             const x = mouseX - dragOffsetX;
             const y = mouseY - dragOffsetY;
             
-            // Применяем трансформации
+            // Применяем трансформации с более сильным эффектом
             dragGhost.style.left = x + 'px';
             dragGhost.style.top = y + 'px';
             dragGhost.style.transform = `
                 rotateX(${-rotationX}deg) 
                 rotateZ(${rotationZ}deg) 
-                scale(1.05)
+                scale(1.08)
             `;
-            dragGhost.style.boxShadow = '0 20px 60px rgba(52, 152, 219, 0.3)';
+            dragGhost.style.boxShadow = '0 25px 70px rgba(52, 152, 219, 0.4)';
         }
 
         // Обработчик ручного скролла колесиком мыши
