@@ -6,6 +6,7 @@
     <title>VimeStats</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="settings.css">
     <style>
         @font-face {
             font-family: 'VimeArtBold';
@@ -1606,5 +1607,24 @@
         });
     </script>
     <script src="auth.js"></script>
+      <script src="settings.js"></script>
+
+    <!-- Кнопка настроек -->
+    <div id="settings-btn">
+        <div class="gear">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="gear-inner"></div>
+        </div>
+    </div>
+
+    <!-- Меню настроек -->
+    <div id="settings-menu">
+        <div class="settings-item">
+            <span class="settings-label">Отключить кастомный шрифт</span>
+            <div class="settings-toggle" id="font-toggle"></div>
+        </div>
+    </div>
 </body>
 </html>
