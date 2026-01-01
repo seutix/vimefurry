@@ -270,16 +270,6 @@ function updateAuthUI() {
         authKeyBtn.style.boxShadow = 'none';
         authKeyBtn.style.border = 'none';
         authKeyBtn.style.cursor = 'pointer';
-        authKeyBtn.style.transition = 'transform 0.2s';
-        
-        // Добавляем эффект при наведении
-        authKeyBtn.onmouseenter = function() {
-            authKeyBtn.style.transform = 'scale(1.1)';
-        };
-        
-        authKeyBtn.onmouseleave = function() {
-            authKeyBtn.style.transform = 'scale(1)';
-        };
         
         authKeyBtn.onclick = function() {
             window.location.href = 'auth.html';
