@@ -103,7 +103,7 @@ function updateAuthUI() {
         
         // Базовая голова
         const head = document.createElement('img');        
-        head.src = `https://skin.vimeworld.com/head/${userData.username}.png`;        
+        head.src = `https://skin.vimeworld.com/head/${userData.username}.png?t=${Date.now()}`;        
         head.alt = '';        
         head.style.position = 'absolute';
         head.style.top = '0';
@@ -115,7 +115,7 @@ function updateAuthUI() {
         headContainer.appendChild(head);
         
         // Добавляем оверлей головы из полного скина
-        const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png`;
+        const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png?t=${Date.now()}`;
         const skinFullImg = new Image();
         
         skinFullImg.onload = function() {

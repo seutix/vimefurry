@@ -2191,7 +2191,7 @@
                         resolve(`/assets/skins/steve.png`);
                     };
 
-                    img.src = `https://skin.vimeworld.com/raw/skin/${username}.png`;
+                    img.src = `https://skin.vimeworld.com/raw/skin/${username}.png?t=${Date.now()}`;
                 });
             }
             
@@ -2643,7 +2643,7 @@
 
                     // Добавляем базовую голову
                     const playerHeadImg = document.createElement('img');
-                    playerHeadImg.src = `https://skin.vimeworld.com/head/${player.username}.png`;
+                    playerHeadImg.src = `https://skin.vimeworld.com/head/${player.username}.png?t=${Date.now()}`;
                     playerHeadImg.alt = `${player.username} head`;
                     playerHeadImg.classList.add('player-avatar-base');
                     playerAvatarDiv.appendChild(playerHeadImg);
@@ -2697,7 +2697,7 @@
                     // Инициализация SkinViewer
                    // const skinUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;
                     const skinUrl = await getPlayerSkin(player.username);
-                    const capeUrl = `https://skin.vimeworld.com/raw/cape/${player.username}.png`;
+                    const capeUrl = `https://skin.vimeworld.com/raw/cape/${player.username}.png?t=${Date.now()}`;
 
                     const skinContainer = document.getElementById('skin3d-container');
                     skinContainer.innerHTML = ""; // очищаем
@@ -4979,7 +4979,7 @@ function createFriendElement(friend, onlineStatuses) {
     
     // Добавляем 3D голову
     const headImg = document.createElement('img');
-    headImg.src = `https://skin.vimeworld.com/helm/3d/${friend.username}.png`;
+    headImg.src = `https://skin.vimeworld.com/helm/3d/${friend.username}.png?t=${Date.now()}`;
     headImg.alt = `${friend.username}`;
     headImg.className = 'friend-avatar-img';
     headImg.style.fontFamily = 'VimeArtBold, sans-serif';
@@ -5733,7 +5733,7 @@ async function loadCapesHistory() {
         grid.className = 'history-grid';
         
         // Получаем текущий скин для отображения с плащом
-        const currentSkinUrl = `https://skin.vimeworld.com/raw/skin/${username}.png`;
+        const currentSkinUrl = `https://skin.vimeworld.com/raw/skin/${username}.png?t=${Date.now()}`;
         
         data.response.data.forEach((item, index) => {
             const historyItem = document.createElement('div');
@@ -6726,7 +6726,7 @@ const gameIcons = {
     'FALLGUYS': { name: 'Fall Guys', icon: 'FallGuys.png' },
     'TEAMFORTRESS': { name: 'Team Fortess', icon: '404.png' },
     'BATTLEBOX': { name: 'Battle Box', icon: 'battlebox.png' },
-    'FARM': { name: 'My Farm', icon: 'MyFarm.png' },
+    'FARM': { name: 'MyLittleFarm', icon: 'MyFarm.png' },
     'FIREBALLFIGHT': { name: 'Fireball Fight', icon: 'firebollfight.png' },
     'DEATHRUN': { name: 'Death Run', icon: 'money.png' }
 };

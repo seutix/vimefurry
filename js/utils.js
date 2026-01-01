@@ -243,7 +243,7 @@ function formatPlaytime(seconds, full = false) {
  * @param {HTMLElement} container - Контейнер для добавления оверлея
  */
 function createHeadOverlay(username, container) {
-    const skinUrl = `https://skin.vimeworld.com/raw/skin/${username}.png`;
+    const skinUrl = `https://skin.vimeworld.com/raw/skin/${username}.png?t=${Date.now()}`;
     const img = new Image();
     img.crossOrigin = "Anonymous";
     

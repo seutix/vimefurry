@@ -214,13 +214,13 @@ function createRecentNickItem(nick, onClick, options = {}) {
     
     // Добавляем базовую голову
     const head = document.createElement('img');
-    head.src = `https://skin.vimeworld.com/head/${nick}.png`;
+    head.src = `https://skin.vimeworld.com/head/${nick}.png?t=${Date.now()}`;
     head.className = 'mini-head';
     head.alt = '';
     headContainer.appendChild(head);
     
     // Добавляем оверлей головы
-    const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png`;
+    const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png?t=${Date.now()}`;
     const skinFullImg = new Image();
     
     skinFullImg.onerror = function() {
