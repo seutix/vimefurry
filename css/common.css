@@ -13,9 +13,40 @@
 /* ============================================
    Шрифты
    ============================================ */
+
+@font-face {
+    font-family: 'VimeArt';
+    src: url('../assets/fonts/vimeart.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @font-face {
     font-family: 'VimeArtBold';
     src: url('../assets/fonts/vimeartbold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'VimeArtBoldBlock';
+    src: url('../assets/fonts/vimeartboldblock.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'VimeArtBoldLong';
+    src: url('../assets/fonts/vimeartboldlong.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'VimeArtMini';
+    src: url('../assets/fonts/vimeartmini.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
