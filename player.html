@@ -1627,7 +1627,7 @@
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                             <span id="friends-count-link" style="cursor: pointer; display: flex; align-items: center;">
-                                <span class="playtime-label" style="font-family: 'VimeArtBold', sans-serif; font-weight: normal; font-size: 0.8rem; margin-right: 2px; line-height: 1;">Друзей: </span>
+                                <span class="playtime-label" style="font-family: 'VimeArtBold', sans-serif; font-weight: normal; font-size: 0.8rem; margin-right: 2px; line-height: 1; white-space: pre;">Друзей: </span>
                                 <span id="player-friends" style="font-family: 'VimeArtBold', sans-serif; font-weight: normal; font-size: 0.8rem; line-height: 1;">0</span>
                             </span>
                         </div>
@@ -4323,7 +4323,7 @@ async function loadFriendsBasicInfo(username) {
         }));
         
         // Обновляем счетчик друзей на странице
-        const friendsCount = data.friends.length;
+        const friendsCount =  data.friends.length;
         document.getElementById('player-friends').textContent = friendsCount;
         
         return data.friends;
