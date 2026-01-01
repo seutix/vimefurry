@@ -31,7 +31,7 @@ const NAV_STYLES = {
     searchContainer: 'position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px;background:#e6f3ff;border-radius:10px;padding:0 12px;height:40px;box-shadow:0 2px 8px rgba(52,152,219,0.08);',
     searchInput: "border:none;background:none;outline:none;width:260px;font-family:'VimeArtBold',sans-serif;font-size:0.9rem;color:#3498db;",
     searchBtn: 'display:flex;align-items:center;justify-content:center;cursor:pointer;',
-    authBtn: 'position:absolute;right:24px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#e6f3ff;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(52,152,219,0.08);'
+    authBtn: 'position:absolute;right:24px;top:50%;transform:translateY(-50%);width:35px;height:35px;display:flex;align-items:center;justify-content:center;background:#e6f3ff;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(52,152,219,0.08);'
 };
 
 /**
