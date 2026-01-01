@@ -1339,6 +1339,169 @@
             }
         }
 
+        /* Стили для вкладки матчей */
+        .matches-loading {
+            text-align: center;
+            padding: 50px;
+            color: #3498db;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+        
+        .matches-error {
+            text-align: center;
+            padding: 50px;
+            color: #e74c3c;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+        
+        .matches-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        
+        .match-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInMatch 0.4s ease-out forwards;
+        }
+        
+        @keyframes fadeInMatch {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+        }
+        
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e6f3ff;
+        }
+        
+        .match-game {
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 1.1rem;
+            color: #3498db;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .match-game-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+        
+        .match-result {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .match-result.win {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .match-result.lose {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .match-result.draw {
+            background: rgba(149, 165, 166, 0.2);
+            color: #7f8c8d;
+        }
+        
+        .match-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .match-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        
+        .match-info-label {
+            color: #7f8c8d;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+        
+        .match-info-value {
+            color: #2c3e50;
+            font-family: 'VimeArtBold', sans-serif;
+            font-weight: bold;
+        }
+        
+        .match-date {
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e6f3ff;
+            color: #95a5a6;
+            font-size: 0.8rem;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+        
+        .match-map {
+            background: #f8fbff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 12px;
+            font-family: 'VimeArtBold', sans-serif;
+            color: #3498db;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .matches-list {
+                grid-template-columns: 1fr;
+            }
+            
+            #matches-filters > div {
+                flex-direction: column;
+                align-items: stretch !important;
+            }
+            
+            #matches-filters select {
+                max-width: 100% !important;
+            }
+            
+            #matches-filters label {
+                margin-left: 0 !important;
+            }
+        }
+
         /* Стили для модального окна истории скинов */
         .history-modal {
             display: none;
@@ -1776,7 +1939,34 @@
                 </div>
 
                 <div class="tab-pane fade" id="matches" role="tabpanel">
-                    <div class="matches-list" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <div class="matches-loading" id="matches-loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                        <div style="margin-top: 10px;">Загрузка истории матчей...</div>
+                    </div>
+                    <div class="matches-error" id="matches-error" style="display: none;">
+                        <div>Не удалось загрузить историю матчей</div>
+                        <button class="btn btn-primary mt-3" id="retry-matches-btn">Повторить</button>
+                    </div>
+                    <!-- Фильтры для матчей -->
+                    <div id="matches-filters" style="display: none; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08); flex-wrap: wrap;">
+                            <label for="matches-game-filter" style="font-family: 'VimeArtBold', sans-serif; font-size: 1rem; color: #3498db; margin: 0;">Игра:</label>
+                            <select id="matches-game-filter" style="flex: 1; min-width: 150px; max-width: 220px; padding: 10px 16px; font-family: 'VimeArtBold', sans-serif; font-size: 0.95rem; color: #2c3e50; background: #f8fbff; border: 2px solid #e6f3ff; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; outline: none;">
+                                <option value="all">Все игры</option>
+                            </select>
+                            
+                            <label for="matches-result-filter" style="font-family: 'VimeArtBold', sans-serif; font-size: 1rem; color: #3498db; margin: 0 0 0 12px;">Результат:</label>
+                            <select id="matches-result-filter" style="flex: 1; min-width: 150px; max-width: 220px; padding: 10px 16px; font-family: 'VimeArtBold', sans-serif; font-size: 0.95rem; color: #2c3e50; background: #f8fbff; border: 2px solid #e6f3ff; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; outline: none;">
+                                <option value="all">Все результаты</option>
+                                <option value="win">Победы</option>
+                                <option value="lose">Поражения</option>
+                                <option value="draw">Ничьи</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="matches-list" id="matches-list" style="display: none;">
                         <!-- Матчи будут добавлены динамически -->
                     </div>
                 </div>
@@ -6248,7 +6438,334 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Добавляем обработчик для вкладки матчей
+    const matchesTab = document.getElementById('matches-tab');
+    if (matchesTab) {
+        matchesTab.addEventListener('shown.bs.tab', function() {
+            // Загружаем матчи только при первом открытии вкладки
+            if (!window.matchesLoaded && window.currentPlayerId) {
+                loadMatches(window.currentPlayerId);
+            }
+        });
+    }
+    
+    // Обработчик для кнопки повтора загрузки матчей
+    const retryMatchesBtn = document.getElementById('retry-matches-btn');
+    if (retryMatchesBtn) {
+        retryMatchesBtn.addEventListener('click', function() {
+            if (window.currentPlayerId) {
+                loadMatches(window.currentPlayerId);
+            }
+        });
+    }
 });
+
+// Функция для загрузки матчей
+let matchesData = null;
+let filteredMatches = null;
+
+async function loadMatches(playerId) {
+    try {
+        const matchesLoading = document.getElementById('matches-loading');
+        const matchesError = document.getElementById('matches-error');
+        const matchesList = document.getElementById('matches-list');
+        const matchesFilters = document.getElementById('matches-filters');
+        
+        matchesLoading.style.display = 'block';
+        matchesError.style.display = 'none';
+        matchesList.style.display = 'none';
+        matchesFilters.style.display = 'none';
+        
+        const response = await fetch(`https://api.vimeworld.com/user/${playerId}/matches`);
+        
+        if (!response.ok) {
+            throw new Error('Ошибка загрузки матчей');
+        }
+        
+        matchesData = await response.json();
+        filteredMatches = matchesData.matches || [];
+        window.matchesLoaded = true;
+        
+        // Заполняем фильтр игр
+        populateGameFilter();
+        
+        displayMatches();
+        
+        matchesLoading.style.display = 'none';
+        matchesList.style.display = 'grid';
+        matchesFilters.style.display = 'block';
+        
+    } catch (error) {
+        console.error('Ошибка при загрузке матчей:', error);
+        const matchesLoading = document.getElementById('matches-loading');
+        const matchesError = document.getElementById('matches-error');
+        
+        matchesLoading.style.display = 'none';
+        matchesError.style.display = 'block';
+    }
+}
+
+// Заполняем фильтр игр уникальными играми
+function populateGameFilter() {
+    const gameFilter = document.getElementById('matches-game-filter');
+    const games = new Set();
+    
+    if (matchesData && matchesData.matches) {
+        matchesData.matches.forEach(match => {
+            if (match.game) {
+                games.add(match.game);
+            }
+        });
+    }
+    
+    // Очищаем и добавляем опции
+    gameFilter.innerHTML = '<option value="all">Все игры</option>';
+    
+    Array.from(games).sort().forEach(game => {
+        const gameInfo = gameIcons[game] || { name: game };
+        const option = document.createElement('option');
+        option.value = game;
+        option.textContent = gameInfo.name;
+        gameFilter.appendChild(option);
+    });
+    
+    // Добавляем обработчики фильтров
+    gameFilter.addEventListener('change', applyFilters);
+    document.getElementById('matches-result-filter').addEventListener('change', applyFilters);
+}
+
+// Применяем фильтры
+function applyFilters() {
+    const gameFilter = document.getElementById('matches-game-filter').value;
+    const resultFilter = document.getElementById('matches-result-filter').value;
+    
+    filteredMatches = matchesData.matches.filter(match => {
+        // Фильтр по игре
+        if (gameFilter !== 'all' && match.game !== gameFilter) {
+            return false;
+        }
+        
+        // Фильтр по результату
+        if (resultFilter !== 'all') {
+            if (resultFilter === 'win' && match.win !== true) return false;
+            if (resultFilter === 'lose' && match.win !== false) return false;
+            if (resultFilter === 'draw' && match.win !== undefined) return false;
+        }
+        
+        return true;
+    });
+    
+    displayMatches();
+}
+
+// Маппинг игр на иконки и названия
+const gameIcons = {
+    'BW': { name: 'BedWars', icon: 'bedwars.png' },
+    'SW': { name: 'SkyWars', icon: 'SkyWars.png' },
+    'DUELS': { name: 'Duels', icon: 'Duels.png' },
+    'HG': { name: 'HungerGames', icon: 'HungerGames.png' },
+    'BRIDGE': { name: 'The Bridge', icon: 'TheBridge.png' },
+    'MURDER': { name: 'Murder Mystery', icon: 'MurderMystery.png' },
+    'BB': { name: 'Build Battle', icon: 'BuildBattle.png' },
+    'CP': { name: 'ClashPoint', icon: 'ClashPoint.png' },
+    'PRISON': { name: 'Prison', icon: 'Prison.png' },
+    'ARCADE': { name: 'Arcade', icon: 'arcade.png' },
+    'GUNGAME': { name: 'Gun Game', icon: 'GunGame.png' },
+    'JUMPLEAGUE': { name: 'Jump League', icon: 'JumpLeague.png' },
+    'TNTRUN': { name: 'TNT Run', icon: 'tntrun.png' },
+    'TNTTAG': { name: 'TNT Tag', icon: 'tnttag.png' },
+    'BLOCKPARTY': { name: 'Block Party', icon: 'BlockParty.png' },
+    'KPVP': { name: 'Kit PvP', icon: 'kitpvp.png' },
+    'ANNIH': { name: 'Annihilation', icon: 'Annihilation.png' },
+    'BWTURBO': { name: 'BedWars Turbo', icon: 'BedWars Turbo.png' }
+};
+
+function displayMatches() {
+    const matchesList = document.getElementById('matches-list');
+    matchesList.innerHTML = '';
+    
+    if (!filteredMatches || filteredMatches.length === 0) {
+        matchesList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px; color: #7f8c8d; font-family: \'VimeArtBold\', sans-serif;">Матчи не найдены</div>';
+        return;
+    }
+    
+    // Добавляем статистику по матчам
+    const stats = {
+        total: filteredMatches.length,
+        wins: filteredMatches.filter(m => m.win === true).length,
+        losses: filteredMatches.filter(m => m.win === false).length,
+        draws: filteredMatches.filter(m => m.win === undefined).length,
+        totalKills: filteredMatches.reduce((sum, m) => sum + (m.kills || 0), 0),
+        totalDeaths: filteredMatches.reduce((sum, m) => sum + (m.deaths || 0), 0)
+    };
+    
+    const winRate = stats.total > 0 ? ((stats.wins / stats.total) * 100).toFixed(1) : 0;
+    const kd = stats.totalDeaths > 0 ? (stats.totalKills / stats.totalDeaths).toFixed(2) : stats.totalKills.toFixed(2);
+    
+    // Создаем блок статистики
+    const statsBlock = document.createElement('div');
+    statsBlock.style.cssText = `
+        grid-column: 1/-1;
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 32px rgba(52, 152, 219, 0.15);
+        color: white;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+    `;
+    
+    statsBlock.innerHTML = `
+        <div style="text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">ВСЕГО МАТЧЕЙ</div>
+            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif;">${stats.total}</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">ПОБЕД</div>
+            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif; color: #2ecc71;">${stats.wins}</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">ПОРАЖЕНИЙ</div>
+            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif; color: #e74c3c;">${stats.losses}</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">ВИНРЕЙТ</div>
+            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif;">${winRate}%</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">K/D</div>
+            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif;">${kd}</div>
+        </div>
+    `;
+    
+    matchesList.appendChild(statsBlock);
+    
+    filteredMatches.forEach((match, index) => {
+        const matchCard = document.createElement('div');
+        matchCard.className = 'match-card';
+        matchCard.style.animationDelay = `${index * 0.05}s`;
+        
+        // Определяем игру
+        const gameInfo = gameIcons[match.game] || { name: match.game, icon: '404.png' };
+        const gameIconPath = `assets/images/icons/${gameInfo.icon}`;
+        
+        // Определяем результат
+        let resultClass = 'draw';
+        let resultText = 'Ничья';
+        
+        if (match.win !== undefined) {
+            if (match.win === true) {
+                resultClass = 'win';
+                resultText = 'Победа';
+            } else if (match.win === false) {
+                resultClass = 'lose';
+                resultText = 'Поражение';
+            }
+        }
+        
+        // Форматируем дату
+        const matchDate = new Date(match.date * 1000);
+        const formattedDate = matchDate.toLocaleString('ru-RU', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Создаем HTML карточки
+        let matchHTML = `
+            <div class="match-header">
+                <div class="match-game">
+                    <img src="${gameIconPath}" alt="${gameInfo.name}" class="match-game-icon" onerror="this.src='assets/images/icons/404.png'">
+                    <span>${gameInfo.name}</span>
+                </div>
+                <div class="match-result ${resultClass}">${resultText}</div>
+            </div>
+            <div class="match-info">
+        `;
+        
+        // Добавляем информацию о матче
+        if (match.map) {
+            matchHTML += `<div class="match-map">Карта: ${match.map}</div>`;
+        }
+        
+        // Добавляем статистику в зависимости от игры
+        if (match.kills !== undefined) {
+            matchHTML += `
+                <div class="match-info-row">
+                    <span class="match-info-label">Убийств:</span>
+                    <span class="match-info-value">${match.kills}</span>
+                </div>
+            `;
+        }
+        
+        if (match.deaths !== undefined) {
+            matchHTML += `
+                <div class="match-info-row">
+                    <span class="match-info-label">Смертей:</span>
+                    <span class="match-info-value">${match.deaths}</span>
+                </div>
+            `;
+        }
+        
+        if (match.kills !== undefined && match.deaths !== undefined) {
+            const kd = match.deaths > 0 ? (match.kills / match.deaths).toFixed(2) : match.kills.toFixed(2);
+            matchHTML += `
+                <div class="match-info-row">
+                    <span class="match-info-label">K/D:</span>
+                    <span class="match-info-value">${kd}</span>
+                </div>
+            `;
+        }
+        
+        if (match.score !== undefined) {
+            matchHTML += `
+                <div class="match-info-row">
+                    <span class="match-info-label">Очки:</span>
+                    <span class="match-info-value">${match.score}</span>
+                </div>
+            `;
+        }
+        
+        if (match.duration !== undefined) {
+            const minutes = Math.floor(match.duration / 60);
+            const seconds = match.duration % 60;
+            matchHTML += `
+                <div class="match-info-row">
+                    <span class="match-info-label">Длительность:</span>
+                    <span class="match-info-value">${minutes}:${seconds.toString().padStart(2, '0')}</span>
+                </div>
+            `;
+        }
+        
+        // Добавляем дополнительные поля если они есть
+        const excludeFields = ['game', 'map', 'date', 'win', 'kills', 'deaths', 'score', 'duration'];
+        for (const [key, value] of Object.entries(match)) {
+            if (!excludeFields.includes(key) && typeof value !== 'object') {
+                const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+                matchHTML += `
+                    <div class="match-info-row">
+                        <span class="match-info-label">${label}:</span>
+                        <span class="match-info-value">${value}</span>
+                    </div>
+                `;
+            }
+        }
+        
+        matchHTML += `
+            </div>
+            <div class="match-date">${formattedDate}</div>
+        `;
+        
+        matchCard.innerHTML = matchHTML;
+        matchesList.appendChild(matchCard);
+    });
+}
+
     </script>
     <script src="js/auth.js"></script>
 
