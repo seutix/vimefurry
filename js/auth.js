@@ -83,88 +83,82 @@ function updateAuthUI() {
         
         authKeyBtn.innerHTML = '';
         authKeyBtn.style.padding = '0';
-        authKeyBtn.style.overflow = 'hidden';
+        authKeyBtn.style.overflow = 'visible';
+        authKeyBtn.style.borderRadius = '0';
+        authKeyBtn.style.background = 'transparent';
+        authKeyBtn.style.boxShadow = 'none';
         
         const headContainer = document.createElement('div');        
         headContainer.style.position = 'relative';        
-        headContainer.style.width = '45px';        
-        headContainer.style.height = '45px';        
+        headContainer.style.width = '35px';        
+        headContainer.style.height = '35px';        
         headContainer.style.display = 'inline-block';        
         headContainer.style.verticalAlign = 'middle';                
         
+        // Базовая голова
         const head = document.createElement('img');        
         head.src = `https://skin.vimeworld.com/head/${userData.username}.png`;        
-        head.className = 'mini-head';        
         head.alt = '';        
+        head.style.position = 'absolute';
+        head.style.top = '0';
+        head.style.left = '0';
         head.style.width = '100%';        
         head.style.height = '100%';        
-        head.style.imageRendering = 'pixelated';        
+        head.style.imageRendering = 'pixelated';
+        head.style.objectFit = 'cover';
         headContainer.appendChild(head);
         
-        try {
-            // Добавляем оверлей головы
-            const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png`;
-            const skinFullImg = new Image();
-            skinFullImg.crossOrigin = "Anonymous";
-            skinFullImg.src = skinFullUrl;
-            
-            skinFullImg.onload = function() {
-                try {
-                    console.log('Скин загружен успешно:', skinFullUrl);
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Определяем размер скина и рассчитываем масштабирование
-                    const skinResolution = skinFullImg.width;
-                    const scale = skinResolution / 64;
-                    
-                    console.log('Размер скина:', skinResolution, 'x', skinFullImg.height, 'масштаб:', scale);
-                    
-                    // Координаты и размер оверлея головы
-                    const baseOverlayX = 40;
-                    const baseOverlayY = 8;
-                    const baseOverlaySize = 8;
-                    
-                    // Масштабируем координаты и размер
-                    const scaledOverlayX = baseOverlayX * scale;
-                    const scaledOverlayY = baseOverlayY * scale;
-                    const scaledOverlaySize = baseOverlaySize * scale;
-                    
-                    console.log('Координаты оверлея:', scaledOverlayX, scaledOverlayY, 'размер:', scaledOverlaySize);
-                    
-                    canvas.width = scaledOverlaySize;
-                    canvas.height = scaledOverlaySize;
-                    
-                    // Вырезаем оверлей головы
-                    ctx.drawImage(skinFullImg, scaledOverlayX, scaledOverlayY, scaledOverlaySize, scaledOverlaySize, 0, 0, scaledOverlaySize, scaledOverlaySize);
-                    
-                    // Создаем изображение из canvas и добавляем на страницу
-                    const overlayImg = document.createElement('img');
-                    overlayImg.src = canvas.toDataURL();
-                    overlayImg.alt = `${userData.username} head overlay`;
-                    overlayImg.style.position = 'absolute';
-                    overlayImg.style.top = '0';
-                    overlayImg.style.left = '0';
-                    overlayImg.style.width = '100%';
-                    overlayImg.style.height = '100%';
-                    overlayImg.style.imageRendering = 'pixelated';
-                    overlayImg.style.transform = 'scale(1.1)';
-                    overlayImg.style.transformOrigin = 'center center';
-                    headContainer.appendChild(overlayImg);
-                    console.log('Оверлей головы добавлен');
-                } catch (error) {
-                    console.error('Ошибка при обработке оверлея головы:', error);
-                }
-            };
-            
-            skinFullImg.onerror = function() {
-                console.error('Не удалось загрузить скин:', skinFullUrl);
-            };
-        } catch (error) {
-            console.error('Ошибка при создании оверлея головы:', error);
-        }
+        // Добавляем оверлей головы из полного скина
+        const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png`;
+        const skinFullImg = new Image();
         
-        // Добавляем контейнер для головы в любом случае, оверлей добавится позже
+        skinFullImg.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Определяем размер скина и рассчитываем масштабирование
+            const skinResolution = skinFullImg.width;
+            const scale = skinResolution / 64;
+            
+            // Координаты и размер оверлея головы
+            const baseOverlayX = 40;
+            const baseOverlayY = 8;
+            const baseOverlaySize = 8;
+            
+            // Масштабируем координаты и размер
+            const scaledOverlayX = baseOverlayX * scale;
+            const scaledOverlayY = baseOverlayY * scale;
+            const scaledOverlaySize = baseOverlaySize * scale;
+            
+            canvas.width = scaledOverlaySize;
+            canvas.height = scaledOverlaySize;
+            
+            // Вырезаем оверлей головы
+            ctx.drawImage(skinFullImg, scaledOverlayX, scaledOverlayY, scaledOverlaySize, scaledOverlaySize, 0, 0, scaledOverlaySize, scaledOverlaySize);
+            
+            // Создаем изображение из canvas и добавляем на страницу
+            const overlayImg = document.createElement('img');
+            overlayImg.src = canvas.toDataURL();
+            overlayImg.alt = `${userData.username} head overlay`;
+            overlayImg.style.position = 'absolute';
+            overlayImg.style.top = '0';
+            overlayImg.style.left = '0';
+            overlayImg.style.width = '100%';
+            overlayImg.style.height = '100%';
+            overlayImg.style.imageRendering = 'pixelated';
+            overlayImg.style.transform = 'scale(1.1)';
+            overlayImg.style.transformOrigin = 'center center';
+            headContainer.appendChild(overlayImg);
+        };
+        
+        skinFullImg.onerror = function() {
+            // Игнорируем ошибку загрузки скина
+        };
+        
+        // Устанавливаем crossOrigin и src после обработчиков
+        skinFullImg.crossOrigin = "Anonymous";
+        skinFullImg.src = skinFullUrl;
+        
         authKeyBtn.appendChild(headContainer);
         console.log('Контейнер головы добавлен в auth-key-btn');
         
@@ -192,9 +186,9 @@ function updateAuthUI() {
             authMenu.style.boxShadow = '0 8px 24px rgba(52,152,219,0.10)';
             authMenu.style.padding = '10px 0';
             authMenu.style.zIndex = '1010';
+            authMenu.style.minWidth = '150px';
             
-            
-            // Добавляем кнопку профиля
+            // Добавляем кнопку профиля - ведет на ник, зарегистрированный в API
             const profileBtn = document.createElement('div');
             profileBtn.style.padding = '10px 15px';
             profileBtn.style.cursor = 'pointer';
@@ -213,11 +207,10 @@ function updateAuthUI() {
                 profileBtn.style.background = 'transparent';
             };
             
-            profileBtn.onclick = function() {
+            profileBtn.onclick = function(e) {
+                e.stopPropagation();
+                // Переходим на профиль пользователя, зарегистрированного в API
                 window.location.href = `player.html?username=${encodeURIComponent(userData.username)}`;
-                if (document.body.contains(authMenu)) {
-                    document.body.removeChild(authMenu);
-                }
             };
             
             authMenu.appendChild(profileBtn);
@@ -239,7 +232,8 @@ function updateAuthUI() {
                 logoutBtn.style.background = 'transparent';
             };
             
-            logoutBtn.onclick = function() {
+            logoutBtn.onclick = function(e) {
+                e.stopPropagation();
                 logout();
                 if (document.body.contains(authMenu)) {
                     document.body.removeChild(authMenu);
@@ -250,24 +244,42 @@ function updateAuthUI() {
             document.body.appendChild(authMenu);
             
             // Добавляем обработчик для закрытия меню при клике вне его
-            document.addEventListener('click', function closeMenu(e) {
-                if (!authMenu.contains(e.target) && e.target !== authKeyBtn) {
-                    if (document.body.contains(authMenu)) {
-                        document.body.removeChild(authMenu);
+            setTimeout(() => {
+                document.addEventListener('click', function closeMenu(e) {
+                    if (!authMenu.contains(e.target) && !authKeyBtn.contains(e.target)) {
+                        if (document.body.contains(authMenu)) {
+                            document.body.removeChild(authMenu);
+                        }
+                        document.removeEventListener('click', closeMenu);
                     }
-                    document.removeEventListener('click', closeMenu);
-                }
-            });
+                });
+            }, 0);
         };
     } else {
-        // Пользователь не авторизован - отображаем иконку ключа
+        // Пользователь не авторизован - отображаем только иконку ключа
         authKeyBtn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16" fill="none">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5.5C16 8.53757 13.5376 11 10.5 11H7V13H5V15L4 16H0V12L5.16351 6.83649C5.0567 6.40863 5 5.96094 5 5.5C5 2.46243 7.46243 0 10.5 0C13.5376 0 16 2.46243 16 5.5ZM13 4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4C11 3.44772 11.4477 3 12 3C12.5523 3 13 3.44772 13 4Z" fill="#3498db"/>
             </svg>
         `;
-        authKeyBtn.style.padding = ''; // сбрасываем padding к значению по умолчанию
-        authKeyBtn.style.overflow = ''; // сбрасываем overflow к значению по умолчанию
+        // Делаем кнопку полностью прозрачной, оставляя только иконку
+        authKeyBtn.style.padding = '8px';
+        authKeyBtn.style.overflow = 'visible';
+        authKeyBtn.style.borderRadius = '0';
+        authKeyBtn.style.background = 'transparent';
+        authKeyBtn.style.boxShadow = 'none';
+        authKeyBtn.style.border = 'none';
+        authKeyBtn.style.cursor = 'pointer';
+        authKeyBtn.style.transition = 'transform 0.2s';
+        
+        // Добавляем эффект при наведении
+        authKeyBtn.onmouseenter = function() {
+            authKeyBtn.style.transform = 'scale(1.1)';
+        };
+        
+        authKeyBtn.onmouseleave = function() {
+            authKeyBtn.style.transform = 'scale(1)';
+        };
         
         authKeyBtn.onclick = function() {
             window.location.href = 'auth.html';
