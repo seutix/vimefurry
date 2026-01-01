@@ -2175,6 +2175,21 @@
                     playerStatus.appendChild(statusIndicator);
                 }
             }
+
+            function getPlayerSkin(username) {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        resolve(img.src); 
+                    };
+                    
+                    img.onerror = () => {
+                        resolve(`/assets/skins/steve.png`);
+                    };
+
+                    img.src = `https://skin.vimeworld.com/raw/skin/${username}.png`;
+                });
+            }
             
             // Функция для обновления статуса игрока через новый запрос
             async function updatePlayerStatus() {
@@ -2630,7 +2645,7 @@
                     playerAvatarDiv.appendChild(playerHeadImg);
 
                     // Добавляем оверлей головы из полного скина
-                    const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;
+                    const skinFullUrl = await getPlayerSkin(player.username);
                     const skinFullImg = new Image();
                     
                     skinFullImg.onerror = function() {
@@ -2676,7 +2691,8 @@
                     skinFullImg.src = skinFullUrl;
 
                     // Инициализация SkinViewer
-                    const skinUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;
+                   // const skinUrl = `https://skin.vimeworld.com/raw/skin/${player.username}.png`;
+                    const skinUrl = await getPlayerSkin(player.username);
                     const capeUrl = `https://skin.vimeworld.com/raw/cape/${player.username}.png`;
 
                     const skinContainer = document.getElementById('skin3d-container');
