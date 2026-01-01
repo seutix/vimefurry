@@ -270,9 +270,6 @@ function createRecentNickItem(nick, onClick, options = {}) {
     nickContainer.appendChild(nickSpan);
     
     // Добавляем индикатор онлайн-статуса
-    const onlineStatus = document.createElement('div');
-    onlineStatus.className = 'online-status unknown';
-    nickContainer.appendChild(onlineStatus);
     
     li.appendChild(headContainer);
     li.appendChild(nickContainer);
@@ -286,7 +283,7 @@ function createRecentNickItem(nick, onClick, options = {}) {
     }
     
     // Получаем актуальные данные с API
-    fetchAndApplyPlayerData(nick, nickSpan, li, onlineStatus, { ranksData, savePlayerData });
+    fetchAndApplyPlayerData(nick, nickSpan, li, { ranksData, savePlayerData });
     
     // Обработчик клика
     li.addEventListener('click', () => onClick(nick));
@@ -344,7 +341,7 @@ function applyPlayerDataToElement(nickSpan, li, data, ranksData) {
  * @param {HTMLElement} onlineStatus - Элемент статуса онлайн
  * @param {object} options - Опции
  */
-function fetchAndApplyPlayerData(nick, nickSpan, li, onlineStatus, options = {}) {
+function fetchAndApplyPlayerData(nick, nickSpan, li, options = {}, onlineStatus=null) {
     const { ranksData, savePlayerData } = options;
     
     fetch(`https://api.vimeworld.com/user/name/${nick}`)
@@ -367,6 +364,7 @@ function fetchAndApplyPlayerData(nick, nickSpan, li, onlineStatus, options = {})
                     applyPlayerDataToElement(nickSpan, li, player, ranksData);
                 }
                 
+                if (onlineStatus !== null) {
                 // Проверяем онлайн-статус
                 fetch(`https://api.vimeworld.com/user/name/${nick}/session`)
                     .then(response => {
@@ -383,6 +381,7 @@ function fetchAndApplyPlayerData(nick, nickSpan, li, onlineStatus, options = {})
                     .catch(() => {
                         onlineStatus.className = 'online-status unknown';
                     });
+                }
             }
         })
         .catch(error => {
