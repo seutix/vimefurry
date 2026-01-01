@@ -226,12 +226,12 @@
             border-radius: 4px; /* Скругление углов */
             display: inline-block; /* Блок занимает только необходимую ширину */
             vertical-align: middle; /* Выравнивание по центру с текстом имени */
-            font-size: 0.6rem; /* Размер шрифта контейнера */
+            font-size: 0.3rem; /* Размер шрифта контейнера */
             /* position: relative; */ /* Переносим позиционирование в .player-privileges */
             /* top: 3px; */ /* Переносим позиционирование в .player-privileges */
         }
         .rank-badge .player-rank {
-            font-size: 0.8rem; /* Крупный размер для белого текста основной привилегии */
+            font-size: 0.9rem; /* Крупный размер для белого текста основной привилегии */
         }
         .prime-badge {
             background: rgba(52, 152, 219, 0.2); /* Голубой фон с прозрачностью */
@@ -5431,6 +5431,485 @@ document.addEventListener('DOMContentLoaded', function() {
     const showHistoryBtn = document.getElementById('showHistoryBtn');
     if (showHistoryBtn) {
         showHistoryBtn.addEventListener('click', openHistoryModal);
+    }
+});
+
+// Функция для загрузки достижений
+let achievementsData = null;
+let playerAchievements = null;
+
+async function loadAchievements(playerId) {
+    try {
+        const achievementsGrid = document.querySelector('#achievements .achievements-grid');
+        achievementsGrid.innerHTML = '<div class="loading">Загрузка достижений...</div>';
+
+        // Загружаем список всех достижений и достижения игрока параллельно
+        const [allAchievementsResponse, playerAchievementsResponse] = await Promise.all([
+            fetch('https://api.vimeworld.com/misc/achievements'),
+            fetch(`https://api.vimeworld.com/user/${playerId}/achievements`)
+        ]);
+
+        achievementsData = await allAchievementsResponse.json();
+        const playerAchievementsData = await playerAchievementsResponse.json();
+        
+        // API возвращает объект с массивом achievements внутри
+        playerAchievements = playerAchievementsData.achievements || [];
+
+        displayAchievements();
+    } catch (error) {
+        console.error('Ошибка при загрузке достижений:', error);
+        const achievementsGrid = document.querySelector('#achievements .achievements-grid');
+        achievementsGrid.innerHTML = '<div class="error-message">Не удалось загрузить достижения</div>';
+    }
+}
+
+function displayAchievements() {
+    const achievementsGrid = document.querySelector('#achievements .achievements-grid');
+    achievementsGrid.innerHTML = '';
+    achievementsGrid.style.display = 'flex';
+    achievementsGrid.style.flexDirection = 'column';
+    achievementsGrid.style.gap = '24px';
+
+    // Добавляем CSS анимации
+    if (!document.getElementById('achievements-animations')) {
+        const style = document.createElement('style');
+        style.id = 'achievements-animations';
+        style.textContent = `
+            @keyframes fadeInStats {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fadeInCategory {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fadeInAchievement {
+                from { opacity: 0; transform: scale(0.9); }
+                to { opacity: 1; transform: scale(1); }
+            }
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Получаем список ID достижений игрока
+    const playerAchievementIds = new Set(playerAchievements.map(a => a.id));
+
+    // Подсчитываем общую статистику
+    let totalAchievements = 0;
+    let completedAchievements = 0;
+    let totalReward = 0;
+    let earnedReward = 0;
+
+    // Создаем общую статистику
+    const statsContainer = document.createElement('div');
+    statsContainer.style.cssText = `
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 50%, #d35400 100%);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 12px 40px rgba(243, 156, 18, 0.25);
+        color: white;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInStats 0.6s ease-out;
+    `;
+
+    // Добавляем декоративные элементы
+    const decorCircle1 = document.createElement('div');
+    decorCircle1.style.cssText = `
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        top: -100px;
+        right: -50px;
+        pointer-events: none;
+    `;
+    statsContainer.appendChild(decorCircle1);
+
+    const decorCircle2 = document.createElement('div');
+    decorCircle2.style.cssText = `
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        bottom: -75px;
+        left: -30px;
+        pointer-events: none;
+    `;
+    statsContainer.appendChild(decorCircle2);
+    
+    // Добавляем большую иконку монет справа
+    const bigMoneyIcon = document.createElement('img');
+    bigMoneyIcon.src = 'assets/images/icons/mnogo_money.png';
+    bigMoneyIcon.style.cssText = `
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        object-fit: contain;
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+        opacity: 0.9;
+        pointer-events: none;
+        z-index: 2;
+    `;
+    statsContainer.appendChild(bigMoneyIcon);
+
+    // Проходим по каждой категории для подсчета статистики
+    for (const [categoryName, achievements] of Object.entries(achievementsData)) {
+        if (!achievements || achievements.length === 0) continue;
+        
+        achievements.forEach(achievement => {
+            totalAchievements++;
+            totalReward += achievement.reward;
+            if (playerAchievementIds.has(achievement.id)) {
+                completedAchievements++;
+                earnedReward += achievement.reward;
+            }
+        });
+    }
+
+    const progressPercent = totalAchievements > 0 ? Math.round((completedAchievements / totalAchievements) * 100) : 0;
+
+    // Статистика: Прогресс
+    const progressStat = document.createElement('div');
+    progressStat.style.cssText = 'position: relative; z-index: 1;';
+    progressStat.innerHTML = `
+        <div style="font-size: 0.95rem; opacity: 0.95; margin-bottom: 12px; font-family: 'VimeArtBold', sans-serif; letter-spacing: 0.5px;">ПРОГРЕСС</div>
+        <div style="font-size: 2.5rem; font-family: 'VimeArtBold', sans-serif; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.2);">${progressPercent}%</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-family: 'VimeArtBold', sans-serif;">${completedAchievements} из ${totalAchievements}</div>
+        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.3); border-radius: 3px; margin-top: 12px; overflow: hidden;">
+            <div style="width: ${progressPercent}%; height: 100%; background: white; border-radius: 3px; transition: width 1s ease;"></div>
+        </div>
+    `;
+    statsContainer.appendChild(progressStat);
+
+    // Статистика: Заработано Коинов
+    const rewardStat = document.createElement('div');
+    rewardStat.style.cssText = 'position: relative; z-index: 1;';
+    rewardStat.innerHTML = `
+        <div style="font-size: 0.95rem; opacity: 0.95; margin-bottom: 12px; font-family: 'VimeArtBold', sans-serif; letter-spacing: 0.5px;">ЗАРАБОТАНО КОИНОВ</div>
+        <div style="font-size: 2.5rem; font-family: 'VimeArtBold', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-bottom: 8px;">${earnedReward.toLocaleString()}</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-family: 'VimeArtBold', sans-serif;">из ${totalReward.toLocaleString()}</div>
+    `;
+    statsContainer.appendChild(rewardStat);
+
+    // Статистика: Категории
+    const categoriesStat = document.createElement('div');
+    categoriesStat.style.cssText = 'position: relative; z-index: 1;';
+    const totalCategories = Object.keys(achievementsData).length;
+    let completedCategories = 0;
+    
+    for (const [categoryName, achievements] of Object.entries(achievementsData)) {
+        if (!achievements || achievements.length === 0) continue;
+        const categoryCompleted = achievements.every(a => playerAchievementIds.has(a.id));
+        if (categoryCompleted) completedCategories++;
+    }
+    
+    categoriesStat.innerHTML = `
+        <div style="font-size: 0.95rem; opacity: 0.95; margin-bottom: 12px; font-family: 'VimeArtBold', sans-serif; letter-spacing: 0.5px;">КАТЕГОРИИ</div>
+        <div style="font-size: 2.5rem; font-family: 'VimeArtBold', sans-serif; margin-bottom: 8px; text-shadow: 0 2px 8px rgba(0,0,0,0.2);">${completedCategories}/${totalCategories}</div>
+        <div style="font-size: 0.9rem; opacity: 0.9; font-family: 'VimeArtBold', sans-serif;">завершено</div>
+    `;
+    statsContainer.appendChild(categoriesStat);
+
+    achievementsGrid.appendChild(statsContainer);
+
+    // Проходим по каждой категории
+    for (const [categoryName, achievements] of Object.entries(achievementsData)) {
+        if (!achievements || achievements.length === 0) continue;
+
+        // Подсчитываем прогресс категории
+        const categoryCompleted = achievements.filter(a => playerAchievementIds.has(a.id)).length;
+        const categoryTotal = achievements.length;
+        const categoryPercent = Math.round((categoryCompleted / categoryTotal) * 100);
+
+        // Создаем контейнер для категории
+        const categoryContainer = document.createElement('div');
+        categoryContainer.style.cssText = `
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(243, 156, 18, 0.08);
+        `;
+
+        // Заголовок категории с прогрессом
+        const categoryHeader = document.createElement('div');
+        categoryHeader.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #fef5e7;
+            cursor: pointer;
+            user-select: none;
+        `;
+
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.textContent = categoryName;
+        categoryTitle.style.cssText = `
+            font-family: 'VimeArtBold', sans-serif;
+            color: #f39c12;
+            font-size: 1.2rem;
+            margin: 0;
+        `;
+
+        const categoryProgress = document.createElement('div');
+        categoryProgress.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        `;
+        categoryProgress.innerHTML = `
+            <span style="font-family: 'VimeArtBold', sans-serif; color: #7f8c8d; font-size: 0.9rem;">
+                ${categoryCompleted}/${categoryTotal}
+            </span>
+            <div style="
+                width: 100px;
+                height: 8px;
+                background: #fef5e7;
+                border-radius: 4px;
+                overflow: hidden;
+            ">
+                <div style="
+                    width: ${categoryPercent}%;
+                    height: 100%;
+                    background: linear-gradient(90deg, #f39c12, #e67e22);
+                    border-radius: 4px;
+                    transition: width 0.3s ease;
+                "></div>
+            </div>
+            <span style="font-family: 'VimeArtBold', sans-serif; color: #f39c12; font-size: 0.9rem;">
+                ${categoryPercent}%
+            </span>
+            <span class="category-toggle" style="font-family: 'VimeArtBold', sans-serif; color: #f39c12; font-size: 1.2rem; transition: transform 0.3s ease;">▼</span>
+        `;
+
+        categoryHeader.appendChild(categoryTitle);
+        categoryHeader.appendChild(categoryProgress);
+        categoryContainer.appendChild(categoryHeader);
+
+        // Сетка достижений
+        const achievementsContainer = document.createElement('div');
+        achievementsContainer.style.cssText = `
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        `;
+
+        // Добавляем обработчик клика для сворачивания/разворачивания
+        let isExpanded = false;
+        categoryHeader.addEventListener('click', function() {
+            isExpanded = !isExpanded;
+            const toggle = this.querySelector('.category-toggle');
+            
+            if (isExpanded) {
+                achievementsContainer.style.display = 'grid';
+                // Небольшая задержка для плавной анимации
+                setTimeout(() => {
+                    achievementsContainer.style.maxHeight = '10000px';
+                    achievementsContainer.style.opacity = '1';
+                }, 10);
+                toggle.style.transform = 'rotate(180deg)';
+            } else {
+                achievementsContainer.style.maxHeight = '0';
+                achievementsContainer.style.opacity = '0';
+                toggle.style.transform = 'rotate(0deg)';
+                // Скрываем после завершения анимации
+                setTimeout(() => {
+                    if (!isExpanded) {
+                        achievementsContainer.style.display = 'none';
+                    }
+                }, 400);
+            }
+        });
+
+        // Добавляем каждое достижение
+        achievements.forEach(achievement => {
+            const hasAchievement = playerAchievementIds.has(achievement.id);
+            
+            const achievementCard = document.createElement('div');
+            achievementCard.style.cssText = `
+                background: ${hasAchievement ? '#fef9f3' : '#f8f8f8'};
+                border-radius: 12px;
+                padding: 16px;
+                border: 2px solid ${hasAchievement ? '#f39c12' : '#e0e0e0'};
+                cursor: ${hasAchievement ? 'pointer' : 'default'};
+                position: relative;
+                ${!hasAchievement ? 'opacity: 0.6;' : ''}
+                user-select: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+            `;
+
+            // Добавляем эффект падающих монет при клике на выполненное достижение
+            if (hasAchievement) {
+                achievementCard.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const rect = this.getBoundingClientRect();
+                    const clickX = e.clientX;
+                    const clickY = e.clientY;
+                    
+                    // Создаем 15-20 монет
+                    const coinCount = Math.floor(Math.random() * 6) + 15;
+                    
+                    for (let i = 0; i < coinCount; i++) {
+                        const coin = document.createElement('img');
+                        coin.src = Math.random() > 0.5 ? 'assets/images/icons/money.png' : 'assets/images/icons/mnogo_money.png';
+                        coin.style.cssText = `
+                            position: fixed;
+                            width: ${Math.random() * 20 + 30}px;
+                            height: ${Math.random() * 20 + 30}px;
+                            left: ${clickX}px;
+                            top: ${clickY}px;
+                            pointer-events: none;
+                            z-index: 10000;
+                            opacity: 1;
+                            transform: translate(-50%, -50%);
+                            user-select: none;
+                        `;
+                        document.body.appendChild(coin);
+                        
+                        // Случайные параметры для каждой монеты
+                        const angle = Math.random() * Math.PI * 2;
+                        const velocity = Math.random() * 200 + 100;
+                        const vx = Math.cos(angle) * velocity;
+                        const vy = Math.sin(angle) * velocity - 200;
+                        const rotation = Math.random() * 720 - 360;
+                        
+                        let posX = clickX;
+                        let posY = clickY;
+                        let velocityX = vx;
+                        let velocityY = vy;
+                        const gravity = 800;
+                        let opacity = 1;
+                        
+                        const startTime = Date.now();
+                        const duration = 2000;
+                        
+                        function animate() {
+                            const elapsed = Date.now() - startTime;
+                            const progress = elapsed / duration;
+                            
+                            if (progress >= 1) {
+                                coin.remove();
+                                return;
+                            }
+                            
+                            const dt = 0.016;
+                            velocityY += gravity * dt;
+                            posX += velocityX * dt;
+                            posY += velocityY * dt;
+                            
+                            opacity = 1 - progress;
+                            
+                            coin.style.left = posX + 'px';
+                            coin.style.top = posY + 'px';
+                            coin.style.opacity = opacity;
+                            coin.style.transform = `translate(-50%, -50%) rotate(${rotation * progress}deg)`;
+                            
+                            requestAnimationFrame(animate);
+                        }
+                        
+                        requestAnimationFrame(animate);
+                    }
+                });
+            }
+
+            // Иконка статуса (галочка или замок)
+            const statusIcon = document.createElement('div');
+            statusIcon.style.cssText = `
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: ${hasAchievement ? '#2ecc71' : '#95a5a6'};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+            `;
+            statusIcon.textContent = hasAchievement ? '✓' : '🔒';
+            achievementCard.appendChild(statusIcon);
+
+            // Название достижения
+            const title = document.createElement('div');
+            title.textContent = achievement.title;
+            title.style.cssText = `
+                font-family: 'VimeArtBold', sans-serif;
+                font-size: 1rem;
+                color: ${hasAchievement ? '#2c3e50' : '#7f8c8d'};
+                margin-bottom: 8px;
+                padding-right: 32px;
+            `;
+            achievementCard.appendChild(title);
+
+            // Описание достижения
+            const description = document.createElement('div');
+            description.textContent = achievement.description.join(' ');
+            description.style.cssText = `
+                font-family: 'VimeArtBold', sans-serif;
+                font-size: 0.85rem;
+                color: #7f8c8d;
+                margin-bottom: 12px;
+                line-height: 1.4;
+            `;
+            achievementCard.appendChild(description);
+
+            // Награда
+            const reward = document.createElement('div');
+            reward.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: 'VimeArtBold', sans-serif;
+                font-size: 0.95rem;
+                color: #f39c12;
+            `;
+            reward.innerHTML = `
+                <img src="assets/images/icons/money.png" width="24" height="24" style="object-fit: contain;" alt="Коины">
+                <span>${achievement.reward.toLocaleString()} Коинов</span>
+            `;
+            achievementCard.appendChild(reward);
+
+            achievementsContainer.appendChild(achievementCard);
+        });
+
+        categoryContainer.appendChild(achievementsContainer);
+        achievementsGrid.appendChild(categoryContainer);
+    }
+}
+
+// Добавляем обработчик для вкладки достижений
+document.addEventListener('DOMContentLoaded', function() {
+    const achievementsTab = document.getElementById('achievements-tab');
+    if (achievementsTab) {
+        achievementsTab.addEventListener('shown.bs.tab', function() {
+            // Загружаем достижения только при первом открытии вкладки
+            if (!achievementsData && window.currentPlayerId) {
+                loadAchievements(window.currentPlayerId);
+            }
+        });
     }
 });
     </script>
