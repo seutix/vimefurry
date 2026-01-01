@@ -6477,7 +6477,7 @@ async function loadMatches(playerId) {
         matchesList.style.display = 'none';
         matchesFilters.style.display = 'none';
         
-        const response = await fetch(`https://api.vimeworld.com/user/${playerId}/matches`);
+        const response = await fetch(`https://api.vimeworld.com/user/${playerId}/matches?count=250`);
         
         if (!response.ok) {
             throw new Error('Ошибка загрузки матчей');
@@ -6635,10 +6635,6 @@ function displayMatches() {
             <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">ВИНРЕЙТ</div>
             <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif;">${winRate}%</div>
         </div>
-        <div style="text-align: center;">
-            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 8px; font-family: 'VimeArtBold', sans-serif;">K/D</div>
-            <div style="font-size: 2rem; font-family: 'VimeArtBold', sans-serif;">${kd}</div>
-        </div>
     `;
     
     matchesList.appendChild(statsBlock);
@@ -6758,7 +6754,10 @@ function displayMatches() {
         
         matchHTML += `
             </div>
-            <div class="match-date">${formattedDate}</div>
+            <div class="match-date">
+                ${formattedDate}
+                ${match.id ? `<div style="font-size: 0.7rem; color: #bdc3c7; margin-top: 4px;">ID: ${match.id}</div>` : ''}
+            </div>
         `;
         
         matchCard.innerHTML = matchHTML;
