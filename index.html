@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VimeStats</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="responsive.css" rel="stylesheet">
-    <link rel="stylesheet" href="settings.css">
+    <link href="css/common.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/settings.css">
     <style>
         @font-face {
             font-family: 'VimeArtBold';
-            src: url('https://mc.vimeworld.com/assets/vimestats/vimeartbold.ttf') format('truetype');
+            src: url('assets/fonts/vimeartbold.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -305,8 +306,7 @@
             margin-left: 4px;
             display: inline-block;
             vertical-align: middle;
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
+            color: #fff;
         }
         .online-status {
             width: 8px;
@@ -502,34 +502,32 @@
         .navbar-brand {
             font-family:'VimeArtBold',sans-serif;
             font-size:1.2rem;
-            color:#3498db;
+            background: linear-gradient(
+                90deg,
+                #3498db,
+                #2980b9,
+                #3498db
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing:1px;
             padding-left:24px;
             z-index:2;
             position: relative;
-            overflow: hidden;
             transition: all 0.3s ease;
-        }
-
-        .navbar-brand::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(52, 152, 219, 0.2),
-                transparent
-            );
-            animation: shimmer 2s infinite;
+            animation: shimmer 3s linear infinite;
         }
 
         .navbar-brand:hover {
-            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+            filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.5));
             transform: scale(1.05);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         .container {
@@ -593,27 +591,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" style="position:fixed;top:0;left:0;width:100%;z-index:1000;">
-        <div class="container-fluid" style="padding-left:0;padding-right:0;position:relative;min-height:56px;display:flex;align-items:center;">
-            <a class="navbar-brand" href="index.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.2rem;color:#3498db;letter-spacing:1px;padding-left:24px;z-index:2;">VimeStats</a>
-            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:24px;z-index:1;">
-                <a href="tops.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.1rem;color:#3498db;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M8 21h8M12 17v4M19 5V3H5v2M19 5v2a7 7 0 0 1-14 0V5m14 0h2a2 2 0 0 1 2 2v1a7 7 0 0 1-6 6.93M5 5H3a2 2 0 0 0-2 2v1a7 7 0 0 0 6 6.93" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Топы
-                </a>
-                <a href="moders.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.1rem;color:#3498db;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Модеры
-                </a>
-            </div>
-            <div id="auth-key-btn" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#e6f3ff;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(52,152,219,0.08);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5.5C16 8.53757 13.5376 11 10.5 11H7V13H5V15L4 16H0V12L5.16351 6.83649C5.0567 6.40863 5 5.96094 5 5.5C5 2.46243 7.46243 0 10.5 0C13.5376 0 16 2.46243 16 5.5ZM13 4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4C11 3.44772 11.4477 3 12 3C12.5523 3 13 3.44772 13 4Z" fill="#3498db"/>
-                </svg>
-            </div>
-        </div>
-    </nav>
-    <div style="height:70px;"></div>
+    <div id="navbar-placeholder"></div>
     <div style="position:fixed;top:80px;left:32px;width:220px;height:80vh;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(52,152,219,0.10);padding:24px 16px;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'VimeArtBold',sans-serif;color:#3498db;font-size:1.2rem;margin-bottom:12px;text-align:center;width:100%;">Онлайн</div>
         <hr style="width:100%;border:0;border-top:2px solid #3498db;margin:0 0 16px 0;">
@@ -656,157 +634,88 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/ranks.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/navbar.js"></script>
     <script>
-        const MAX_RECENT_NICKS = 5;
+        // Константы для главной страницы
         const MAX_RECENT_GUILDS = 5;
+        
+        // DOM элементы
         const searchInput = document.querySelector('input[name="username"]');
         const guildInput = document.querySelector('input[name="guild"]');
-        const recentNicks = document.getElementById('recentNicks');
+        const recentNicksDropdown = document.getElementById('recentNicks');
         const recentGuilds = document.getElementById('recentGuilds');
-        const recentNicksList = recentNicks.querySelector('.recent-nicks-list');
+        const recentNicksList = recentNicksDropdown.querySelector('.recent-nicks-list');
         const recentGuildsList = recentGuilds.querySelector('.recent-nicks-list');
 
-        // Загрузка модераторов онлайн
+        // Загрузка модераторов онлайн (использует функции из ranks.js)
         function loadModeratorsOnline() {
             const moderatorsBlock = document.getElementById('moderatorsOnline');
             moderatorsBlock.innerHTML = 'Загрузка...';
             
             fetch('https://api.vimeworld.com/online/staff')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     return response.json();
                 })
                 .then(staffData => {
                     if (staffData && staffData.length > 0) {
                         moderatorsBlock.innerHTML = '';
                         const moderatorsList = document.createElement('ul');
-                        moderatorsList.style.listStyle = 'none';
-                        moderatorsList.style.padding = '0';
-                        moderatorsList.style.margin = '0';
+                        moderatorsList.style.cssText = 'list-style:none;padding:0;margin:0;';
 
-                        // Сортировка модераторов по рангам
-                        staffData.sort((a, b) => {
-                            return getRankPriority(b.rank) - getRankPriority(a.rank);
-                        });
+                        // Сортировка модераторов по рангам (используем getRankPriority из ranks.js)
+                        staffData.sort((a, b) => getRankPriority(b.rank) - getRankPriority(a.rank));
 
                         staffData.forEach(moderator => {
                             const listItem = document.createElement('li');
-                            listItem.style.display = 'flex';
-                            listItem.style.alignItems = 'center';
-                            listItem.style.padding = '8px 0';
-                            listItem.style.borderBottom = '1px solid #e0e0e0';
-                            listItem.style.cursor = 'pointer';
+                            listItem.style.cssText = 'display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #e0e0e0;cursor:pointer;';
                             
                             // Контейнер для головы
                             const headContainer = document.createElement('div');
-                            headContainer.style.position = 'relative';
-                            headContainer.style.width = '25px';
-                            headContainer.style.height = '25px';
-                            headContainer.style.marginRight = '8px';
+                            headContainer.style.cssText = 'position:relative;width:25px;height:25px;margin-right:8px;';
                             
-                            // Базовая голова
                             const head = document.createElement('img');
                             head.src = `https://skin.vimeworld.com/head/${moderator.username}.png`;
                             head.className = 'mini-head';
                             head.alt = '';
-                            head.onerror = function() {
-                                head.src = 'https://skin.vimeworld.com/head/Steve.png';
-                            };
+                            head.onerror = () => head.src = 'https://skin.vimeworld.com/head/Steve.png';
                             headContainer.appendChild(head);
                             
-                            // Добавляем оверлей головы
-                            const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${moderator.username}.png`;
-                            const skinFullImg = new Image();
-                            
-                            skinFullImg.onerror = function() {
-                                // Игнорируем ошибку загрузки скина
-                                // Не логируем, чтобы не засорять консоль
-                            };
-                            
-                            skinFullImg.onload = function() {
-                                try {
-                                    const canvas = document.createElement('canvas');
-                                    const ctx = canvas.getContext('2d');
-                                    if (!ctx) return;
-                                    
-                                    // Определяем размер скина и рассчитываем масштабирование
-                                    const skinResolution = skinFullImg.width;
-                                    const scale = skinResolution / 64;
-                                    
-                                    // Координаты и размер оверлея головы на стандартном скине (64x64)
-                                    const baseOverlayX = 40;
-                                    const baseOverlayY = 8;
-                                    const baseOverlaySize = 8;
-                                    
-                                    // Масштабируем координаты и размер под текущее разрешение скина
-                                    const scaledOverlayX = baseOverlayX * scale;
-                                    const scaledOverlayY = baseOverlayY * scale;
-                                    const scaledOverlaySize = baseOverlaySize * scale;
-                                    
-                                    canvas.width = scaledOverlaySize;
-                                    canvas.height = scaledOverlaySize;
-                                    
-                                    // Вырезаем оверлей головы из масштабированного скина
-                                    ctx.drawImage(skinFullImg, scaledOverlayX, scaledOverlayY, scaledOverlaySize, scaledOverlaySize, 0, 0, scaledOverlaySize, scaledOverlaySize);
-                                    
-                                    // Создаем изображение из canvas и добавляем на страницу
-                                    const overlayImg = document.createElement('img');
-                                    overlayImg.src = canvas.toDataURL();
-                                    overlayImg.alt = `${moderator.username} head overlay`;
-                                    overlayImg.className = 'mini-head-overlay';
-                                    headContainer.appendChild(overlayImg);
-                                } catch (error) {
-                                    console.error('Ошибка при создании оверлея головы:', error);
-                                }
-                            };
-                            
-                            // Устанавливаем crossOrigin и src после обработчиков
-                            skinFullImg.crossOrigin = "Anonymous";
-                            skinFullImg.src = skinFullUrl;
+                            // Добавляем оверлей головы (используем createHeadOverlay из utils.js)
+                            createHeadOverlay(moderator.username, headContainer);
                             
                             // Контейнер информации
                             const infoContainer = document.createElement('div');
-                            infoContainer.style.display = 'flex';
-                            infoContainer.style.flexDirection = 'column';
+                            infoContainer.style.cssText = 'display:flex;flex-direction:column;';
                             
                             // Имя модератора
                             const moderatorName = document.createElement('span');
                             moderatorName.textContent = moderator.username;
-                            moderatorName.style.fontFamily = "'VimeArtBold', sans-serif";
-                            moderatorName.style.fontSize = '0.9rem';
+                            moderatorName.style.cssText = "font-family:'VimeArtBold',sans-serif;font-size:0.9rem;";
                             
-                            // Установка цвета на основе рангов
+                            // Применяем кастомные цвета
                             if (moderator.customColors && moderator.customColors.length > 0) {
                                 if (moderator.customColors.length === 1) {
                                     moderatorName.style.color = `#${moderator.customColors[0]}`;
                                 } else {
-                                    const gradient = `linear-gradient(to right, ${moderator.customColors.map(color => `#${color}`).join(', ')})`;
-                                    moderatorName.style.background = gradient;
+                                    moderatorName.style.background = `linear-gradient(to right, ${moderator.customColors.map(c => `#${c}`).join(', ')})`;
                                     moderatorName.style.webkitBackgroundClip = 'text';
                                     moderatorName.style.webkitTextFillColor = 'transparent';
                                 }
                             }
                             
-                            // Ранг модератора с фоном, привязанным к тексту
+                            // Ранг модератора (используем getRankName и getRankColors из ranks.js)
                             const moderatorRank = document.createElement('span');
                             moderatorRank.textContent = getRankName(moderator.rank);
-                            moderatorRank.style.fontSize = '0.7rem';
-                            moderatorRank.style.padding = '2px 6px';
-                            moderatorRank.style.borderRadius = '4px';
-                            moderatorRank.style.margin = '2px 0';
-                            moderatorRank.style.display = 'inline-block';
-                            moderatorRank.style.color = '#fff';
-                            moderatorRank.style.width = 'fit-content'; // Привязка фона к тексту
+                            moderatorRank.style.cssText = 'font-size:0.7rem;padding:2px 6px;border-radius:4px;margin:2px 0;display:inline-block;color:#fff;width:fit-content;';
                             
-                            // Применяем цвет фона на основе ранга
                             const rankColors = getRankColors(moderator.rank);
-                            if (rankColors.length > 1) {
-                                moderatorRank.style.background = `linear-gradient(to right, ${rankColors.map(color => `#${color}`).join(', ')})`;
-                            } else {
-                                moderatorRank.style.background = `#${rankColors[0]}`;
-                            }
+                            moderatorRank.style.background = rankColors.length > 1 
+                                ? `linear-gradient(to right, ${rankColors.map(c => `#${c}`).join(', ')})` 
+                                : `#${rankColors[0]}`;
                             
                             infoContainer.appendChild(moderatorName);
                             infoContainer.appendChild(moderatorRank);
@@ -814,7 +723,6 @@
                             listItem.appendChild(headContainer);
                             listItem.appendChild(infoContainer);
                             
-                            // Добавляем обработчик клика для перехода на профиль
                             listItem.addEventListener('click', () => {
                                 window.location.href = `player.html?username=${encodeURIComponent(moderator.username)}`;
                             });
@@ -832,411 +740,23 @@
                     moderatorsBlock.innerHTML = 'Ошибка загрузки';
                 });
         }
-        
-        // Получение приоритета ранга для сортировки
-        function getRankPriority(rankCode) {
-            const rankPriorities = {
-                "ADMIN": 100,
-                "CHIEF": 90,
-                "WARDEN": 80,
-                "MODER": 70,
-                "HELPER": 60,
-                "ORGANIZER": 55,
-                "DEV": 50,
-                "MAPLEAD": 45,
-                "SRBUILDER": 40,
-                "BUILDER": 35,
-                "JRBUILDER": 30,
-                "YOUTUBE": 25,
-                "ETERNAL": 20,
-                "THANE": 18,
-                "ELITE": 16,
-                "DIVINE": 14,
-                "IMMORTAL": 12,
-                "HOLY": 10,
-                "PREMIUM": 8,
-                "VIP": 6,
-                "VIME": 4,
-                "PLAYER": 2
-            };
-            return rankPriorities[rankCode] || 0;
-        }
-        
-        // Получение цветов ранга
-        function getRankColors(rankCode) {
-            const rankColors = {
-                "ADMIN": ["ff2030", "d40048", "c1006b"],
-                "CHIEF": ["ff5e43", "db2100"],
-                "WARDEN": ["3c36de"],
-                "MODER": ["4e62eb"],
-                "HELPER": ["76a6ff"],
-                "ORGANIZER": ["0d83ae", "00c0eb"],
-                "DEV": ["d61753"],
-                "YOUTUBE": ["bf2dff", "f33fd7"],
-                "MAPLEAD": ["55961a", "3f6e13"],
-                "SRBUILDER": ["57c22d", "55961a"],
-                "BUILDER": ["67ff54", "57c22d"],
-                "JRBUILDER": ["bdecb6", "67ff54"],
-                "VIME": ["2599d4", "1d7cab"],
-                "ETERNAL": ["2688ed", "8b00d7", "ff4161"],
-                "ELITE": ["ffa51e", "ff5619", "ff314a"],
-                "THANE": ["30ff87", "1cffe4", "3594ff"],
-                "DIVINE": ["b451ff", "84b5ff"],
-                "IMMORTAL": ["ff70d1", "ff5d6d"],
-                "HOLY": ["fff8a9", "ffa317"],
-                "PREMIUM": ["3decff"],
-                "VIP": ["3dff80"],
-                "PLAYER": ["cccccc"]
-            };
-            return rankColors[rankCode] || ["cccccc"];
-        }
-        
-        // Получение локализованного имени ранга
-        function getRankName(rankCode) {
-            // Используем сокращенные названия из ranksData
-            if (ranksData[rankCode]) {
-                return ranksData[rankCode].name;
-            }
-            
-            // Запасной вариант для рангов, которых нет в ranksData
-            const rankNames = {
-                "ADMIN": "Гл. Админ",
-                "CHIEF": "Админ",
-                "WARDEN": "Пр. Модератор",
-                "MODER": "Модератор",
-                "HELPER": "Хелпер",
-                "BUILDER": "Билдер",
-                "SRBUILDER": "Ст. Билдер",
-                "JRBUILDER": "Мл. Билдер",
-                "MAPLEAD": "Гл. Билдер",
-                "YOUTUBE": "Media",
-                "DEV": "Разработчик",
-                "ORGANIZER": "Организатор",
-                "DIVINE": "Divine",
-                "IMMORTAL": "Immortal",
-                "HOLY": "Holy",
-                "PREMIUM": "Premium",
-                "VIP": "VIP",
-                "PLAYER": "Игрок",
-                "THANE": "Thane",
-                "ELITE": "Elite",
-                "VIME": "Vime",
-                "ETERNAL": "Eternal"
-            };
-            return rankNames[rankCode] || rankCode;
-        }
-        
-        // Данные о рангах для обратной совместимости
-        const ranksData = {
-            "PLAYER": { name: "Игрок", colors: [] },
-            "VIP": { name: "VIP", colors: ["3dff80"] },
-            "PREMIUM": { name: "Premium", colors: ["3decff"] },
-            "HOLY": { name: "Holy", colors: ["fff8a9", "ffa317"] },
-            "IMMORTAL": { name: "Immortal", colors: ["ff70d1", "ff5d6d"] },
-            "DIVINE": { name: "Divine", colors: ["b451ff", "84b5ff"] },
-            "THANE": { name: "Thane", colors: ["30ff87", "1cffe4", "3594ff"] },
-            "ELITE": { name: "Elite", colors: ["ffa51e", "ff5619", "ff314a"] },
-            "ETERNAL": { name: "Eternal", colors: ["2688ed", "8b00d7", "ff4161"] },
-            "VIME": { name: "Vime", colors: ["2599d4", "1d7cab"] },
-            "JRBUILDER": { name: "Мл. Билдер", colors: ["bdecb6", "67ff54"] },
-            "BUILDER": { name: "Билдер", colors: ["67ff54", "57c22d"] },
-            "SRBUILDER": { name: "Ст. Билдер", colors: ["57c22d", "55961a"] },
-            "MAPLEAD": { name: "Гл. Билдер", colors: ["55961a", "3f6e13"] },
-            "YOUTUBE": { name: "Media", colors: ["bf2dff", "f33fd7"] },
-            "DEV": { name: "Разработчик", colors: ["d61753"] },
-            "ORGANIZER": { name: "Организатор", colors: ["0d83ae", "00c0eb"] },
-            "HELPER": { name: "Хелпер", colors: ["76a6ff"] },
-            "MODER": { name: "Модератор", colors: ["4e62eb"] },
-            "WARDEN": { name: "Пр. Модератор", colors: ["3c36de"] },
-            "CHIEF": { name: "Админ", colors: ["ff5e43", "db2100"] },
-            "ADMIN": { name: "Гл. Админ", colors: ["ff2030", "d40048", "c1006b"] }
-        };
 
-        // Основные функции
-        function loadRecentNicks() {
-            const nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-            updateRecentNicksList(nicks);
-        }
-
-        function loadRecentGuilds() {
+        // Функции для работы с гильдиями
+        function loadRecentGuildsLocal() {
             const guilds = JSON.parse(localStorage.getItem('recentGuilds') || '[]');
-            updateRecentGuildsList(guilds);
+            updateRecentGuildsListLocal(guilds);
         }
 
-        // Сохранение никнейма в localStorage
-        function saveNick(nick) {
-            // Получаем оригинальный никнейм из API
-            fetch(`https://api.vimeworld.com/user/name/${nick}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && data.length > 0) {
-                        const originalUsername = data[0].username;
-                        let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-                        nicks = nicks.filter(n => n !== originalUsername);
-                        nicks.unshift(originalUsername);
-                        nicks = nicks.slice(0, MAX_RECENT_NICKS);
-                        localStorage.setItem('recentNicks', JSON.stringify(nicks));
-                        updateRecentNicksList(nicks);
-                    }
-                })
-                .catch(error => {
-                    console.error('Ошибка при получении оригинального никнейма:', error);
-                    let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-                    nicks = nicks.filter(n => n !== nick);
-                    nicks.unshift(nick);
-                    nicks = nicks.slice(0, MAX_RECENT_NICKS);
-                    localStorage.setItem('recentNicks', JSON.stringify(nicks));
-                    updateRecentNicksList(nicks);
-                });
-        }
-
-        // Сохранение данных игрока в кеш
-        function savePlayerData(nick, data) {
-            const playerCache = JSON.parse(localStorage.getItem('playerCache') || '{}');
-            playerCache[nick] = {
-                ...data,
-                timestamp: Date.now()
-            };
-            localStorage.setItem('playerCache', JSON.stringify(playerCache));
-        }
-
-        // Получение данных игрока из кеша
-        function getPlayerData(nick) {
-            const playerCache = JSON.parse(localStorage.getItem('playerCache') || '{}');
-            return playerCache[nick];
-        }
-
-        // Сохранение гильдии в localStorage
         function saveGuild(guild) {
             let guilds = JSON.parse(localStorage.getItem('recentGuilds') || '[]');
             guilds = guilds.filter(g => g !== guild);
             guilds.unshift(guild);
             guilds = guilds.slice(0, MAX_RECENT_GUILDS);
             localStorage.setItem('recentGuilds', JSON.stringify(guilds));
-            updateRecentGuildsList(guilds);
+            updateRecentGuildsListLocal(guilds);
         }
 
-        // Обновление списка недавних никнеймов
-        function updateRecentNicksList(nicks) {
-            if (!recentNicksList) return;
-            
-            recentNicksList.innerHTML = '';
-            nicks.forEach(nick => {
-                const li = document.createElement('li');
-                li.setAttribute('data-username', nick);
-                
-                // Создаем контейнер для головы
-                const headContainer = document.createElement('div');
-                headContainer.style.position = 'relative';
-                headContainer.style.width = '25px';
-                headContainer.style.height = '25px';
-                
-                // Добавляем базовую голову
-                const head = document.createElement('img');
-                head.src = `https://skin.vimeworld.com/head/${nick}.png`;
-                head.className = 'mini-head';
-                head.alt = '';
-                head.onerror = function() {
-                    head.src = 'https://skin.vimeworld.com/head/Steve.png'; // Fallback to Steve head
-                };
-                headContainer.appendChild(head);
-                
-                // Добавляем оверлей головы
-                const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png`;
-                const skinFullImg = new Image();
-                
-                skinFullImg.onerror = function() {
-                    // Игнорируем ошибку загрузки скина
-                    // Не логируем, чтобы не засорять консоль
-                };
-                
-                skinFullImg.onload = function() {
-                    try {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        if (!ctx) return;
-                        
-                        // Определяем размер скина и рассчитываем масштабирование
-                        const skinResolution = skinFullImg.width;
-                        const scale = skinResolution / 64;
-                        
-                        // Координаты и размер оверлея головы на стандартном скине (64x64)
-                        const baseOverlayX = 40;
-                        const baseOverlayY = 8;
-                        const baseOverlaySize = 8;
-                        
-                        // Масштабируем координаты и размер под текущее разрешение скина
-                        const scaledOverlayX = baseOverlayX * scale;
-                        const scaledOverlayY = baseOverlayY * scale;
-                        const scaledOverlaySize = baseOverlaySize * scale;
-                        
-                        canvas.width = scaledOverlaySize;
-                        canvas.height = scaledOverlaySize;
-                        
-                        // Вырезаем оверлей головы из масштабированного скина
-                        ctx.drawImage(skinFullImg, scaledOverlayX, scaledOverlayY, scaledOverlaySize, scaledOverlaySize, 0, 0, scaledOverlaySize, scaledOverlaySize);
-                        
-                        // Создаем изображение из canvas и добавляем на страницу
-                        const overlayImg = document.createElement('img');
-                        overlayImg.src = canvas.toDataURL();
-                        overlayImg.alt = `${nick} head overlay`;
-                        overlayImg.className = 'mini-head-overlay';
-                        headContainer.appendChild(overlayImg);
-                    } catch (error) {
-                        console.error('Ошибка при создании оверлея головы:', error);
-                    }
-                };
-                
-                // Устанавливаем crossOrigin и src после обработчиков
-                skinFullImg.crossOrigin = "Anonymous";
-                skinFullImg.src = skinFullUrl;
-                
-                // Добавляем никнейм
-                const nickname = document.createElement('span');
-                nickname.textContent = nick;
-                
-                // Создаем контейнер для ника и статуса
-                const nickContainer = document.createElement('div');
-                nickContainer.style.display = 'flex';
-                nickContainer.style.alignItems = 'center';
-                nickContainer.style.gap = '4px';
-                
-                // Добавляем никнейм в контейнер
-                nickContainer.appendChild(nickname);
-                
-                // Создаем индикатор онлайн-статуса
-                const onlineStatus = document.createElement('div');
-                onlineStatus.className = 'online-status unknown';
-                nickContainer.appendChild(onlineStatus);
-
-                li.appendChild(headContainer);
-                li.appendChild(nickContainer);
-
-                // Проверяем кеш перед запросом к API
-                const cachedData = getPlayerData(nick);
-                if (cachedData) {
-                    applyPlayerData(nickname, onlineStatus, li, cachedData);
-                }
-                
-                // Получаем актуальные данные с API
-                fetch(`https://api.vimeworld.com/user/name/${nick}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            const player = data[0];
-                            savePlayerData(nick, player);
-                            applyPlayerData(nickname, onlineStatus, li, player);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Ошибка при получении данных игрока:', error);
-                        if (!cachedData) {
-                            nickname.style.color = '#000000';
-                        }
-                    });
-                
-                li.addEventListener('click', () => {
-                    saveNick(nick);
-                    window.location.href = `player.html?username=${encodeURIComponent(nick)}`;
-                });
-                recentNicksList.appendChild(li);
-            });
-        }
-
-        // Вспомогательная функция для применения данных игрока
-        function applyPlayerData(nickname, onlineStatus, li, player) {
-            if (player.customColors && player.customColors.length > 0) {
-                if (player.customColors.length === 1) {
-                    nickname.style.color = `#${player.customColors[0]}`;
-                } else {
-                    const gradient = `linear-gradient(to right, ${player.customColors.map(color => `#${color}`).join(', ')})`;
-                    nickname.style.background = gradient;
-                    nickname.style.webkitBackgroundClip = 'text';
-                    nickname.style.webkitTextFillColor = 'transparent';
-                }
-            } else {
-                nickname.style.color = '#000000';
-            }
-            
-            const mainRank = player.rank || "PLAYER";
-            const rankInfo = ranksData[mainRank] || ranksData["PLAYER"];
-            if (mainRank !== "PLAYER" && !li.querySelector('.player-rank')) {
-                const rank = document.createElement('span');
-                rank.className = 'player-rank';
-                rank.textContent = rankInfo.name;
-                
-                if (rankInfo.colors && rankInfo.colors.length > 0) {
-                    if (rankInfo.colors.length === 1) {
-                        rank.style.background = `#${rankInfo.colors[0]}`;
-                        rank.style.color = '#fff';
-                    } else {
-                        const gradient = `linear-gradient(to right, ${rankInfo.colors.map(color => `#${color}`).join(', ')})`;
-                        rank.style.background = gradient;
-                        rank.style.color = '#fff';
-                    }
-                }
-                
-                li.appendChild(rank);
-            }
-
-            // Устанавливаем начальный неизвестный статус
-            onlineStatus.className = 'online-status unknown';
-
-            // Получаем онлайн-статус
-            fetch(`https://api.vimeworld.com/user/name/${player.username}/session`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(sessionData => {
-                    if (sessionData && sessionData.online) {
-                        onlineStatus.className = 'online-status ' + (sessionData.online.value ? 'online' : 'offline');
-                        
-                        // Сохраняем статус в localStorage
-                        const onlineStatuses = JSON.parse(localStorage.getItem('onlineStatuses') || '{}');
-                        onlineStatuses[player.username] = {
-                            status: sessionData.online.value,
-                            timestamp: Date.now()
-                        };
-                        localStorage.setItem('onlineStatuses', JSON.stringify(onlineStatuses));
-                    } else {
-                        onlineStatus.className = 'online-status unknown';
-                        
-                        const onlineStatuses = JSON.parse(localStorage.getItem('onlineStatuses') || '{}');
-                        onlineStatuses[player.username] = {
-                            status: 'unknown',
-                            timestamp: Date.now()
-                        };
-                        localStorage.setItem('onlineStatuses', JSON.stringify(onlineStatuses));
-                    }
-                })
-                .catch(error => {
-                    console.error('Ошибка при получении онлайн-статуса:', error);
-                    onlineStatus.className = 'online-status unknown';
-                    
-                    const onlineStatuses = JSON.parse(localStorage.getItem('onlineStatuses') || '{}');
-                    onlineStatuses[player.username] = {
-                        status: 'unknown',
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('onlineStatuses', JSON.stringify(onlineStatuses));
-                });
-        }
-
-        // Обновление списка недавних гильдий
-        function updateRecentGuildsList(guilds) {
+        function updateRecentGuildsListLocal(guilds) {
             recentGuildsList.innerHTML = '';
             guilds.forEach(guild => {
                 const li = document.createElement('li');
@@ -1250,7 +770,15 @@
             });
         }
 
-        // Обработка отправки формы
+        // Обновление списка недавних никнеймов (использует функции из search.js)
+        function updateNicksList(nicks) {
+            updateRecentNicksList(recentNicksList, nicks, (nick) => {
+                saveRecentNick(nick, updateNicksList);
+                window.location.href = `player.html?username=${encodeURIComponent(nick)}`;
+            }, { ranksData, getPlayerData, savePlayerData });
+        }
+
+        // Обработка отправки формы поиска
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const username = searchInput.value.trim();
@@ -1264,94 +792,34 @@
             }
 
             if (username) {
-                const lowerUsername = username.toLowerCase();
-                if (lowerUsername.startsWith('id:')) {
-                    const playerId = username.slice(3).trim();
-                    if (!/^\d+$/.test(playerId)) {
-                        errorMessage.textContent = 'После "id:" должны быть только цифры';
-                        errorMessage.classList.add('show');
-                        return;
-                    }
-                    
-                    fetch(`https://api.vimeworld.com/user/${playerId}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data && data.length > 0) {
-                                const player = data[0];
-                                saveNick(player.username);
-                                window.location.href = `player.html?username=${encodeURIComponent(player.username)}`;
-                            } else {
-                                errorMessage.textContent = 'Игрок с таким ID не найден';
-                                errorMessage.classList.add('show');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при получении данных игрока:', error);
-                            errorMessage.textContent = 'Произошла ошибка при поиске игрока';
-                            errorMessage.classList.add('show');
-                        });
-                } else {
-                    fetch(`https://api.vimeworld.com/user/name/${username}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data && data.length > 0) {
-                                const originalUsername = data[0].username;
-                                saveNick(originalUsername);
-                                window.location.href = `player.html?username=${encodeURIComponent(originalUsername)}`;
-                            } else {
-                                errorMessage.textContent = 'Игрок не найден';
-                                errorMessage.classList.add('show');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Ошибка при получении данных игрока:', error);
-                            errorMessage.textContent = 'Произошла ошибка при поиске игрока';
-                            errorMessage.classList.add('show');
-                        });
-                }
+                searchAndRedirect(username, searchInput, updateNicksList);
             } else if (guild) {
                 saveGuild(guild);
                 window.location.href = `guild.html`;
             }
         });
 
-        // Скрываем сообщение об ошибке при фокусе на поле ввода
+        // Обработчики событий для поля ввода никнейма
         searchInput.addEventListener('focus', () => {
-            const errorMessage = document.getElementById('errorMessage');
-            errorMessage.classList.remove('show');
+            document.getElementById('errorMessage').classList.remove('show');
             if (recentNicksList.children.length > 0) {
-                recentNicks.classList.add('active');
+                recentNicksDropdown.classList.add('active');
                 recentGuilds.classList.remove('active');
             }
         });
 
-        // Показ/скрытие выпадающего окна для никнеймов
         searchInput.addEventListener('input', () => {
             const inputValue = searchInput.value.trim().toLowerCase();
-            const nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
+            const nicks = loadRecentNicks();
             const suggestedNicks = document.getElementById('suggestedNicks');
             const suggestedNicksList = suggestedNicks.querySelector('.suggested-nicks-list');
             const recentNicksTitle = document.querySelector('.recent-nicks-title');
             const recentNicksDivider = document.querySelector('.recent-nicks-divider');
             
             if (inputValue.length > 0) {
-                // Фильтруем никнеймы по всем введенным символам
-                const filteredNicks = nicks.filter(nick => 
-                    nick.toLowerCase().startsWith(inputValue)
-                );
-                updateRecentNicksList(filteredNicks);
+                const filteredNicks = nicks.filter(nick => nick.toLowerCase().startsWith(inputValue));
+                updateNicksList(filteredNicks);
                 
-                // Скрываем или показываем секцию "Недавно искали" в зависимости от наличия результатов
                 if (filteredNicks.length === 0) {
                     recentNicksTitle.classList.add('hidden');
                     recentNicksDivider.classList.add('hidden');
@@ -1360,18 +828,12 @@
                     recentNicksDivider.classList.remove('hidden');
                 }
                 
-                // Показываем секцию "Возможно вы ищите..."
                 suggestedNicks.classList.add('active');
-                
-                // Здесь будет ваша реализация получения 10 игроков
-                // Пока оставим пустой список
                 suggestedNicksList.innerHTML = '';
             } else {
-                // Если поле пустое, показываем все недавние никнеймы
-                updateRecentNicksList(nicks);
+                updateNicksList(nicks);
                 suggestedNicks.classList.remove('active');
                 
-                // Показываем секцию "Недавно искали" если есть ники
                 if (nicks.length > 0) {
                     recentNicksTitle.classList.remove('hidden');
                     recentNicksDivider.classList.remove('hidden');
@@ -1382,238 +844,66 @@
             }
 
             if (recentNicksList.children.length > 0 || suggestedNicksList.children.length > 0) {
-                recentNicks.classList.add('active');
+                recentNicksDropdown.classList.add('active');
                 recentGuilds.classList.remove('active');
             } else {
-                recentNicks.classList.remove('active');
+                recentNicksDropdown.classList.remove('active');
             }
         });
+
         searchInput.addEventListener('blur', () => {
-            setTimeout(() => recentNicks.classList.remove('active'), 150);
+            setTimeout(() => recentNicksDropdown.classList.remove('active'), 150);
         });
 
-        // Показ/скрытие выпадающего окна для гильдий
+        // Обработчики событий для поля ввода гильдии
         guildInput.addEventListener('focus', () => {
             if (recentGuildsList.children.length > 0) {
                 recentGuilds.classList.add('active');
-                recentNicks.classList.remove('active');
+                recentNicksDropdown.classList.remove('active');
             }
         });
+
         guildInput.addEventListener('input', () => {
             if (recentGuildsList.children.length > 0) {
                 recentGuilds.classList.add('active');
-                recentNicks.classList.remove('active');
+                recentNicksDropdown.classList.remove('active');
             }
         });
+
         guildInput.addEventListener('blur', () => {
             setTimeout(() => recentGuilds.classList.remove('active'), 150);
         });
 
-        // Инициализация
+        // Инициализация страницы
         document.addEventListener('DOMContentLoaded', function() {
-            loadRecentNicks();
-            loadRecentGuilds();
+            // Загружаем данные
+            updateNicksList(loadRecentNicks());
+            loadRecentGuildsLocal();
             loadModeratorsOnline();
 
-            if (JSON.parse(localStorage.getItem('recentNicks') || '[]').length > 0) {
-                recentNicks.style.visibility = 'visible';
+            if (loadRecentNicks().length > 0) {
+                recentNicksDropdown.style.visibility = 'visible';
             }
             if (JSON.parse(localStorage.getItem('recentGuilds') || '[]').length > 0) {
                 recentGuilds.style.visibility = 'visible';
             }
         });
 
-        // Переход на страницу авторизации по клику на ключ
-        document.getElementById('auth-key-btn').onclick = function() {
-            window.location.href = 'auth.html';
-        };
-
-        // Функция обновления онлайн-статусов
-        function updateOnlineStatuses() {
-            const nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-            nicks.forEach(nick => {
-                fetch(`https://api.vimeworld.com/user/name/${nick}/session`)
-                    .then(response => response.json())
-                    .then(sessionData => {
-                        if (sessionData && sessionData.online) {
-                            const onlineStatuses = JSON.parse(localStorage.getItem('onlineStatuses') || '{}');
-                            onlineStatuses[nick] = {
-                                status: sessionData.online.value,
-                                timestamp: Date.now()
-                            };
-                            localStorage.setItem('onlineStatuses', JSON.stringify(onlineStatuses));
-                            
-                            // Обновляем индикатор в DOM если он существует
-                            const listItem = document.querySelector(`.recent-nicks-list li[data-username="${nick}"]`);
-                            if (listItem) {
-                                const statusIndicator = listItem.querySelector('.online-status');
-                                if (statusIndicator) {
-                                    statusIndicator.className = 'online-status ' + (sessionData.online.value ? 'online' : 'offline');
-                                }
-                            }
-                        }
-                    })
-                    .catch(error => console.error('Ошибка при обновлении онлайн-статуса:', error));
-            });
-        }
-
-        // Обновляем статусы при открытии списка
-        searchInput.addEventListener('focus', () => {
-            if (recentNicksList.children.length > 0) {
-                recentNicks.classList.add('active');
-                recentGuilds.classList.remove('active');
-                updateOnlineStatuses();
-            }
-        });
-
-        // Новые функции для улучшения UX
-        function addLoadingEffect(element) {
-            element.style.position = 'relative';
-            element.style.overflow = 'hidden';
-            
-            const loadingOverlay = document.createElement('div');
-            loadingOverlay.style.position = 'absolute';
-            loadingOverlay.style.top = '0';
-            loadingOverlay.style.left = '-100%';
-            loadingOverlay.style.width = '100%';
-            loadingOverlay.style.height = '100%';
-            loadingOverlay.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)';
-            loadingOverlay.style.animation = 'loading 1.5s infinite';
-            
-            element.appendChild(loadingOverlay);
-        }
-
-        // Добавляем эффект загрузки при поиске
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            const button = this.querySelector('.search-button');
-            addLoadingEffect(button);
-        });
-
-        // Добавляем подсказки при вводе
-        searchInput.addEventListener('input', function() {
-            const value = this.value.trim();
-            if (value.length >= 2) {
-                fetch(`https://api.vimeworld.com/user/name/${value}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            const suggestedNicks = document.getElementById('suggestedNicks');
-                            const suggestedNicksList = suggestedNicks.querySelector('.suggested-nicks-list');
-                            suggestedNicksList.innerHTML = '';
-                            
-                            data.slice(0, 5).forEach(player => {
-                                const li = document.createElement('li');
-                                li.textContent = player.username;
-                                li.addEventListener('click', () => {
-                                    searchInput.value = player.username;
-                                    recentNicks.classList.remove('active');
-                                });
-                                suggestedNicksList.appendChild(li);
-                            });
-                            
-                            suggestedNicks.classList.add('active');
-                        }
-                    })
-                    .catch(error => console.error('Ошибка при получении подсказок:', error));
-            }
-        });
-        // Добавляем эффект параллакса для фона
+        // Эффекты UI
         document.addEventListener('mousemove', function(e) {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
             const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            
             document.body.style.backgroundPosition = `calc(50% + ${moveX}px) calc(50% + ${moveY}px)`;
         });
 
-        // Добавляем анимацию при скролле
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
             const searchContainer = document.querySelector('.search-container');
-            
-            if (scrolled > 100) {
-                searchContainer.style.transform = 'scale(0.98)';
-            } else {
-                searchContainer.style.transform = 'scale(1)';
-            }
-        });
-
-        // Добавляем звуковые эффекты
-        const clickSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU');
-        
-        document.querySelectorAll('button, a').forEach(element => {
-            element.addEventListener('click', () => {
-                clickSound.currentTime = 0;
-                clickSound.play().catch(() => {});
-            });
-        });
-
-        // Добавляем уведомления
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Добавляем стили для уведомлений
-        const style = document.createElement('style');
-        style.textContent = `
-            .notification {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                padding: 15px 25px;
-                background: #3498db;
-                color: white;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-                transform: translateY(100px);
-                opacity: 0;
-                transition: all 0.3s ease;
-                z-index: 1000;
-            }
-            
-            .notification.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            
-            .notification.success {
-                background: #2ecc71;
-            }
-            
-            .notification.error {
-                background: #e74c3c;
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Показываем уведомление при успешном поиске
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = searchInput.value.trim();
-            const guild = guildInput.value.trim();
-            
-            if (!username && !guild) {
-                showNotification('Пожалуйста, заполните хотя бы одно поле поиска', 'error');
-                return;
-            }
-            
-            // Остальной код обработки формы...
+            searchContainer.style.transform = scrolled > 100 ? 'scale(0.98)' : 'scale(1)';
         });
     </script>
-    <script src="auth.js"></script>
-      <script src="settings.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/settings.js"></script>
 
     <!-- Кнопка настроек -->
     <div id="settings-btn">

@@ -100,12 +100,6 @@ function updateAuthUI() {
         head.style.height = '100%';        
         head.style.imageRendering = 'pixelated';        
         headContainer.appendChild(head);
-
-        const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${userData.username}.png`;
-        const skinFullImg = new Image();
-        skinFullImg.crossOrigin = "Anonymous";
-        skinFullImg.src = skinFullUrl;
-
         
         try {
             // Добавляем оверлей головы

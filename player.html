@@ -6,11 +6,13 @@
     <title>Профиль | VimeStats</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="settings.css">
+    <link href="css/common.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/settings.css">
     <style>
         @font-face {
             font-family: 'VimeArtBold';
-            src: url('https://mc.vimeworld.com/assets/vimestats/vimeartbold.ttf') format('truetype');
+            src: url('assets/fonts/vimeartbold.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -25,7 +27,7 @@
         }
         .player-container {
             max-width: 1200px;
-            margin: 80px auto 0;
+            margin: 20px auto 0;
             padding: 20px;
             position: relative;
             z-index: 1;
@@ -98,28 +100,6 @@
             #skin3d-controls {
                 min-width: 100%;
             }
-            .navbar .container-fluid {
-                padding: 0 10px;
-            }
-            .navbar-brand {
-                font-size: 1rem;
-                padding-left: 10px;
-            }
-            .navbar .container-fluid > div {
-                display: none;
-            }
-            .navbar .container-fluid > div:first-child {
-                display: block;
-            }
-            #quick-search {
-                border: none;
-                background: none;
-                outline: none;
-                width: 260px; /* Увеличиваем ширину поля поиска */
-                font-family: 'VimeArtBold', sans-serif;
-                font-size: 0.9rem;
-                color: #3498db;
-            }
         }
         @media (max-width: 480px) {
             .stats-grid {
@@ -152,15 +132,6 @@
             .status-item {
                 font-size: 0.8rem;
             }
-        }
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: #fff;
-            box-shadow: 0 0 12px rgba(52, 152, 219, 0.1);
         }
         .player-header {
             background: #fff;
@@ -255,9 +226,12 @@
             border-radius: 4px; /* Скругление углов */
             display: inline-block; /* Блок занимает только необходимую ширину */
             vertical-align: middle; /* Выравнивание по центру с текстом имени */
-            font-size: 0.9rem; /* Устанавливаем размер шрифта как у дополнительных рангов */
+            font-size: 0.6rem; /* Размер шрифта контейнера */
             /* position: relative; */ /* Переносим позиционирование в .player-privileges */
             /* top: 3px; */ /* Переносим позиционирование в .player-privileges */
+        }
+        .rank-badge .player-rank {
+            font-size: 0.8rem; /* Крупный размер для белого текста основной привилегии */
         }
         .prime-badge {
             background: rgba(52, 152, 219, 0.2); /* Голубой фон с прозрачностью */
@@ -601,23 +575,6 @@
         .stat-values:hover::-webkit-scrollbar-thumb:hover {
             background: #2980b9;
         }
-        /* Удаляем специфические стили для кнопок прокрутки в .stat-values */
-/*
-        .stat-values::-webkit-scrollbar-button {
-            display: block;
-            height: 12px;
-            background-color: #3498db;
-            border-radius: 3px;
-        }
-        .stat-values::-webkit-scrollbar-button:vertical:start {
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-         .stat-values::-webkit-scrollbar-button:vertical:end {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-        }
-*/
 
         .expand-button {
             position: absolute;
@@ -1162,33 +1119,6 @@
             opacity: 1;
         }
 
-        .navbar-brand {
-            font-family:'VimeArtBold',sans-serif;
-            font-size:1.2rem;
-            color:#3498db;
-            letter-spacing:1px;
-            padding-left:24px;
-            z-index:2;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .navbar-brand::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.4),
-                transparent
-            );
-            animation: shimmer 24s infinite;
-        }
-
         html {
             scrollbar-width: thin;
             scrollbar-color: rgba(52, 152, 219, 0.7) transparent;
@@ -1632,42 +1562,9 @@
         }
     </style>
 </head>
-<body></body>
-    </style>
-</head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" style="position:fixed;top:0;left:0;width:100%;z-index:1000;">
-        <div class="container-fluid" style="padding-left:0;padding-right:0;position:relative;min-height:56px;display:flex;align-items:center;">
-            <a class="navbar-brand" href="index.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.2rem;color:#3498db;letter-spacing:1px;padding-left:24px;z-index:2;">VimeStats</a>
-            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:24px;z-index:1;">
-                <a href="tops.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.1rem;color:#3498db;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M8 21h8M12 17v4M19 5V3H5v2M19 5v2a7 7 0 0 1-14 0V5m14 0h2a2 2 0 0 1 2 2v1a7 7 0 0 1-6 6.93M5 5H3a2 2 0 0 0-2 2v1a7 7 0 0 0 6 6.93" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Топы
-                </a>
-                <a href="moders.html" style="font-family:'VimeArtBold',sans-serif;font-size:1.1rem;color:#3498db;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    Модеры
-                </a>
-            </div>
-            <div style="position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px;background:#e6f3ff;border-radius:10px;padding:0 12px;height:40px;box-shadow:0 2px 8px rgba(52,152,219,0.08);">
-                <input type="text" id="quick-search" placeholder="Поиск" style="border:none;background:none;outline:none;width:260px;font-family:'VimeArtBold',sans-serif;font-size:0.9rem;color:#3498db;" autocomplete="off">
-                <div id="quick-search-btn" style="display:flex;align-items:center;justify-content:center;cursor:pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </div>
-                <div class="recent-nicks" id="quickRecentNicks">
-                    <ul class="recent-nicks-list"></ul>
-                </div>
-            </div>
-            <div id="auth-key-btn" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#e6f3ff;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(52,152,219,0.08);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5.5C16 8.53757 13.5376 11 10.5 11H7V13H5V15L4 16H0V12L5.16351 6.83649C5.0567 6.40863 5 5.96094 5 5.5C5 2.46243 7.46243 0 10.5 0C13.5376 0 16 2.46243 16 5.5ZM13 4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4C11 3.44772 11.4477 3 12 3C12.5523 3 13 3.44772 13 4Z" fill="#3498db"/>
-                </svg>
-            </div>
-        </div>
-    </nav>
+    <!-- Навигация генерируется динамически через navbar.js -->
+    <div id="navbar-placeholder"></div>
 
     <!-- Кнопка настроек -->
     <div id="settings-btn">
@@ -1696,7 +1593,7 @@
         </div>
         <div id="player-content" style="display: none;">
             <div class="profile-banner">
-                <img src="vimefurrybanner.jpg" alt="Баннер профиля" id="profile-banner-img">
+                <img src="assets/images/vimefurrybanner.jpg" alt="Баннер профиля" id="profile-banner-img">
             </div>
             <div class="player-header">
                 <div class="player-avatar" id="player-avatar"></div>
@@ -1867,42 +1764,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/skinview3d@latest/bundles/skinview3d.bundle.js"></script>
-    <script src="settings.js"></script>
+    <script src="js/ranks.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/settings.js"></script>
     <script>
-        // Данные о рангах
-        const ranksData = {
-            "PLAYER": { name: "Игрок", colors: [] },
-            "VIP": { name: "VIP", colors: ["3dff80"] },
-            "PREMIUM": { name: "Premium", colors: ["3decff"] },
-            "HOLY": { name: "Holy", colors: ["fff8a9", "ffa317"] },
-            "IMMORTAL": { name: "Immortal", colors: ["ff70d1", "ff5d6d"] },
-            "DIVINE": { name: "Divine", colors: ["b451ff", "84b5ff"] },
-            "THANE": { name: "Thane", colors: ["30ff87", "1cffe4", "3594ff"] },
-            "ELITE": { name: "Elite", colors: ["ffa51e", "ff5619", "ff314a"] },
-            "ETERNAL": { name: "Eternal", colors: ["2688ed", "8b00d7", "ff4161"] },
-            "VIME": { name: "Vime", colors: ["2599d4", "1d7cab"] },
-            "JRBUILDER": { name: "Мл. Билдер", colors: ["bdecb6", "67ff54"] },
-            "BUILDER": { name: "Билдер", colors: ["67ff54", "57c22d"] },
-            "SRBUILDER": { name: "Ст. Билдер", colors: ["57c22d", "55961a"] },
-            "MAPLEAD": { name: "Гл. Билдер", colors: ["55961a", "3f6e13"] },
-            "YOUTUBE": { name: "Media", colors: ["bf2dff", "f33fd7"] },
-            "DEV": { name: "Разработчик", colors: ["d61753"] },
-            "ORGANIZER": { name: "Организатор", colors: ["0d83ae", "00c0eb"] },
-            "HELPER": { name: "Хелпер", colors: ["76a6ff"] },
-            "MODER": { name: "Модератор", colors: ["4e62eb"] },
-            "WARDEN": { name: "Пр. Модератор", colors: ["3c36de"] },
-            "CHIEF": { name: "Админ", colors: ["ff5e43", "db2100"] },
-            "ADMIN": { name: "Гл. Админ", colors: ["ff2030", "d40048", "c1006b"] },
-            "ABSOLUTE": { name: "Absolute", colors: ["f200ff", "972a6e", "632f59", "dd57bc"] },
-            "IMPERIAL": { name: "Imperial", colors: ["fdbd05", "ffa630", "fffabd", "fdbd05"] },
-            "CELESTIAL": { name: "Celestial", colors: ["e0f3ff", "bfdfff", "96c6ff", "6895d6"] },
-            "ULTIMATE": { name: "Ultimate", colors: ["4f4f4f", "737272", "fbf7ff", "3a3a3a"] }
-        };
-
-            document.getElementById('auth-key-btn').onclick = function() {
-            window.location.href = 'auth.html';
-        };
-
         // Обработчик клика для баннера профиля
         document.addEventListener('DOMContentLoaded', function() {
             const profileBanner = document.querySelector('.profile-banner');
@@ -1932,371 +1799,6 @@
                 }
             }
         });
-
-        /* Добавляем функционал недавних ников в навигации */
-        const MAX_RECENT_NICKS_NAV = 5;
-        const quickSearchInput = document.getElementById('quick-search');
-        const quickRecentNicks = document.getElementById('quickRecentNicks');
-        const quickRecentNicksList = quickRecentNicks.querySelector('.recent-nicks-list');
-
-        // Загрузка недавних никнеймов из localStorage для навигации
-        function loadQuickRecentNicks() {
-            const nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-            updateQuickRecentNicksList(nicks);
-        }
-
-        // Сохранение никнейма в localStorage для навигации
-function saveQuickNick(nick) {
-    // Получаем оригинальный никнейм из API
-    fetch(`https://api.vimeworld.com/user/name/${nick}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.length > 0) {
-                const originalUsername = data[0].username;
-                let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-                // Удаляем все совпадения по нижнему регистру
-                nicks = nicks.filter(n => n.toLowerCase() !== originalUsername.toLowerCase());
-                nicks.unshift(originalUsername); // Добавляем оригинальный ник из API
-                nicks = nicks.slice(0, MAX_RECENT_NICKS_NAV);
-                localStorage.setItem('recentNicks', JSON.stringify(nicks));
-                updateQuickRecentNicksList(nicks);
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка при получении оригинального никнейма:', error);
-            // Если не удалось получить оригинальный никнейм, сохраняем введенный
-            let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-            nicks = nicks.filter(n => n.toLowerCase() !== nick.toLowerCase());
-            nicks.unshift(nick);
-            nicks = nicks.slice(0, MAX_RECENT_NICKS_NAV);
-            localStorage.setItem('recentNicks', JSON.stringify(nicks));
-            updateQuickRecentNicksList(nicks);
-        });
-}
-
-        // Обновление списка недавних никнеймов для навигации
-        function updateQuickRecentNicksList(nicks) {
-            quickRecentNicksList.innerHTML = '';
-            nicks.forEach(nick => {
-                const li = document.createElement('li');
-                
-                // Создаем контейнер для головы
-                const headContainer = document.createElement('div');
-                headContainer.style.position = 'relative';
-                headContainer.style.width = '25px';
-                headContainer.style.height = '25px';
-                
-                // Добавляем базовую голову
-                const head = document.createElement('img');
-                head.src = `https://skin.vimeworld.com/head/${nick}.png`;
-                head.className = 'mini-head';
-                head.alt = '';
-                headContainer.appendChild(head);
-                
-                // Добавляем оверлей головы
-                const skinFullUrl = `https://skin.vimeworld.com/raw/skin/${nick}.png`;
-                const skinFullImg = new Image();
-                
-                skinFullImg.onerror = function() {
-                    // Игнорируем ошибку загрузки скина (например, если у игрока нет кастомного скина)
-                    // Не логируем, чтобы не засорять консоль
-                };
-                
-                skinFullImg.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Определяем размер скина и рассчитываем масштабирование
-                    const skinResolution = skinFullImg.width;
-                    const scale = skinResolution / 64;
-                    
-                    // Координаты и размер оверлея головы
-                    const baseOverlayX = 40;
-                    const baseOverlayY = 8;
-                    const baseOverlaySize = 8;
-                    
-                    // Масштабируем координаты и размер
-                    const scaledOverlayX = baseOverlayX * scale;
-                    const scaledOverlayY = baseOverlayY * scale;
-                    const scaledOverlaySize = baseOverlaySize * scale;
-                    
-                    canvas.width = scaledOverlaySize;
-                    canvas.height = scaledOverlaySize;
-                    
-                    // Вырезаем оверлей головы
-                    ctx.drawImage(skinFullImg, scaledOverlayX, scaledOverlayY, scaledOverlaySize, scaledOverlaySize, 0, 0, scaledOverlaySize, scaledOverlaySize);
-                    
-                    // Создаем изображение из canvas и добавляем на страницу
-                    const overlayImg = document.createElement('img');
-                    overlayImg.src = canvas.toDataURL();
-                    overlayImg.alt = `${nick} head overlay`;
-                    overlayImg.className = 'mini-head-overlay';
-                    headContainer.appendChild(overlayImg);
-                };
-                
-                // Устанавливаем crossOrigin и src после обработчиков
-                skinFullImg.crossOrigin = "Anonymous";
-                skinFullImg.src = skinFullUrl;
-                
-                // Создаем контейнер для ника и статуса
-                const nickContainer = document.createElement('div');
-                nickContainer.style.display = 'flex';
-                nickContainer.style.alignItems = 'center';
-                nickContainer.style.gap = '4px';
-                
-                // Ник
-                const nickSpan = document.createElement('span');
-                nickSpan.textContent = nick;
-                nickSpan.style.color = '#2c3e50';
-                nickContainer.appendChild(nickSpan);
-                
-                // Добавляем индикатор онлайн-статуса
-                const onlineStatus = document.createElement('div');
-                onlineStatus.className = 'online-status unknown';
-                nickContainer.appendChild(onlineStatus);
-                
-                li.appendChild(headContainer);
-                li.appendChild(nickContainer);
-                
-                // Проверяем кеш перед запросом к API
-                const cachedData = getPlayerData(nick);
-                if (cachedData) {
-                    // Применяем кешированные данные
-                    if (cachedData.customColors && cachedData.customColors.length > 0) {
-                        if (cachedData.customColors.length === 1) {
-                            nickSpan.style.color = `#${cachedData.customColors[0]}`;
-                        } else {
-                            const gradient = `linear-gradient(to right, ${cachedData.customColors.map(color => `#${color}`).join(', ')})`;
-                            nickSpan.style.background = gradient;
-                            nickSpan.style.webkitBackgroundClip = 'text';
-                            nickSpan.style.webkitTextFillColor = 'transparent';
-                        }
-                    }
-                    
-                    // Добавляем ранг из кеша
-                    const mainRank = cachedData.rank || "PLAYER";
-                    const rankInfo = ranksData[mainRank] || ranksData["PLAYER"];
-                    if (mainRank !== "PLAYER") {
-                        const rank = document.createElement('span');
-                        rank.className = 'player-rank';
-                        rank.textContent = rankInfo.name;
-                        
-                        if (rankInfo.colors && rankInfo.colors.length > 0) {
-                            if (rankInfo.colors.length === 1) {
-                                rank.style.background = `#${rankInfo.colors[0]}`;
-                                rank.style.color = '#fff';
-                            } else {
-                                const gradient = `linear-gradient(to right, ${rankInfo.colors.map(color => `#${color}`).join(', ')})`;
-                                rank.style.background = gradient;
-                                rank.style.color = '#fff';
-                            }
-                        }
-                        
-                        li.appendChild(rank);
-                    }
-                }
-                
-                // Получаем актуальные данные с API
-                fetch(`https://api.vimeworld.com/user/name/${nick}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            const player = data[0];
-                            // Сохраняем данные в кеш
-                            savePlayerData(nick, {
-                                rank: player.rank || "PLAYER",
-                                customColors: player.customColors || [],
-                                username: player.username
-                            });
-                            
-                            // Применяем кастомные цвета к никнейму
-                            if (player.customColors && player.customColors.length > 0) {
-                                if (player.customColors.length === 1) {
-                                    nickSpan.style.color = `#${player.customColors[0]}`;
-                                } else {
-                                    const gradient = `linear-gradient(to right, ${player.customColors.map(color => `#${color}`).join(', ')})`;
-                                    nickSpan.style.background = gradient;
-                                    nickSpan.style.webkitBackgroundClip = 'text';
-                                    nickSpan.style.webkitTextFillColor = 'transparent';
-                                }
-                            }
-                            
-                            // Добавляем ранг после статуса только если его еще нет
-                            const mainRank = player.rank || "PLAYER";
-                            const rankInfo = ranksData[mainRank] || ranksData["PLAYER"];
-                            if (mainRank !== "PLAYER" && !li.querySelector('.player-rank')) {
-                                const rank = document.createElement('span');
-                                rank.className = 'player-rank';
-                                rank.textContent = rankInfo.name;
-                                
-                                if (rankInfo.colors && rankInfo.colors.length > 0) {
-                                    if (rankInfo.colors.length === 1) {
-                                        rank.style.background = `#${rankInfo.colors[0]}`;
-                                        rank.style.color = '#fff';
-                                    } else {
-                                        const gradient = `linear-gradient(to right, ${rankInfo.colors.map(color => `#${color}`).join(', ')})`;
-                                        rank.style.background = gradient;
-                                        rank.style.color = '#fff';
-                                    }
-                                }
-                                
-                                li.appendChild(rank);
-                            }
-                            
-                            // Проверяем онлайн-статус
-                            fetch(`https://api.vimeworld.com/user/name/${nick}/session`)
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Network response was not ok');
-                                    }
-                                    return response.json();
-                                })
-                                .then(sessionData => {
-                                    if (sessionData && sessionData.online) {
-                                        onlineStatus.className = 'online-status ' + (sessionData.online.value ? 'online' : 'offline');
-                                    } else {
-                                        onlineStatus.className = 'online-status unknown';
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Ошибка при получении онлайн-статуса:', error);
-                                    onlineStatus.className = 'online-status unknown';
-                                });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Ошибка при получении данных игрока:', error);
-                        if (!cachedData) {
-                            nickSpan.style.color = '#2c3e50';
-                        }
-                    });
-                
-                li.addEventListener('click', () => {
-                    quickSearchInput.value = nick;
-                    quickRecentNicks.classList.remove('active');
-                    getOriginalNameAndRedirect(nick);
-                });
-                quickRecentNicksList.appendChild(li);
-            });
-        }
-
-        // Показ/скрытие выпадающего окна для недавних ников в навигации
-        quickSearchInput.addEventListener('focus', () => {
-            if (quickRecentNicksList.children.length > 0) {
-                quickRecentNicks.classList.add('active');
-            }
-        });
-        quickSearchInput.addEventListener('input', () => {
-             if (quickRecentNicksList.children.length > 0 && quickSearchInput.value.trim() === '') {
-                quickRecentNicks.classList.add('active');
-            } else {
-                quickRecentNicks.classList.remove('active');
-            }
-        });
-        quickSearchInput.addEventListener('blur', () => {
-            setTimeout(() => quickRecentNicks.classList.remove('active'), 150);
-        });
-
-        // Функция для получения оригинального никнейма и перехода на страницу игрока
-function getOriginalNameAndRedirect(inputName) {
-    if (!inputName.trim()) return;
-    
-    // Показываем индикатор загрузки
-    quickSearchInput.disabled = true;
-    
-    // Проверяем, является ли запрос поиском по ID
-    const lowerInputName = inputName.toLowerCase();
-    if (lowerInputName.startsWith('id:')) {
-        const playerId = inputName.slice(3).trim();
-        
-        // Проверяем, что после "id:" есть только цифры
-        if (!/^\d+$/.test(playerId)) {
-            alert('После "id:" должны быть только цифры');
-            quickSearchInput.disabled = false;
-            return;
-        }
-        
-        // Получаем данные игрока по ID
-        fetch(`https://api.vimeworld.com/user/${playerId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    const player = data[0];
-                    const originalUsername = player.username;
-                    
-                    // Сохраняем в историю
-                    let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-                    nicks = nicks.filter(n => n.toLowerCase() !== originalUsername.toLowerCase());
-                    nicks.unshift(originalUsername);
-                    nicks = nicks.slice(0, MAX_RECENT_NICKS_NAV);
-                    localStorage.setItem('recentNicks', JSON.stringify(nicks));
-                    updateQuickRecentNicksList(nicks);
-                    
-                    // Перенаправляем на страницу игрока
-                    window.location.href = `player.html?username=${encodeURIComponent(originalUsername)}`;
-                } else {
-                    alert('Игрок с таким ID не найден');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных игрока по ID:', error);
-                alert('Произошла ошибка при поиске игрока по ID');
-            })
-            .finally(() => {
-                quickSearchInput.disabled = false;
-            });
-    } else {
-        // Обычный поиск по никнейму
-        fetch(`https://api.vimeworld.com/user/name/${inputName}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    const originalUsername = data[0].username;
-                    let nicks = JSON.parse(localStorage.getItem('recentNicks') || '[]');
-                    nicks = nicks.filter(n => n.toLowerCase() !== originalUsername.toLowerCase());
-                    nicks.unshift(originalUsername);
-                    nicks = nicks.slice(0, MAX_RECENT_NICKS_NAV);
-                    localStorage.setItem('recentNicks', JSON.stringify(nicks));
-                    updateQuickRecentNicksList(nicks);
-                    
-                    // Перенаправляем на страницу с оригинальным никнеймом
-                    window.location.href = `player.html?username=${encodeURIComponent(originalUsername)}`;
-                } else {
-                    // Если игрок не найден, не показываем alert, чтобы избежать двойных сообщений
-                    console.log('Игрок не найден');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при получении оригинального никнейма:', error);
-                // В случае ошибки показываем сообщение
-                alert('Произошла ошибка при поиске игрока');
-            })
-            .finally(() => {
-                quickSearchInput.disabled = false;
-            });
-    }
-}
-
-// Обновляем обработчик Enter для сохранения ника
-quickSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        const username = this.value.trim();
-        if (username) {
-            getOriginalNameAndRedirect(username);
-        }
-    }
-});
-
-// Обновляем обработчик клика по лупе для сохранения ника
-document.getElementById('quick-search-btn').onclick = function() {
-    const username = quickSearchInput.value.trim();
-    if (username) {
-        getOriginalNameAndRedirect(username);
-    }
-};
-
-        // Загружаем недавние никнеймы для навигации при загрузке страницы
-        loadQuickRecentNicks();
 
         // Получаем никнейм из URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -4357,57 +3859,131 @@ document.getElementById('quick-search-btn').onclick = function() {
             const tooltip = document.createElement('div');
             tooltip.id = 'nick-history-tooltip';
             tooltip.style.cssText = `
-                position: absolute;
+                position: fixed;
                 background: white;
                 border-radius: 12px;
                 box-shadow: 0 8px 32px rgba(52, 152, 219, 0.15);
                 padding: 20px;
+                padding-top: 40px;
                 min-width: 300px;
                 max-width: 400px;
                 max-height: 500px;
                 overflow-y: auto;
                 z-index: 10000;
                 font-family: 'VimeArtBold', sans-serif;
+                cursor: default;
             `;
             
-            // Позиционируем тултип относительно кнопки
-            const buttonRect = buttonElement.getBoundingClientRect();
-            const tooltipWidth = 350; // Примерная ширина тултипа
-            const tooltipHeight = 400; // Примерная высота тултипа
+            // Создаем заголовок для перетаскивания
+            const dragHeader = document.createElement('div');
+            dragHeader.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 40px;
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+                border-radius: 12px 12px 0 0;
+                cursor: move;
+                display: flex;
+                align-items: center;
+                padding: 0 12px;
+                color: white;
+                font-weight: bold;
+                font-size: 0.9rem;
+                user-select: none;
+            `;
+            dragHeader.textContent = 'История ников';
+            tooltip.appendChild(dragHeader);
             
-            let left = buttonRect.left - tooltipWidth / 2 + buttonRect.width / 2;
-            let top = buttonRect.bottom + 10;
+            // Создаем кнопку закрытия
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '×';
+            closeButton.style.cssText = `
+                position: absolute;
+                top: 3px;
+                right: 8px;
+                width: 28px;
+                height: 28px;
+                border: none;
+                background: transparent;
+                color: white;
+                font-size: 24px;
+                line-height: 24px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: transform 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                z-index: 10001;
+            `;
+            closeButton.onmouseover = function() {
+                this.style.transform = 'scale(1.15)';
+            };
+            closeButton.onmouseout = function() {
+                this.style.transform = 'scale(1)';
+            };
+            closeButton.onclick = function(e) {
+                e.stopPropagation();
+                tooltip.remove();
+            };
+            dragHeader.appendChild(closeButton);
             
-            // Проверяем, не выходит ли тултип за правый край экрана
-            if (left + tooltipWidth > window.innerWidth) {
-                left = window.innerWidth - tooltipWidth - 10;
-            }
+            // Переменные для перетаскивания
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
             
-            // Проверяем, не выходит ли тултип за левый край экрана
-            if (left < 10) {
-                left = 10;
-            }
+            // Обработчики перетаскивания
+            dragHeader.addEventListener('mousedown', function(e) {
+                if (e.target === closeButton || closeButton.contains(e.target)) {
+                    return;
+                }
+                
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                isDragging = true;
+                dragHeader.style.cursor = 'grabbing';
+            });
             
-            // Проверяем, не выходит ли тултип за нижний край экрана
-            if (top + tooltipHeight > window.innerHeight) {
-                top = buttonRect.top - tooltipHeight - 10;
-            }
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    
+                    tooltip.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    dragHeader.style.cursor = 'move';
+                }
+            });
+            
+            // Позиционируем тултип по центру экрана
+            const tooltipWidth = 350;
+            const tooltipHeight = 400;
+            
+            let left = (window.innerWidth - tooltipWidth) / 2;
+            let top = (window.innerHeight - tooltipHeight) / 2;
+            
+            // Убеждаемся, что окно не выходит за границы экрана
+            if (left < 10) left = 10;
+            if (top < 10) top = 10;
             
             tooltip.style.top = top + 'px';
             tooltip.style.left = left + 'px';
-            
-            // Добавляем заголовок
-            const title = document.createElement('div');
-            title.textContent = 'История ников';
-            title.style.cssText = `
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #2c3e50;
-                margin-bottom: 16px;
-                padding-bottom: 12px;
-                border-bottom: 2px solid #e6f3ff;
-            `;
-            tooltip.appendChild(title);
             
             // Добавляем индикатор загрузки
             const loadingDiv = document.createElement('div');
@@ -5858,7 +5434,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
     </script>
-    <script src="auth.js"></script>
+    <script src="js/auth.js"></script>
 
     <!-- Модальное окно истории скинов и плащей -->
     <div id="historyModal" class="history-modal">
