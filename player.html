@@ -468,13 +468,9 @@
             animation: none !important;
         }
         
-        .drag-ghost .drag-handle {
-            display: none !important;
-        }
-        
         .drag-handle {
             position: absolute;
-            top: 14px;
+            top: 24px;
             right: 8px;
             width: 24px;
             height: 24px;
@@ -601,6 +597,8 @@
             margin-bottom: 12px;
             padding-bottom: 8px;
             border-bottom: 2px solid #e6f3ff;
+            display: flex;
+            align-items: center;
         }
         .stat-values {
             display: flex;
@@ -775,6 +773,30 @@
             text-align: center;
             padding: 50px;
             color: #e74c3c;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+        #friends-sort {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233498db' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px !important;
+        }
+        #friends-sort:hover {
+            border-color: #3498db;
+            background-color: #e6f3ff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+        }
+        #friends-sort:focus {
+            border-color: #3498db;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        #friends-sort option {
+            padding: 10px;
             font-family: 'VimeArtBold', sans-serif;
         }
         .friend-prime {
@@ -1702,14 +1724,14 @@
                         <button class="btn btn-primary mt-3" id="retry-friends-btn">Повторить</button>
                     </div>
                     <!-- Добавляем селектор сортировки -->
-                    <div id="friends-sort-container" style="display: none; margin-bottom: 15px;">
-                        <div class="d-flex align-items-center">
-                            <label for="friends-sort" style="margin-right: 10px; font-family: 'VimeArtBold', sans-serif; font-size: 0.9rem; color: #3498db;">Сортировка:</label>
-                            <select id="friends-sort" class="form-select" style="width: auto; max-width: 200px; font-family: 'VimeArtBold', sans-serif; font-size: 0.9rem; color: #2c3e50; background-color: #f8fbff; border-color: #e6f3ff;">
+                    <div id="friends-sort-container" style="display: none; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 16px rgba(52, 152, 219, 0.08);">
+                            <label for="friends-sort" style="font-family: 'VimeArtBold', sans-serif; font-size: 1rem; color: #3498db; margin: 0;">Сортировка:</label>
+                            <select id="friends-sort" style="flex: 1; max-width: 220px; padding: 10px 16px; font-family: 'VimeArtBold', sans-serif; font-size: 0.95rem; color: #2c3e50; background: #f8fbff; border: 2px solid #e6f3ff; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; outline: none;">
                                 <option value="online">Онлайн</option>
-                                <option value="last_seen">Вход</option>
-                                <option value="rank">Ранг</option>
-                                <option value="name">Имя</option>
+                                <option value="last_seen">Последний вход</option>
+                                <option value="rank">По рангу</option>
+                                <option value="name">По имени</option>
                             </select>
                         </div>
                     </div>
@@ -3086,7 +3108,59 @@
             // Заголовок блока
             const title = document.createElement('div');
             title.className = 'stat-title';
-            title.textContent = gameData.name;
+            
+            // Маппинг иконок игр
+            const gameIcons = {
+                'ANN': 'Annihilation.png',
+                'BB': 'BuildBattle.png',
+                'BP': 'BlockParty.png',
+                'BW': 'bedwars.png',
+                'BWHYPE': 'BedWarsHype.png',
+                'BWT': 'BedWars Turbo.png',
+                'CP': 'ClashPoint.png',
+                'DUELS': 'Duels.png',
+                'GG': 'GunGame.png',
+                'HG': 'HungerGames.png',
+                'KPVP': 'kitpvp.png',
+                'EGGWARS': 'EggWars.png',
+                'MW': 'MobWars.png',
+                'PRISON': 'Prison.png',
+                'PRISON_LITE': 'prisonalphabeta.png',
+                'SW': 'SkyWars.png',
+                'ARC': 'arcade.png',
+                'BRIDGE': 'TheBridge.png',
+                'JUMPLEAGUE': 'JumpLeague.png',
+                'MURDER': 'MurderMystery.png',
+                'SPEEDBUILDERS': 'speedbuilders.png',
+                'FALLGUYS': 'FallGuys.png',
+                'BATTLEBOX': 'battlebox.png',
+                'FARM': 'MyFarm.png',
+                'FIREBALLFIGHT': 'firebollfight.png',
+                'HIDE': 'hideandseek.png',
+                'TNTTAG': 'tnttag.png',
+                'TNTRUN': 'tntrun.png',
+                'LUCKYWARS': 'LuckyWars.png',
+                'DEATHRUN': 'money.png',
+                'TURFWARS': 'turfwars.png'
+            };
+            
+            // Добавляем иконку
+            const icon = document.createElement('img');
+            // Используем иконку игры, если есть, иначе 404.png
+            icon.src = gameIcons[gameCode] ? `assets/images/icons/${gameIcons[gameCode]}` : 'assets/images/icons/404.png';
+            icon.style.cssText = 'width: 40px; height: 40px; margin-right: 8px; vertical-align: middle; flex-shrink: 0;';
+            icon.onerror = function() { 
+                // Если иконка не загрузилась, пробуем загрузить 404.png
+                if (this.src.indexOf('404.png') === -1) {
+                    this.src = 'assets/images/icons/404.png';
+                }
+            };
+            title.appendChild(icon);
+            
+            const titleText = document.createElement('span');
+            titleText.textContent = gameData.name;
+            title.appendChild(titleText);
+            
             block.appendChild(title);
 
             // Контейнер для статистики
@@ -4520,8 +4594,18 @@ function renderFriendsList(friends, onlineStatuses, sortType = 'online') {
     }
     
     // Отрисовываем отсортированный список
-    sortedFriends.forEach(friend => {
+    sortedFriends.forEach((friend, index) => {
         const friendElement = createFriendElement(friend, onlineStatuses);
+        // Сбрасываем анимацию и добавляем задержку
+        friendElement.style.animation = 'none';
+        friendElement.style.opacity = '0';
+        friendElement.style.transform = 'translateY(10px)';
+        
+        // Применяем анимацию с задержкой
+        setTimeout(() => {
+            friendElement.style.animation = `fadeInFriend 0.4s ease-out ${index * 0.05}s forwards`;
+        }, 10);
+        
         friendsList.appendChild(friendElement);
     });
     
@@ -5776,7 +5860,9 @@ function displayAchievements() {
 
     achievementsGrid.appendChild(statsContainer);
 
-    // Проходим по каждой категории
+    // Создаем массив категорий с их процентами для сортировки
+    const categoriesArray = [];
+    
     for (const [categoryName, achievements] of Object.entries(achievementsData)) {
         if (!achievements || achievements.length === 0) continue;
 
@@ -5784,6 +5870,26 @@ function displayAchievements() {
         const categoryCompleted = achievements.filter(a => playerAchievementIds.has(a.id)).length;
         const categoryTotal = achievements.length;
         const categoryPercent = Math.round((categoryCompleted / categoryTotal) * 100);
+        
+        categoriesArray.push({
+            name: categoryName,
+            achievements: achievements,
+            completed: categoryCompleted,
+            total: categoryTotal,
+            percent: categoryPercent
+        });
+    }
+    
+    // Сортируем категории от 100% до 0%
+    categoriesArray.sort((a, b) => b.percent - a.percent);
+
+    // Проходим по отсортированным категориям
+    for (const categoryData of categoriesArray) {
+        const categoryName = categoryData.name;
+        const achievements = categoryData.achievements;
+        const categoryCompleted = categoryData.completed;
+        const categoryTotal = categoryData.total;
+        const categoryPercent = categoryData.percent;
 
         // Создаем контейнер для категории
         const categoryContainer = document.createElement('div');
@@ -5791,7 +5897,7 @@ function displayAchievements() {
             background: #fff;
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 4px 16px rgba(243, 156, 18, 0.08);
+            box-shadow: 0 4px 16px ${categoryPercent === 100 ? 'rgba(243, 156, 18, 0.08)' : 'rgba(127, 140, 141, 0.08)'};
         `;
 
         // Заголовок категории с прогрессом
@@ -5802,19 +5908,72 @@ function displayAchievements() {
             align-items: center;
             margin-bottom: 16px;
             padding-bottom: 12px;
-            border-bottom: 2px solid #fef5e7;
+            border-bottom: 2px solid ${categoryPercent === 100 ? '#fef5e7' : '#e8e8e8'};
             cursor: pointer;
             user-select: none;
         `;
 
         const categoryTitle = document.createElement('h3');
-        categoryTitle.textContent = categoryName;
         categoryTitle.style.cssText = `
             font-family: 'VimeArtBold', sans-serif;
-            color: #f39c12;
+            color: ${categoryPercent === 100 ? '#f39c12' : '#7f8c8d'};
             font-size: 1.2rem;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         `;
+        
+        // Маппинг иконок игр для достижений
+        const achievementGameIcons = {
+            'Annihilation': 'Annihilation.png',
+            'BuildBattle': 'BuildBattle.png',
+            'BlockParty': 'BlockParty.png',
+            'BedWars': 'bedwars.png',
+            'BedWars Hype': 'BedWarsHype.png',
+            'BedWars Turbo': 'BedWars Turbo.png',
+            'ClashPoint': 'ClashPoint.png',
+            'Дуэли': 'Duels.png',
+            'GunGame': 'GunGame.png',
+            'HungerGames': 'HungerGames.png',
+            'KitPvP': 'kitpvp.png',
+            'EggWars': 'EggWars.png',
+            'MobWars': 'MobWars.png',
+            'Prison': 'Prison.png',
+            'Prison Lite | Alpha': 'prisonalphabeta.png',
+            'SkyWars': 'SkyWars.png',
+            'Аркады': 'arcade.png',
+            'The Bridge': 'TheBridge.png',
+            'Jump League': 'JumpLeague.png',
+            'Murder Mystery': 'MurderMystery.png',
+            'Speed Builders': 'speedbuilders.png',
+            'Fall Guys': 'FallGuys.png',
+            'BattleBox': 'battlebox.png',
+            'My Farm': 'MyFarm.png',
+            'FireBall Fight': 'firebollfight.png',
+            'Прятки': 'hideandseek.png',
+            'TNT Tag': 'tnttag.png',
+            'TNT Run': 'tntrun.png',
+            'Lucky Wars': 'LuckyWars.png',
+            'DeathRun': 'money.png',
+            'Turf Wars': 'turfwars.png',
+            'Sheep Wars': 'rodwars.png'
+        };
+        
+        // Добавляем иконку
+        const categoryIcon = document.createElement('img');
+        categoryIcon.src = achievementGameIcons[categoryName] ? `assets/images/icons/${achievementGameIcons[categoryName]}` : 'assets/images/icons/404.png';
+        categoryIcon.style.cssText = 'width: 40px; height: 40px; flex-shrink: 0;';
+        categoryIcon.onerror = function() {
+            if (this.src.indexOf('404.png') === -1) {
+                this.src = 'assets/images/icons/404.png';
+            }
+        };
+        categoryTitle.appendChild(categoryIcon);
+        
+        const categoryTitleText = document.createElement('span');
+        categoryTitleText.textContent = categoryName;
+        categoryTitle.appendChild(categoryTitleText);
 
         const categoryProgress = document.createElement('div');
         categoryProgress.style.cssText = `
@@ -5829,22 +5988,22 @@ function displayAchievements() {
             <div style="
                 width: 100px;
                 height: 8px;
-                background: #fef5e7;
+                background: ${categoryPercent === 100 ? '#fef5e7' : '#e8e8e8'};
                 border-radius: 4px;
                 overflow: hidden;
             ">
                 <div style="
                     width: ${categoryPercent}%;
                     height: 100%;
-                    background: linear-gradient(90deg, #f39c12, #e67e22);
+                    background: linear-gradient(90deg, ${categoryPercent === 100 ? '#f39c12, #e67e22' : '#95a5a6, #7f8c8d'});
                     border-radius: 4px;
                     transition: width 0.3s ease;
                 "></div>
             </div>
-            <span style="font-family: 'VimeArtBold', sans-serif; color: #f39c12; font-size: 0.9rem;">
+            <span style="font-family: 'VimeArtBold', sans-serif; color: ${categoryPercent === 100 ? '#f39c12' : '#7f8c8d'}; font-size: 0.9rem;">
                 ${categoryPercent}%
             </span>
-            <span class="category-toggle" style="font-family: 'VimeArtBold', sans-serif; color: #f39c12; font-size: 1.2rem; transition: transform 0.3s ease;">▼</span>
+            <span class="category-toggle" style="font-family: 'VimeArtBold', sans-serif; color: ${categoryPercent === 100 ? '#f39c12' : '#7f8c8d'}; font-size: 1.2rem; transition: transform 0.3s ease;">▼</span>
         `;
 
         categoryHeader.appendChild(categoryTitle);
