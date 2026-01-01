@@ -94,6 +94,92 @@ async function fetchPlayerOnlineStatus(username) {
 // ============================================
 
 /**
+ * Парсит Minecraft цветовые коды (& коды) и возвращает HTML с цветами
+ * @param {string} text - Текст с & кодами
+ * @returns {string} HTML строка с цветами
+ */
+function parseMinecraftColors(text) {
+    if (!text) return '';
+    
+    const colorMap = {
+        '0': '#000000', // Черный
+        '1': '#0000AA', // Темно-синий
+        '2': '#00AA00', // Темно-зеленый
+        '3': '#00AAAA', // Темно-голубой
+        '4': '#AA0000', // Темно-красный
+        '5': '#AA00AA', // Темно-фиолетовый
+        '6': '#FFAA00', // Золотой
+        '7': '#AAAAAA', // Серый
+        '8': '#555555', // Темно-серый
+        '9': '#5555FF', // Синий
+        'a': '#55FF55', // Зеленый
+        'b': '#55FFFF', // Голубой
+        'c': '#FF5555', // Красный
+        'd': '#FF55FF', // Розовый
+        'e': '#FFFF55', // Желтый
+        'f': '#FFFFFF', // Белый
+    };
+    
+    const formatMap = {
+        'l': 'font-weight: bold;',
+        'm': 'text-decoration: line-through;',
+        'n': 'text-decoration: underline;',
+        'o': 'font-style: italic;',
+    };
+    
+    let result = '';
+    let currentColor = '';
+    let currentFormat = '';
+    let i = 0;
+    
+    while (i < text.length) {
+        if (text[i] === '&' && i + 1 < text.length) {
+            const code = text[i + 1].toLowerCase();
+            
+            if (colorMap[code]) {
+                // Закрываем предыдущий span если есть
+                if (currentColor || currentFormat) {
+                    result += '</span>';
+                }
+                currentColor = colorMap[code];
+                currentFormat = '';
+                result += `<span style="color: ${currentColor};">`;
+                i += 2;
+                continue;
+            } else if (formatMap[code]) {
+                // Закрываем предыдущий span если есть
+                if (currentColor || currentFormat) {
+                    result += '</span>';
+                }
+                currentFormat += formatMap[code];
+                result += `<span style="${currentColor ? 'color: ' + currentColor + '; ' : ''}${currentFormat}">`;
+                i += 2;
+                continue;
+            } else if (code === 'r') {
+                // Сброс форматирования
+                if (currentColor || currentFormat) {
+                    result += '</span>';
+                }
+                currentColor = '';
+                currentFormat = '';
+                i += 2;
+                continue;
+            }
+        }
+        
+        result += text[i];
+        i++;
+    }
+    
+    // Закрываем последний span если есть
+    if (currentColor || currentFormat) {
+        result += '</span>';
+    }
+    
+    return result;
+}
+
+/**
  * Возвращает правильное окончание слова в зависимости от числа (русский язык)
  * @param {number} number - Число
  * @param {string[]} endings - Массив окончаний [для 1, для 2-4, для 5-20]
