@@ -195,15 +195,7 @@ function initNavbar(options = {}) {
         searchInstance = initQuickSearch('quick-search', 'quickRecentNicks', finalSearchOptions);
     }
     
-    // Инициализируем кнопку авторизации
-    if (includeAuth) {
-        const authBtn = document.getElementById('auth-key-btn');
-        if (authBtn) {
-            authBtn.addEventListener('click', function() {
-                window.location.href = 'auth.html';
-            });
-        }
-    }
+    // Инициализация кнопки авторизации происходит в auth.js через updateAuthUI()
     
     return {
         navbar,

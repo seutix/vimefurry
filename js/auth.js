@@ -81,12 +81,18 @@ function updateAuthUI() {
         const userData = authStatus.userData;
         console.log('Данные пользователя:', userData);
         
-        authKeyBtn.innerHTML = '';
-        authKeyBtn.style.padding = '0';
-        authKeyBtn.style.overflow = 'visible';
-        authKeyBtn.style.borderRadius = '0';
-        authKeyBtn.style.background = 'transparent';
-        authKeyBtn.style.boxShadow = 'none';
+        // Удаляем все старые обработчики клика путем клонирования элемента
+        const oldBtn = authKeyBtn;
+        const newAuthKeyBtn = authKeyBtn.cloneNode(false);
+        newAuthKeyBtn.id = 'auth-key-btn'; // Восстанавливаем ID
+        oldBtn.parentNode.replaceChild(newAuthKeyBtn, oldBtn);
+        
+        newAuthKeyBtn.innerHTML = '';
+        newAuthKeyBtn.style.padding = '0';
+        newAuthKeyBtn.style.overflow = 'visible';
+        newAuthKeyBtn.style.borderRadius = '0';
+        newAuthKeyBtn.style.background = 'transparent';
+        newAuthKeyBtn.style.boxShadow = 'none';
         
         const headContainer = document.createElement('div');        
         headContainer.style.position = 'relative';        
@@ -159,11 +165,11 @@ function updateAuthUI() {
         skinFullImg.crossOrigin = "Anonymous";
         skinFullImg.src = skinFullUrl;
         
-        authKeyBtn.appendChild(headContainer);
+        newAuthKeyBtn.appendChild(headContainer);
         console.log('Контейнер головы добавлен в auth-key-btn');
         
         // Добавляем выпадающее меню при клике
-        authKeyBtn.onclick = function(e) {
+        newAuthKeyBtn.onclick = function(e) {
             e.stopPropagation();
             
             // Проверяем, существует ли уже меню
@@ -284,8 +290,11 @@ let authCheckPerformed = false;
 document.addEventListener('DOMContentLoaded', function() {
     if (!authCheckPerformed) {
         console.log('DOMContentLoaded: Обновляем UI авторизации');
-        updateAuthUI();
-        authCheckPerformed = true;
+        // Небольшая задержка, чтобы navbar.js успел создать элементы
+        setTimeout(() => {
+            updateAuthUI();
+            authCheckPerformed = true;
+        }, 50);
     }
 });
 
