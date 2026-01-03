@@ -396,6 +396,22 @@
             width: 100%;
         }
 
+        /* Стили для блока онлайн игр */
+        #onlineGames::-webkit-scrollbar {
+            width: 6px;
+        }
+        #onlineGames::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        #onlineGames::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 3px;
+        }
+        #onlineGames::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+
         /* Медиа-запросы для мобильных устройств */
         @media screen and (max-width: 768px) {
             .search-container {
@@ -595,7 +611,7 @@
     <div style="position:fixed;top:80px;left:32px;width:220px;height:80vh;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(52,152,219,0.10);padding:24px 16px;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'VimeArtBold',sans-serif;color:#3498db;font-size:1.2rem;margin-bottom:12px;text-align:center;width:100%;">Онлайн</div>
         <hr style="width:100%;border:0;border-top:2px solid #3498db;margin:0 0 16px 0;">
-        <div style="color:#3498db;font-family:'VimeArtBold',sans-serif;font-size:1rem;text-align:center;width:100%;">В разработке</div>
+        <div id="onlineGames" style="color:#3498db;font-family:'VimeArtBold',sans-serif;font-size:0.85rem;text-align:left;width:100%;overflow-y:auto;max-height:calc(80vh - 100px);">Загрузка...</div>
     </div>
     <div class="moderators-block">
         <div class="block-title">Модеры</div>
@@ -649,6 +665,173 @@
         const recentGuilds = document.getElementById('recentGuilds');
         const recentNicksList = recentNicksDropdown.querySelector('.recent-nicks-list');
         const recentGuildsList = recentGuilds.querySelector('.recent-nicks-list');
+
+        // Словарь иконок игр (используется для онлайн игр)
+        const gameIcons = {
+            'ann': 'Annihilation.png',
+            'bb': 'BuildBattle.png',
+            'bp': 'BlockParty.png',
+            'bw': 'bedwars.png',
+            'bwhype': 'BedWarsHype.png',
+            'swt': 'SkyWars.png',
+            'bridge': 'TheBridge.png',
+            'cp': 'ClashPoint.png',
+            'deathrun': 'money.png',
+            'duels': 'Duels.png',
+            'gg': 'GunGame.png',
+            'hg': 'HungerGames.png',
+            'jumpleague': 'JumpLeague.png',
+            'kpvp': 'kitpvp.png',
+            'lobby': 'Lobby.png',
+            'luckywars': 'LuckyWars.png',
+            'murder': 'MurderMystery.png',
+            'prison': 'Prison.png',
+            'prison-lite': 'prisonalphabeta.png',
+            'sw': 'SkyWars.png',
+            'tntrun': 'tntrun.png',
+            'tnttag': 'tnttag.png',
+            'turfwars': 'turfwars.png',
+            'skyblock': 'SkyBlock.png',
+            'eggwars': 'EggWars.png',
+            'mw': 'MobWars.png',
+            'speedbuilders': 'speedbuilders.png',
+            'fallguys': 'FallGuys.png',
+            'battlebox': 'battlebox.png',
+            'farm': 'MyFarm.png',
+            'fireballfight': 'firebollfight.png',
+            'hide': 'hideandseek.png',
+            'zombieclaus': '404.png',
+            'whitecold': '404.png',
+            'squidgame': '404.png',
+            'sheep': '404.png',
+            'teamfortress': '404.png',
+            'rodwars': '404.png',
+            'petsimulator': '404.png',
+            'sololeveling': '404.png',
+            'css': '404.png',
+            'cor': '404.png'
+        };
+        
+        // Словарь названий игр
+        const gameNames = {
+            'ann': 'Annihilation',
+            'bb': 'BuildBattle',
+            'bp': 'BlockParty',
+            'bw': 'BedWars',
+            'bwhype': 'BedWars Hype',
+            'swt': 'SkyWars Turbo',
+            'bridge': 'The Bridge',
+            'cp': 'ClashPoint',
+            'deathrun': 'DeathRun',
+            'duels': 'Duels',
+            'gg': 'GunGame',
+            'hg': 'HungerGames',
+            'jumpleague': 'JumpLeague',
+            'kpvp': 'KitPvP',
+            'lobby': 'Lobby',
+            'luckywars': 'LuckyWars',
+            'murder': 'Murder Mystery',
+            'prison': 'Prison',
+            'prison-lite': 'Prison Lite',
+            'sw': 'SkyWars',
+            'tntrun': 'TNT Run',
+            'tnttag': 'TNT Tag',
+            'turfwars': 'TurfWars',
+            'skyblock': 'SkyBlock',
+            'eggwars': 'EggWars',
+            'mw': 'MobWars',
+            'speedbuilders': 'SpeedBuilders',
+            'fallguys': 'Fall Guys',
+            'battlebox': 'BattleBox',
+            'farm': 'MyFarm',
+            'fireballfight': 'Fireball Fight',
+            'hide': 'Hide and Seek',
+            'zombieclaus': 'Zombie Claus',
+            'whitecold': 'White Cold',
+            'squidgame': 'Squid Game',
+            'sheep': 'Sheep Wars',
+            'teamfortress': 'Team Fortress',
+            'rodwars': 'Rod Wars',
+            'petsimulator': 'Pet Simulator',
+            'sololeveling': 'Solo Leveling',
+            'css': 'CS:S',
+            'cor': 'Corridor'
+        };
+
+        // Загрузка онлайн игр
+        function loadOnlineGames() {
+            const onlineGamesBlock = document.getElementById('onlineGames');
+            onlineGamesBlock.innerHTML = 'Загрузка...';
+            
+            fetch('https://api.vimeworld.com/online')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.separated) {
+                        onlineGamesBlock.innerHTML = '';
+                        
+                        // Создаем список игр
+                        const gamesList = document.createElement('div');
+                        gamesList.style.cssText = 'display:flex;flex-direction:column;gap:8px;width:100%;';
+                        
+                        // Сортируем игры по количеству игроков (по убыванию)
+                        const sortedGames = Object.entries(data.separated)
+                            .filter(([game, count]) => count > 0)
+                            .sort((a, b) => b[1] - a[1]);
+                        
+                        sortedGames.forEach(([game, count]) => {
+                            const gameItem = document.createElement('div');
+                            gameItem.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px;border-radius:8px;transition:background 0.2s;cursor:default;';
+                            gameItem.onmouseenter = () => gameItem.style.background = '#e6f3ff';
+                            gameItem.onmouseleave = () => gameItem.style.background = 'transparent';
+                            
+                            // Иконка игры
+                            const icon = document.createElement('img');
+                            const iconFile = gameIcons[game] || '404.png';
+                            icon.src = `assets/images/icons/${iconFile}`;
+                            icon.style.cssText = 'width:24px;height:24px;flex-shrink:0;';
+                            icon.onerror = () => icon.src = 'assets/images/icons/404.png';
+                            
+                            // Название и количество
+                            const textContainer = document.createElement('div');
+                            textContainer.style.cssText = 'display:flex;flex-direction:column;flex:1;min-width:0;';
+                            
+                            const gameName = document.createElement('div');
+                            gameName.textContent = gameNames[game] || game.toUpperCase();
+                            gameName.style.cssText = 'font-size:0.75rem;font-weight:bold;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+                            
+                            const playerCount = document.createElement('div');
+                            playerCount.textContent = `${count} ${count === 1 ? 'игрок' : count < 5 ? 'игрока' : 'игроков'}`;
+                            playerCount.style.cssText = 'font-size:0.65rem;color:#7f8c8d;';
+                            
+                            textContainer.appendChild(gameName);
+                            textContainer.appendChild(playerCount);
+                            
+                            gameItem.appendChild(icon);
+                            gameItem.appendChild(textContainer);
+                            gamesList.appendChild(gameItem);
+                        });
+                        
+                        // Добавляем общее количество
+                        if (data.total) {
+                            const totalItem = document.createElement('div');
+                            totalItem.style.cssText = 'margin-top:8px;padding-top:8px;border-top:1px solid #e0e0e0;text-align:center;font-weight:bold;font-size:0.9rem;';
+                            totalItem.textContent = `Всего: ${data.total} ${data.total === 1 ? 'игрок' : data.total < 5 ? 'игрока' : 'игроков'}`;
+                            gamesList.appendChild(totalItem);
+                        }
+                        
+                        onlineGamesBlock.appendChild(gamesList);
+                    } else {
+                        onlineGamesBlock.innerHTML = 'Нет данных';
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке онлайн игр:', error);
+                    onlineGamesBlock.innerHTML = 'Ошибка загрузки';
+                });
+        }
 
         // Загрузка модераторов онлайн (использует функции из ranks.js)
         function loadModeratorsOnline() {
@@ -879,6 +1062,7 @@
             // Загружаем данные
             updateNicksList(loadRecentNicks());
             loadRecentGuildsLocal();
+            loadOnlineGames();
             loadModeratorsOnline();
 
             if (loadRecentNicks().length > 0) {
