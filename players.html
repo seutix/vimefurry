@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Игроки - VimeStats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+
+        .search-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 1rem;
+        }
+
+        .rank-select {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .custom-select-wrapper {
+            position: relative;
+            min-width: 250px;
+        }
+
+        .custom-select {
+            position: relative;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+
+        .custom-select-trigger {
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            min-height: 48px;
+            font-weight: bold;
+        }
+
+        .custom-select-trigger span {
+            flex: 1;
+        }
+
+        .custom-select-trigger .arrow {
+            opacity: 0.8;
+            margin-left: 10px;
+        }
+
+        .custom-select-trigger.has-rank {
+            color: white;
+            border-color: transparent;
+        }
+
+        .custom-select-trigger.has-rank .arrow {
+            color: white;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #3498db;
+        }
+
+        .custom-select.open .custom-select-trigger {
+            border-color: #3498db;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .custom-select .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .custom-select.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #3498db;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .custom-select.open .custom-options {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-option:hover {
+            background: #f0f8ff;
+        }
+
+        .custom-option.selected {
+            background: #e6f3ff;
+        }
+
+        .custom-option[data-rank] {
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+
+        .custom-option[data-rank="VIP"] {
+            background: #3dff80;
+        }
+
+        .custom-option[data-rank="PREMIUM"] {
+            background: #3decff;
+        }
+
+        .custom-option[data-rank="HOLY"] {
+            background: linear-gradient(to right, #fff8a9, #ffa317);
+        }
+
+        .custom-option[data-rank="IMMORTAL"] {
+            background: linear-gradient(to right, #ff70d1, #ff5d6d);
+        }
+
+        .custom-option[data-rank="DIVINE"] {
+            background: linear-gradient(to right, #b451ff, #84b5ff);
+        }
+
+        .custom-option[data-rank="THANE"] {
+            background: linear-gradient(to right, #30ff87, #1cffe4, #3594ff);
+        }
+
+        .custom-option[data-rank="ELITE"] {
+            background: linear-gradient(to right, #ffa51e, #ff5619, #ff314a);
+        }
+
+        .custom-option[data-rank="ETERNAL"] {
+            background: linear-gradient(to right, #2688ed, #8b00d7, #ff4161);
+        }
+
+        .custom-option[data-rank="CELESTIAL"] {
+            background: linear-gradient(to right, #e0f3ff, #bfdeff, #96c6ff, #6895d6);
+        }
+
+        .custom-option[data-rank="ABSOLUTE"] {
+            background: linear-gradient(to right, #f200ff, #972a6e, #632f59, #dd57bc);
+        }
+
+        .custom-option[data-rank="IMPERIAL"] {
+            background: linear-gradient(to right, #fdbd05, #ffa630, #fffabd, #fdbd05);
+        }
+
+        .custom-option[data-rank="ULTIMATE"] {
+            background: linear-gradient(to right, #4f4f4f, #737272, #fbf7ff, #3a3a3a);
+        }
+
+        .custom-option[data-rank="VIME"] {
+            background: linear-gradient(to right, #2599d4, #1d7cab);
+        }
+
+        .custom-option[data-rank="JRBUILDER"] {
+            background: linear-gradient(to right, #bdecb6, #67ff54);
+        }
+
+        .custom-option[data-rank="BUILDER"] {
+            background: linear-gradient(to right, #67ff54, #57c22d);
+        }
+
+        .custom-option[data-rank="SRBUILDER"] {
+            background: linear-gradient(to right, #57c22d, #55961a);
+        }
+
+        .custom-option[data-rank="MAPLEAD"] {
+            background: linear-gradient(to right, #55961a, #3f6e13);
+        }
+
+        .custom-option[data-rank="YOUTUBE"] {
+            background: linear-gradient(to right, #bf2dff, #f33fd7);
+        }
+
+        .custom-option[data-rank="DEV"] {
+            background: #d61753;
+        }
+
+        .custom-option[data-rank="ORGANIZER"] {
+            background: linear-gradient(to right, #0d83ae, #00c0eb);
+        }
+
+        .custom-option[data-rank="HELPER"] {
+            background: #76a6ff;
+        }
+
+        .custom-option[data-rank="MODER"] {
+            background: #4e62eb;
+        }
+
+        .custom-option[data-rank="WARDEN"] {
+            background: #3c36de;
+        }
+
+        .custom-option[data-rank="CHIEF"] {
+            background: linear-gradient(to right, #ff5e43, #db2100);
+        }
+
+        .custom-option[data-rank="ADMIN"] {
+            background: linear-gradient(to right, #ff2030, #d40048, #c1006b);
+        }
+
+        .custom-option[data-rank="PLAYER"] {
+            background: #7f8c8d;
+        }
+
+        .rank-count {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-left: 8px;
+        }
+
+        .players-table-section {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .players-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .players-table th {
+            padding: 15px;
+            text-align: left;
+            font-family: 'VimeArtBold', sans-serif;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .players-table th:first-child {
+            width: 50px;
+            text-align: center;
+        }
+
+        .players-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+
+        .players-table td:first-child {
+            text-align: center;
+            color: #7f8c8d;
+        }
+
+        .players-table tbody tr {
+            transition: background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .players-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .player-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .player-head {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            image-rendering: pixelated;
+            flex-shrink: 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+            font-family: 'VimeArtBold', sans-serif;
+        }
+
+        .pagination-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .pagination-info {
+            font-family: 'VimeArtBold', sans-serif;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .pagination-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 5px;
+        }
+
+        .page-number-btn {
+            padding: 8px 12px;
+            background: #e6f3ff;
+            color: #3498db;
+            border: 1px solid #3498db;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+        }
+
+        .page-number-btn:hover:not(:disabled) {
+            background: #3498db;
+            color: white;
+        }
+
+        .page-number-btn.active {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        .page-input {
+            width: 70px;
+            padding: 8px;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            font-family: 'VimeArtBold', sans-serif;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .page-input:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+            .container {
+                margin: 60px auto 0;
+                padding: 10px;
+            }
+
+            .search-section {
+                flex-direction: column;
+            }
+
+            .rank-select {
+                width: 100%;
+            }
+
+            .players-table {
+                font-size: 0.9rem;
+            }
+
+            .players-table th,
+            .players-table td {
+                padding: 10px 8px;
+            }
+
+            .player-head {
+                width: 24px;
+                height: 24px;
+            }
+
+            .pagination-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pagination-controls {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .pagination-btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            .page-numbers {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .page-input {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <div class="container">
+        <!-- Поиск и фильтр -->
+        <div class="search-section">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Поиск по нику...">
+            
+            <!-- Кастомный селект для рангов -->
+            <div class="custom-select-wrapper">
+                <div class="custom-select" id="customRankSelect">
+                    <div class="custom-select-trigger">
+                        <span>Все ранги</span>
+                        <div class="arrow">▼</div>
+                    </div>
+                    <div class="custom-options" id="customRankOptions">
+                        <div class="custom-option" data-value="">Все ранги</div>
+                        <div class="custom-option" data-value="PLAYER" data-rank="PLAYER">Игрок</div>
+                        <div class="custom-option" data-value="VIP" data-rank="VIP">Vip</div>
+                        <div class="custom-option" data-value="PREMIUM" data-rank="PREMIUM">Premium</div>
+                        <div class="custom-option" data-value="HOLY" data-rank="HOLY">Holy</div>
+                        <div class="custom-option" data-value="IMMORTAL" data-rank="IMMORTAL">Immortal</div>
+                        <div class="custom-option" data-value="DIVINE" data-rank="DIVINE">Divine</div>
+                        <div class="custom-option" data-value="THANE" data-rank="THANE">Thane</div>
+                        <div class="custom-option" data-value="ELITE" data-rank="ELITE">Elite</div>
+                        <div class="custom-option" data-value="ETERNAL" data-rank="ETERNAL">Eternal</div>
+                        <div class="custom-option" data-value="CELESTIAL" data-rank="CELESTIAL">Celestial</div>
+                        <div class="custom-option" data-value="ABSOLUTE" data-rank="ABSOLUTE">Absolute</div>
+                        <div class="custom-option" data-value="IMPERIAL" data-rank="IMPERIAL">Imperial</div>
+                        <div class="custom-option" data-value="ULTIMATE" data-rank="ULTIMATE">Ultimate</div>
+                        <div class="custom-option" data-value="VIME" data-rank="VIME">Vime</div>
+                        <div class="custom-option" data-value="JRBUILDER" data-rank="JRBUILDER">Мл. Билдер</div>
+                        <div class="custom-option" data-value="BUILDER" data-rank="BUILDER">Билдер</div>
+                        <div class="custom-option" data-value="SRBUILDER" data-rank="SRBUILDER">Ст. Билдер</div>
+                        <div class="custom-option" data-value="MAPLEAD" data-rank="MAPLEAD">Гл. Билдер</div>
+                        <div class="custom-option" data-value="YOUTUBE" data-rank="YOUTUBE">Media</div>
+                        <div class="custom-option" data-value="DEV" data-rank="DEV">Разработчик</div>
+                        <div class="custom-option" data-value="ORGANIZER" data-rank="ORGANIZER">Организатор</div>
+                        <div class="custom-option" data-value="HELPER" data-rank="HELPER">Хелпер</div>
+                        <div class="custom-option" data-value="MODER" data-rank="MODER">Модератор</div>
+                        <div class="custom-option" data-value="WARDEN" data-rank="WARDEN">Пр. Модератор</div>
+                        <div class="custom-option" data-value="CHIEF" data-rank="CHIEF">Админ</div>
+                        <div class="custom-option" data-value="ADMIN" data-rank="ADMIN">Гл. Админ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Скрытый select для совместимости -->
+            <select class="rank-select" id="rankFilter" style="display: none;">
+                <option value="">Все ранги</option>
+                <option value="PLAYER">Игрок</option>
+                <option value="VIP">Vip</option>
+                <option value="PREMIUM">Premium</option>
+                <option value="HOLY">Holy</option>
+                <option value="IMMORTAL">Immortal</option>
+                <option value="DIVINE">Divine</option>
+                <option value="THANE">Thane</option>
+                <option value="ELITE">Elite</option>
+                <option value="ETERNAL">Eternal</option>
+                <option value="CELESTIAL">Celestial</option>
+                <option value="ABSOLUTE">Absolute</option>
+                <option value="IMPERIAL">Imperial</option>
+                <option value="ULTIMATE">Ultimate</option>
+                <option value="VIME">Vime</option>
+                <option value="JRBUILDER">Мл. Билдер</option>
+                <option value="BUILDER">Билдер</option>
+                <option value="SRBUILDER">Ст. Билдер</option>
+                <option value="MAPLEAD">Гл. Билдер</option>
+                <option value="YOUTUBE">Media</option>
+                <option value="DEV">Разработчик</option>
+                <option value="ORGANIZER">Организатор</option>
+                <option value="HELPER">Хелпер</option>
+                <option value="MODER">Модератор</option>
+                <option value="WARDEN">Пр. Модератор</option>
+                <option value="CHIEF">Админ</option>
+                <option value="ADMIN">Гл. Админ</option>
+            </select>
+        </div>
+
+        <!-- Таблица игроков -->
+        <div class="players-table-section">
+            <table class="players-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ИГРОК</th>
+                        <th>УРОВЕНЬ</th>
+                        <th>НАИГРАНО</th>
+                    </tr>
+                </thead>
+                <tbody id="playersTableBody">
+                    <tr>
+                        <td colspan="4">
+                            <div class="loading">Загрузка игроков...</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Пагинация -->
+        <div class="pagination-section">
+            <div class="pagination-info" id="pageInfo">Загрузка...</div>
+            <div class="pagination-controls">
+                <button class="pagination-btn" id="firstPageBtn" title="Первая страница">⏮</button>
+                <button class="pagination-btn" id="prevPageBtn" title="Предыдущая">◀</button>
+                <div id="pageNumbers" class="page-numbers"></div>
+                <input type="number" id="pageInput" class="page-input" min="1" placeholder="№" title="Введите номер страницы">
+                <button class="pagination-btn" id="nextPageBtn" title="Следующая">▶</button>
+                <button class="pagination-btn" id="lastPageBtn" title="Последняя страница">⏭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/ranks.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/players.js"></script>
+</body>
+</html>

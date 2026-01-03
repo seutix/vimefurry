@@ -14,6 +14,7 @@
  */
 const NAV_ICONS = {
     trophy: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M8 21h8M12 17v4M19 5V3H5v2M19 5v2a7 7 0 0 1-14 0V5m14 0h2a2 2 0 0 1 2 2v1a7 7 0 0 1-6 6.93M5 5H3a2 2 0 0 0-2 2v1a7 7 0 0 0 6 6.93" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    users: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     shield: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;display:inline-block;margin-bottom:-3px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     search: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
     key: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 5.5C16 8.53757 13.5376 11 10.5 11H7V13H5V15L4 16H0V12L5.16351 6.83649C5.0567 6.40863 5 5.96094 5 5.5C5 2.46243 7.46243 0 10.5 0C13.5376 0 16 2.46243 16 5.5ZM13 4C13 4.55228 12.5523 5 12 5C11.4477 5 11 4.55228 11 4C11 3.44772 11.4477 3 12 3C12.5523 3 13 3.44772 13 4Z" fill="#3498db"/></svg>`
@@ -26,7 +27,7 @@ const NAV_STYLES = {
     navbar: 'position:fixed;top:0;left:0;width:100%;z-index:1000;',
     container: 'padding-left:0;padding-right:0;position:relative;min-height:56px;display:flex;align-items:center;',
     brand: "font-family:'VimeArtBold',sans-serif;font-size:1.2rem;color:#3498db;letter-spacing:1px;padding-left:24px;z-index:2;",
-    centerLinks: 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:24px;z-index:1;',
+    centerLinks: 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:20px;z-index:1;',
     navLink: "font-family:'VimeArtBold',sans-serif;font-size:1.1rem;color:#3498db;text-decoration:none;transition:color 0.2s;display:flex;align-items:center;gap:6px;",
     searchContainer: 'position:absolute;right:80px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px;background:#e6f3ff;border-radius:10px;padding:0 12px;height:40px;box-shadow:0 2px 8px rgba(52,152,219,0.08);',
     searchInput: "border:none;background:none;outline:none;width:260px;font-family:'VimeArtBold',sans-serif;font-size:0.9rem;color:#3498db;",
@@ -72,6 +73,13 @@ function createNavbar(options = {}) {
     topsLink.style.cssText = NAV_STYLES.navLink;
     topsLink.innerHTML = NAV_ICONS.trophy + ' Топы';
     centerLinks.appendChild(topsLink);
+    
+    // Ссылка на Игроков
+    const playersLink = document.createElement('a');
+    playersLink.href = 'players.html';
+    playersLink.style.cssText = NAV_STYLES.navLink;
+    playersLink.innerHTML = NAV_ICONS.users + ' Игроки';
+    centerLinks.appendChild(playersLink);
     
     // Ссылка на Модеров
     const modersLink = document.createElement('a');
